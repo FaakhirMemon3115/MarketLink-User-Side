@@ -52,7 +52,7 @@ const Toast = {
     }
 };
 
-/* ── Mobile Sidebar ─────────────────────────────────────────── */
+/* ── Mobile & Desktop Hover Sidebar ─────────────────────────── */
 const Sidebar = {
     init() {
         const sidebar = document.querySelector('.dashboard-sidebar');
@@ -60,14 +60,40 @@ const Sidebar = {
         const toggleBtn = document.querySelector('#sidebar-toggle');
         if (!sidebar) return;
 
-        toggleBtn?.addEventListener('click', () => this.toggle(sidebar, overlay));
-        overlay?.addEventListener('click', () => this.close(sidebar, overlay));
+        // Restore collapsed state on desktop
+        const isCollapsed = localStorage.getItem('ml-sidebar-collapsed') === 'true';
+        if (isCollapsed && window.innerWidth >= 993) {
+            document.body.classList.add('sidebar-hover-collapsed');
+        }
+
+        toggleBtn?.addEventListener('click', () => {
+            if (window.innerWidth < 993) {
+                // Mobile: toggle drawer offcanvas
+                this.toggleMobile(sidebar, overlay);
+            } else {
+                // Desktop: toggle hover collapse
+                document.body.classList.toggle('sidebar-hover-collapsed');
+                const collapsed = document.body.classList.contains('sidebar-hover-collapsed');
+                localStorage.setItem('ml-sidebar-collapsed', collapsed);
+            }
+        });
+
+        overlay?.addEventListener('click', () => this.closeMobile(sidebar, overlay));
+
+        // Auto close mobile drawer on clicking any nav item
+        sidebar.querySelectorAll('.sidebar-nav-item').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 993) {
+                    this.closeMobile(sidebar, overlay);
+                }
+            });
+        });
     },
-    toggle(sidebar, overlay) {
+    toggleMobile(sidebar, overlay) {
         sidebar.classList.toggle('open');
         overlay?.classList.toggle('active');
     },
-    close(sidebar, overlay) {
+    closeMobile(sidebar, overlay) {
         sidebar.classList.remove('open');
         overlay?.classList.remove('active');
     }

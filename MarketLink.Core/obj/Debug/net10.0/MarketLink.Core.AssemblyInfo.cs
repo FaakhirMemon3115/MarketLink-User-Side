@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MarketLink.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b3f9e482685616709f585c1d472a3ce12bb53194")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8b16180efbe83a9d144572c14b1cbf45f8ecd788")]
 [assembly: System.Reflection.AssemblyProductAttribute("MarketLink.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MarketLink.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] – My Account | MarketLink eGreen</title>
+    <title>@ViewData["Title"] – Customer Dashboard | MarketLink eGreen Basket</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -12,61 +12,81 @@
 <body data-authenticated="true">
 <div class="dashboard-overlay" id="sidebar-overlay"></div>
 
+@{
+    var currentCtrl = ViewContext.RouteData.Values["Controller"]?.ToString();
+    var currentAct = ViewContext.RouteData.Values["Action"]?.ToString();
+}
+
 <aside class="dashboard-sidebar" id="customer-sidebar">
     <div class="sidebar-brand">
-        <h4><i class="fas fa-seedling me-2" style="color:var(--accent)"></i>eGreen<span> Basket</span></h4>
-        <p style="font-size:11px;color:var(--muted);margin:4px 0 0">@User.Identity?.Name</p>
+        <a asp-area="Customer" asp-controller="Dashboard" asp-action="Index" style="text-decoration:none;">
+            <h4><i class="fas fa-seedling me-2" style="color:var(--accent)"></i>eGreen<span class="sidebar-nav-text"> Basket</span></h4>
+            <p class="sidebar-nav-text" style="font-size:11px;color:var(--muted);margin:4px 0 0">@User.Identity?.Name</p>
+        </a>
     </div>
     <nav class="sidebar-nav">
         <div class="sidebar-section-label">My Account</div>
-        <a class="sidebar-nav-item" asp-area="Customer" asp-controller="Dashboard" asp-action="Index">
-            <span class="nav-icon"><i class="fas fa-home"></i></span> Dashboard
+        <a class="sidebar-nav-item @(currentCtrl == "Dashboard" && currentAct == "Index" ? "active" : "")" asp-area="Customer" asp-controller="Dashboard" asp-action="Index" title="Dashboard">
+            <span class="nav-icon"><i class="fas fa-home"></i></span>
+            <span class="sidebar-nav-text">Dashboard</span>
         </a>
-        <a class="sidebar-nav-item" asp-area="Customer" asp-controller="Profile" asp-action="Index">
-            <span class="nav-icon"><i class="fas fa-user-circle"></i></span> My Profile
+        <a class="sidebar-nav-item @(currentCtrl == "Profile" && currentAct == "Index" ? "active" : "")" asp-area="Customer" asp-controller="Profile" asp-action="Index" title="My Profile">
+            <span class="nav-icon"><i class="fas fa-user-circle"></i></span>
+            <span class="sidebar-nav-text">My Profile</span>
         </a>
-        <a class="sidebar-nav-item" asp-area="Customer" asp-controller="Profile" asp-action="Addresses">
-            <span class="nav-icon"><i class="fas fa-map-marker-alt"></i></span> Addresses
+        <a class="sidebar-nav-item @(currentCtrl == "Profile" && currentAct == "Addresses" ? "active" : "")" asp-area="Customer" asp-controller="Profile" asp-action="Addresses" title="Addresses">
+            <span class="nav-icon"><i class="fas fa-map-marker-alt"></i></span>
+            <span class="sidebar-nav-text">Addresses</span>
         </a>
 
         <div class="sidebar-section-label">Shopping</div>
-        <a class="sidebar-nav-item" asp-controller="Products" asp-action="Index">
-            <span class="nav-icon"><i class="fas fa-leaf"></i></span> Browse Products
+        <a class="sidebar-nav-item @(currentCtrl == "Products" ? "active" : "")" asp-area="" asp-controller="Products" asp-action="Index" title="Browse Products">
+            <span class="nav-icon"><i class="fas fa-leaf"></i></span>
+            <span class="sidebar-nav-text">Browse Products</span>
         </a>
-        <a class="sidebar-nav-item" asp-area="Customer" asp-controller="Cart" asp-action="Index">
-            <span class="nav-icon"><i class="fas fa-shopping-basket"></i></span> Shopping Cart
+        <a class="sidebar-nav-item @(currentCtrl == "Cart" ? "active" : "")" asp-area="Customer" asp-controller="Cart" asp-action="Index" title="Shopping Cart">
+            <span class="nav-icon"><i class="fas fa-shopping-basket"></i></span>
+            <span class="sidebar-nav-text">Shopping Cart</span>
         </a>
-        <a class="sidebar-nav-item" asp-area="Customer" asp-controller="Favorites" asp-action="Index">
-            <span class="nav-icon"><i class="fas fa-heart"></i></span> Favorites
+        <a class="sidebar-nav-item @(currentCtrl == "Favorites" ? "active" : "")" asp-area="Customer" asp-controller="Favorites" asp-action="Index" title="Favorites">
+            <span class="nav-icon"><i class="fas fa-heart text-danger"></i></span>
+            <span class="sidebar-nav-text">Favorites</span>
         </a>
 
         <div class="sidebar-section-label">Orders</div>
-        <a class="sidebar-nav-item" asp-area="Customer" asp-controller="Orders" asp-action="Index">
-            <span class="nav-icon"><i class="fas fa-box"></i></span> My Orders
+        <a class="sidebar-nav-item @(currentCtrl == "Orders" && currentAct == "Index" ? "active" : "")" asp-area="Customer" asp-controller="Orders" asp-action="Index" title="My Orders">
+            <span class="nav-icon"><i class="fas fa-box"></i></span>
+            <span class="sidebar-nav-text">My Orders</span>
         </a>
-        <a class="sidebar-nav-item" asp-area="Customer" asp-controller="Orders" asp-action="History">
-            <span class="nav-icon"><i class="fas fa-history"></i></span> Order History
-        </a>
-
-        <div class="sidebar-section-label">Engage</div>
-        <a class="sidebar-nav-item" asp-area="Customer" asp-controller="Notifications" asp-action="Index">
-            <span class="nav-icon"><i class="fas fa-bell"></i></span> Notifications
-            <span class="notif-badge ms-auto" style="position:static;display:none">0</span>
-        </a>
-        <a class="sidebar-nav-item" asp-area="Customer" asp-controller="Reviews" asp-action="Index">
-            <span class="nav-icon"><i class="fas fa-star"></i></span> My Reviews
+        <a class="sidebar-nav-item @(currentCtrl == "Orders" && currentAct == "History" ? "active" : "")" asp-area="Customer" asp-controller="Orders" asp-action="History" title="Order History">
+            <span class="nav-icon"><i class="fas fa-history"></i></span>
+            <span class="sidebar-nav-text">Order History</span>
         </a>
 
-        <div class="sidebar-section-label">Account</div>
-        <a class="sidebar-nav-item" asp-area="Customer" asp-controller="Dashboard" asp-action="Settings">
-            <span class="nav-icon"><i class="fas fa-cog"></i></span> Settings
+        <div class="sidebar-section-label">Community & More</div>
+        <a class="sidebar-nav-item @(currentCtrl == "Notifications" ? "active" : "")" asp-area="Customer" asp-controller="Notifications" asp-action="Index" title="Notifications">
+            <span class="nav-icon"><i class="fas fa-bell"></i></span>
+            <span class="sidebar-nav-text">Notifications</span>
+        </a>
+        <a class="sidebar-nav-item @(currentCtrl == "Reviews" ? "active" : "")" asp-area="Customer" asp-controller="Reviews" asp-action="Index" title="My Reviews">
+            <span class="nav-icon"><i class="fas fa-star text-warning"></i></span>
+            <span class="sidebar-nav-text">My Reviews</span>
+        </a>
+        <a class="sidebar-nav-item @(currentCtrl == "Home" && currentAct == "About" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="About" title="About Us">
+            <span class="nav-icon"><i class="fas fa-info-circle"></i></span>
+            <span class="sidebar-nav-text">About Us</span>
+        </a>
+        <a class="sidebar-nav-item" asp-area="" asp-controller="Home" asp-action="Index" title="Marketplace Storefront">
+            <span class="nav-icon"><i class="fas fa-store"></i></span>
+            <span class="sidebar-nav-text">Storefront Home</span>
         </a>
     </nav>
     <div style="padding:16px 20px;border-top:1px solid var(--border);">
         <form asp-controller="Auth" asp-action="Logout" method="post">
             @Html.AntiForgeryToken()
-            <button type="submit" style="width:100%;background:transparent;border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px;color:var(--muted);font-size:13px;cursor:pointer;transition:var(--transition);">
-                <i class="fas fa-sign-out-alt me-2"></i>Sign Out
+            <button type="submit" style="width:100%;background:transparent;border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px;color:var(--muted);font-size:13px;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:8px;">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="sidebar-nav-text">Sign Out</span>
             </button>
         </form>
     </div>
@@ -75,14 +95,17 @@
 <div class="dashboard-content">
     <header class="dashboard-topbar">
         <div class="d-flex align-items-center gap-3">
-            <button id="sidebar-toggle" class="btn btn-sm" style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);">
+            <button id="sidebar-toggle" class="btn btn-sm" title="Toggle Sidebar" style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);">
                 <i class="fas fa-bars"></i>
             </button>
-            <h6 style="margin:0;font-size:16px;color:var(--heading);">@ViewData["Title"]</h6>
+            <h6 style="margin:0;font-size:16px;color:var(--heading);font-weight:700;">@ViewData["Title"]</h6>
         </div>
-        <div class="d-flex align-items-center gap-3">
-            <button class="dark-mode-toggle"></button>
-            <a asp-area="Customer" asp-controller="Cart" asp-action="Index" class="nav-icon-btn" style="position:relative;" title="Cart">
+        <div class="d-flex align-items-center gap-2 gap-sm-3">
+            <button class="dark-mode-toggle" title="Toggle dark mode"></button>
+            <a asp-area="Customer" asp-controller="Favorites" asp-action="Index" class="nav-icon-btn" title="Saved Favorites">
+                <i class="fas fa-heart text-danger"></i>
+            </a>
+            <a asp-area="Customer" asp-controller="Cart" asp-action="Index" class="nav-icon-btn" style="position:relative;" title="Shopping Cart">
                 <i class="fas fa-shopping-basket"></i>
                 <span class="cart-badge" style="display:none">0</span>
             </a>
@@ -90,28 +113,49 @@
                 <i class="fas fa-bell"></i>
                 <span class="notif-badge" style="display:none">0</span>
             </a>
+            <div class="dropdown">
+                <button class="nav-icon-btn" data-bs-toggle="dropdown" aria-label="Account">
+                    <i class="fas fa-user-circle"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="border:1px solid var(--border);border-radius:var(--radius);min-width:180px;">
+                    <li><h6 class="dropdown-header">@User.Identity?.Name</h6></li>
+                    <li><a class="dropdown-item small" asp-area="Customer" asp-controller="Profile" asp-action="Index"><i class="fas fa-user me-2 text-primary-green"></i>Profile</a></li>
+                    <li><a class="dropdown-item small" asp-area="Customer" asp-controller="Profile" asp-action="Addresses"><i class="fas fa-map-marker-alt me-2 text-danger"></i>Addresses</a></li>
+                    <li><a class="dropdown-item small" asp-area="Customer" asp-controller="Orders" asp-action="History"><i class="fas fa-history me-2 text-info"></i>Order History</a></li>
+                    <li><a class="dropdown-item small" asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-store me-2 text-muted"></i>Storefront</a></li>
+                    <li><hr class="dropdown-divider my-1"></li>
+                    <li>
+                        <form asp-controller="Auth" asp-action="Logout" method="post">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="dropdown-item small text-danger"><i class="fas fa-sign-out-alt me-2"></i>Sign Out</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
         </div>
     </header>
     <div class="dashboard-body">
         @if (TempData["Success"] != null)
         {
-            <div class="alert alert-success auto-dismiss" style="border-radius:var(--radius-sm);border-left:4px solid var(--success);">
+            <div class="alert alert-success auto-dismiss alert-dismissible fade show" role="alert" style="border-radius:var(--radius-sm);border-left:4px solid var(--success);">
                 <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         }
         @if (TempData["Error"] != null)
         {
-            <div class="alert alert-danger auto-dismiss" style="border-radius:var(--radius-sm);border-left:4px solid var(--danger);">
+            <div class="alert alert-danger auto-dismiss alert-dismissible fade show" role="alert" style="border-radius:var(--radius-sm);border-left:4px solid var(--danger);">
                 <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         }
         @RenderBody()
     </div>
 </div>
+
 <div class="toast-container-green"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
 </body>

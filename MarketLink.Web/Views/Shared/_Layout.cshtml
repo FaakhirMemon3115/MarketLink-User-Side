@@ -55,13 +55,17 @@
 
                 @if (User.Identity?.IsAuthenticated == true)
                 {
+                    <!-- Favorites on User Side Navbar -->
+                    <a class="nav-icon-btn" asp-area="Customer" asp-controller="Favorites" asp-action="Index" title="My Favorites">
+                        <i class="fas fa-heart text-danger"></i>
+                    </a>
                     <!-- Cart -->
                     <a class="nav-icon-btn" asp-area="Customer" asp-controller="Cart" asp-action="Index" title="Shopping Cart">
                         <i class="fas fa-shopping-basket"></i>
                         <span class="cart-badge" style="display:none">0</span>
                     </a>
                     <!-- Notifications -->
-                    <a class="nav-icon-btn" asp-controller="Notifications" asp-action="Index" title="Notifications">
+                    <a class="nav-icon-btn" asp-area="Customer" asp-controller="Notifications" asp-action="Index" title="Notifications">
                         <i class="fas fa-bell"></i>
                         <span class="notif-badge" style="display:none">0</span>
                     </a>
@@ -70,7 +74,7 @@
                         <button class="nav-icon-btn" data-bs-toggle="dropdown" aria-label="User menu">
                             <i class="fas fa-user"></i>
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-end" style="border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-lg);min-width:200px;padding:8px;">
+                        <ul class="dropdown-menu dropdown-menu-end" style="border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-lg);min-width:210px;padding:8px;">
                             <li><h6 class="dropdown-header px-3 py-2" style="font-size:12px;color:var(--muted);">@User.Identity.Name</h6></li>
                             @if (User.IsInRole("Admin"))
                             {
@@ -83,6 +87,10 @@
                             @if (User.IsInRole("Customer"))
                             {
                                 <li><a class="dropdown-item" asp-area="Customer" asp-controller="Dashboard" asp-action="Index"><i class="fas fa-home me-2 text-primary-green"></i>My Dashboard</a></li>
+                                <li><a class="dropdown-item" asp-area="Customer" asp-controller="Favorites" asp-action="Index"><i class="fas fa-heart me-2 text-danger"></i>My Favorites</a></li>
+                                <li><a class="dropdown-item" asp-area="Customer" asp-controller="Profile" asp-action="Index"><i class="fas fa-user-circle me-2 text-primary-green"></i>My Profile</a></li>
+                                <li><a class="dropdown-item" asp-area="Customer" asp-controller="Profile" asp-action="Addresses"><i class="fas fa-map-marker-alt me-2 text-danger"></i>My Addresses</a></li>
+                                <li><a class="dropdown-item" asp-area="Customer" asp-controller="Orders" asp-action="History"><i class="fas fa-history me-2 text-info"></i>Order History</a></li>
                             }
                             <li><hr class="dropdown-divider my-1" style="border-color:var(--border)"></li>
                             <li>
