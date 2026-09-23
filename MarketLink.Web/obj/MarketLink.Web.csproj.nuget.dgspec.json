@@ -10,7 +10,7 @@
         "projectUniqueName": "C:\\Users\\USER\\Desktop\\MarketLink-User-Side\\MarketLink.Core\\MarketLink.Core.csproj",
         "projectName": "MarketLink.Core",
         "projectPath": "C:\\Users\\USER\\Desktop\\MarketLink-User-Side\\MarketLink.Core\\MarketLink.Core.csproj",
-        "packagesPath": "C:\\Users\\USER\\AppData\\Local\\Temp\\cursor-sandbox-cache\\819c9133a9e98c132a3da11c361941a8\\nuget",
+        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\USER\\Desktop\\MarketLink-User-Side\\MarketLink.Core\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
@@ -351,7 +351,7 @@
         "projectUniqueName": "C:\\Users\\USER\\Desktop\\MarketLink-User-Side\\MarketLink.Infrastructure\\MarketLink.Infrastructure.csproj",
         "projectName": "MarketLink.Infrastructure",
         "projectPath": "C:\\Users\\USER\\Desktop\\MarketLink-User-Side\\MarketLink.Infrastructure\\MarketLink.Infrastructure.csproj",
-        "packagesPath": "C:\\Users\\USER\\AppData\\Local\\Temp\\cursor-sandbox-cache\\819c9133a9e98c132a3da11c361941a8\\nuget",
+        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\USER\\Desktop\\MarketLink-User-Side\\MarketLink.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
@@ -706,7 +706,7 @@
         "projectUniqueName": "C:\\Users\\USER\\Desktop\\MarketLink-User-Side\\MarketLink.Web\\MarketLink.Web.csproj",
         "projectName": "MarketLink.Web",
         "projectPath": "C:\\Users\\USER\\Desktop\\MarketLink-User-Side\\MarketLink.Web\\MarketLink.Web.csproj",
-        "packagesPath": "C:\\Users\\USER\\AppData\\Local\\Temp\\cursor-sandbox-cache\\819c9133a9e98c132a3da11c361941a8\\nuget",
+        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\USER\\Desktop\\MarketLink-User-Side\\MarketLink.Web\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
