@@ -232,7 +232,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             e.HasOne(x => x.Product)
              .WithMany(x => x.Favorites)
              .HasForeignKey(x => x.ProductId)
-             .OnDelete(DeleteBehavior.Cascade);
+             .OnDelete(DeleteBehavior.Restrict);
             e.HasOne(x => x.Farmer)
              .WithMany(x => x.Favorites)
              .HasForeignKey(x => x.FarmerId)
