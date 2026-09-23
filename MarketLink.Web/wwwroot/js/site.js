@@ -60,13 +60,16 @@ const Sidebar = {
         const toggleBtn = document.querySelector('#sidebar-toggle');
         if (!sidebar) return;
 
-        // Restore collapsed state on desktop
+        // Restore collapsed state only if explicitly set
         const isCollapsed = localStorage.getItem('ml-sidebar-collapsed') === 'true';
         if (isCollapsed && window.innerWidth >= 993) {
             document.body.classList.add('sidebar-hover-collapsed');
+        } else {
+            document.body.classList.remove('sidebar-hover-collapsed');
         }
 
-        toggleBtn?.addEventListener('click', () => {
+        toggleBtn?.addEventListener('click', (e) => {
+            e.preventDefault();
             if (window.innerWidth < 993) {
                 // Mobile: toggle drawer offcanvas
                 this.toggleMobile(sidebar, overlay);
