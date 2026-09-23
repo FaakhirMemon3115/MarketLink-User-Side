@@ -160,7 +160,7 @@ public class OrdersController : Controller
             {
                 await _notificationService.SendAsync(
                     order.Customer.UserId,
-                    NotificationType.OrderDelivered,
+                    NotificationType.OrderCompleted,
                     "Order Completed! 🌟",
                     $"Thank you for collecting order #{order.OrderNumber}. Enjoy your fresh farm produce!",
                     $"/Customer/Orders/Details/{order.Id}");

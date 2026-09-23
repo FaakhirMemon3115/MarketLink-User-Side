@@ -4,6 +4,7 @@ using MarketLink.Core.Interfaces;
 using MarketLink.Core.Entities;
 using MarketLink.Core.Enums;
 using Microsoft.EntityFrameworkCore;
+using FarmerEntity = MarketLink.Core.Entities.Farmer;
 
 namespace MarketLink.Web.Areas.Admin.Controllers;
 
