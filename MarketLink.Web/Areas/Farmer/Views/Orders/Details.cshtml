@@ -149,8 +149,8 @@
                     </div>
                 </div>
                 <div style="font-size:13px;color:var(--body-text);display:flex;flex-direction:column;gap:8px;">
-                    <div><i class="fas fa-phone me-2 text-muted"></i>@(Model.Customer?.Phone ?? "No phone provided")</div>
-                    <div><i class="fas fa-map-marker-alt me-2 text-muted"></i>@(Model.Customer?.City ?? "Local"), @(Model.Customer?.State ?? "")</div>
+                    <div><i class="fas fa-phone me-2 text-muted"></i>@(Model.Customer?.User?.PhoneNumber ?? "No phone provided")</div>
+                    <div><i class="fas fa-map-marker-alt me-2 text-muted"></i>@(Model.Customer?.DefaultCity ?? "Local")</div>
                 </div>
             </div>
         </div>

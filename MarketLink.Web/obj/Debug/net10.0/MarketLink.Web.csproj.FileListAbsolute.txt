@@ -288,3 +288,7 @@ C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\Mark
 C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\ref\MarketLink.Web.dll
 C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\compressed\b1bjtn3ed9-{0}-h732wxcqsu-h732wxcqsu.gz
 C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\compressed\vqsvky1ean-{0}-80efdre9wn-80efdre9wn.gz
+C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\bin\Debug\net10.0\Microsoft.OpenApi.dll
+C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\bin\Debug\net10.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerUI.dll

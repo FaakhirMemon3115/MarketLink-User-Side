@@ -61,7 +61,7 @@
                                     </span>
                                 </td>
                                 <td style="padding:16px 20px;font-size:13px;color:var(--heading);">
-                                    @c.DisplayOrder
+                                    @c.SortOrder
                                 </td>
                                 <td style="padding:16px 20px;">
                                     @if (c.IsActive)
@@ -113,7 +113,7 @@
                                                         <div class="row g-2 mb-3">
                                                             <div class="col-6">
                                                                 <label class="form-label" style="font-weight:600;font-size:13px;">Display Order</label>
-                                                                <input type="number" name="displayOrder" value="@c.DisplayOrder" class="form-control" style="border:1px solid var(--border);" />
+                                                                <input type="number" name="displayOrder" value="@c.SortOrder" class="form-control" style="border:1px solid var(--border);" />
                                                             </div>
                                                             <div class="col-6 d-flex align-items-center pt-4">
                                                                 <div class="form-check form-switch">
