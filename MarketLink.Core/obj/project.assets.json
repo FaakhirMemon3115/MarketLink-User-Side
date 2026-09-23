@@ -859,7 +859,7 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\USER\\.nuget\\packages\\": {}
+    "C:\\Users\\USER\\AppData\\Local\\Temp\\cursor-sandbox-cache\\819c9133a9e98c132a3da11c361941a8\\nuget": {}
   },
   "project": {
     "version": "1.0.0",
@@ -867,7 +867,7 @@
       "projectUniqueName": "C:\\Users\\USER\\Desktop\\MarketLink-User-Side\\MarketLink.Core\\MarketLink.Core.csproj",
       "projectName": "MarketLink.Core",
       "projectPath": "C:\\Users\\USER\\Desktop\\MarketLink-User-Side\\MarketLink.Core\\MarketLink.Core.csproj",
-      "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
+      "packagesPath": "C:\\Users\\USER\\AppData\\Local\\Temp\\cursor-sandbox-cache\\819c9133a9e98c132a3da11c361941a8\\nuget",
       "outputPath": "C:\\Users\\USER\\Desktop\\MarketLink-User-Side\\MarketLink.Core\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
