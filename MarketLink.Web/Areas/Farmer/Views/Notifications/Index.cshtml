@@ -1,0 +1,66 @@
+@model IEnumerable<MarketLink.Core.Entities.Notification>
+@{
+    ViewData["Title"] = "Farmer Notifications";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+        <h4 class="mb-1" style="font-weight:700;color:var(--heading);"><i class="fas fa-bell me-2 text-primary-green"></i>Farm Alerts & Notifications</h4>
+        <p class="mb-0" style="font-size:13px;color:var(--muted);">Updates on incoming pre-orders, stall pickup schedules, and stock alerts.</p>
+    </div>
+    @if (Model.Any(n => !n.IsRead))
+    {
+        <form asp-action="MarkAllAsRead" method="post">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-outline-green btn-sm">
+                <i class="fas fa-check-double me-1"></i> Mark All as Read
+            </button>
+        </form>
+    }
+</div>
+
+@if (!Model.Any())
+{
+    <div class="card border-0 text-center py-5" style="background:var(--card);border-radius:var(--radius);border:1px dashed var(--border);">
+        <div class="card-body">
+            <div style="font-size:48px;margin-bottom:16px;">🌾</div>
+            <h5 class="fw-bold" style="color:var(--heading);">No notifications yet</h5>
+            <p class="text-muted" style="max-width:420px;margin:0 auto;">Your farm queue is clear. You will receive notifications when customers place pre-orders or when stock is low.</p>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card border-0" style="background:var(--card);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);overflow:hidden;">
+        <div class="list-group list-group-flush">
+            @foreach (var n in Model)
+            {
+                <div class="list-group-item p-3 d-flex align-items-start gap-3 @(n.IsRead ? "" : "bg-light")" style="border-color:var(--border);">
+                    <div style="width:42px;height:42px;border-radius:50%;background:rgba(46,90,39,0.12);display:flex;align-items:center;justify-content:center;color:var(--primary);flex-shrink:0;">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <h6 class="mb-0 fw-bold @(n.IsRead ? "text-muted" : "")" style="color:var(--heading);">@n.Title</h6>
+                            <small class="text-muted">@n.CreatedAt.ToString("MMM dd, hh:mm tt")</small>
+                        </div>
+                        <p class="mb-2 text-muted small">@n.Message</p>
+                        @if (!string.IsNullOrEmpty(n.Link))
+                        {
+                            <a href="@n.Link" class="btn btn-sm btn-outline-green py-0 px-2" style="font-size:12px;">View Details</a>
+                        }
+                    </div>
+                    @if (!n.IsRead)
+                    {
+                        <form asp-action="MarkAsRead" asp-route-id="@n.Id" method="post">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-link text-muted p-0" title="Mark as read">
+                                <i class="fas fa-check"></i>
+                            </button>
+                        </form>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+}

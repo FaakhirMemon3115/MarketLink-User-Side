@@ -11,7 +11,7 @@
             <h4 class="fw-bold mb-1" style="color:var(--heading);"><i class="fas fa-heart me-2 text-danger"></i>My Favorite Produce & Farmers</h4>
             <p class="text-muted small mb-0">Your saved fresh items and favorite local growers in one convenient place.</p>
         </div>
-        <a asp-controller="Products" asp-action="Index" class="btn btn-outline-green btn-sm">
+        <a asp-area="" asp-controller="Products" asp-action="Index" class="btn btn-outline-green btn-sm">
             <i class="fas fa-search me-1"></i> Browse More Products
         </a>
     </div>
@@ -44,7 +44,7 @@
                 <p class="text-muted" style="max-width:440px;margin:0 auto 20px;">
                     When you find fresh items or local farmers you love, click the heart icon on any product or farm to save them here!
                 </p>
-                <a asp-controller="Products" asp-action="Index" class="btn btn-primary-green btn-pill px-4">
+                <a asp-area="" asp-controller="Products" asp-action="Index" class="btn btn-primary-green btn-pill px-4">
                     <i class="fas fa-shopping-basket me-2"></i>Explore Fresh Products
                 </a>
             </div>
@@ -62,7 +62,7 @@
                         <div class="col-sm-6 col-lg-4 col-xl-3">
                             <div class="card product-card h-100 border-0" style="border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);">
                                 <div style="position:relative;">
-                                    <a asp-controller="Products" asp-action="Details" asp-route-slug="@p.Slug">
+                                    <a asp-area="" asp-controller="Products" asp-action="Details" asp-route-slug="@p.Slug">
                                         <img src="@(string.IsNullOrEmpty(p.ImageUrl) ? "/images/placeholder.png" : p.ImageUrl)" class="card-img-top" alt="@p.Name" style="height:180px;object-fit:cover;">
                                     </a>
                                     @if (p.IsOrganic)
@@ -78,14 +78,14 @@
                                 </div>
                                 <div class="card-body p-3 d-flex flex-column">
                                     <div class="text-muted small mb-1">@p.Category?.Name</div>
-                                    <h6 class="fw-bold mb-1"><a asp-controller="Products" asp-action="Details" asp-route-slug="@p.Slug" style="color:var(--heading);text-decoration:none;">@p.Name</a></h6>
+                                    <h6 class="fw-bold mb-1"><a asp-area="" asp-controller="Products" asp-action="Details" asp-route-slug="@p.Slug" style="color:var(--heading);text-decoration:none;">@p.Name</a></h6>
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <span class="fw-bold text-primary-green" style="font-size:16px;">$@p.PricePerKg.ToString("0.00")<span class="small text-muted font-monospace">/kg</span></span>
                                         <span class="small text-muted"><i class="fas fa-tractor me-1"></i>@(p.Farmer?.FarmName ?? "Local Farm")</span>
                                     </div>
                                     <div class="mt-auto pt-2">
                                         <button class="btn btn-primary-green btn-sm w-100" onclick="ML.Cart.addItem(@p.Id, 1)">
-                                            <i class="fas fa-shopping-basket me-1"></i> Add to Cart
+                                             <i class="fas fa-shopping-basket me-1"></i> Add to Cart
                                         </button>
                                     </div>
                                 </div>
@@ -109,7 +109,7 @@
                                 </div>
                                 <h6 class="fw-bold mb-1" style="color:var(--heading);">@f.FarmName</h6>
                                 <p class="text-muted small mb-3">@(f.Bio ?? "Passionate local sustainable producer.")</p>
-                                <a asp-controller="Farmers" asp-action="Details" asp-route-id="@f.Id" class="btn btn-outline-green btn-sm mt-auto w-100">
+                                <a asp-area="" asp-controller="Farmers" asp-action="Details" asp-route-id="@f.Id" class="btn btn-outline-green btn-sm mt-auto w-100">
                                     View Farm Profile
                                 </a>
                             </div>
@@ -131,7 +131,7 @@
                         <div class="col-sm-6 col-lg-4 col-xl-3">
                             <div class="card product-card h-100 border-0" style="border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);">
                                 <div style="position:relative;">
-                                    <a asp-controller="Products" asp-action="Details" asp-route-slug="@p.Slug">
+                                    <a asp-area="" asp-controller="Products" asp-action="Details" asp-route-slug="@p.Slug">
                                         <img src="@(string.IsNullOrEmpty(p.ImageUrl) ? "/images/placeholder.png" : p.ImageUrl)" class="card-img-top" alt="@p.Name" style="height:180px;object-fit:cover;">
                                     </a>
                                     @if (p.IsOrganic)
@@ -147,7 +147,7 @@
                                 </div>
                                 <div class="card-body p-3 d-flex flex-column">
                                     <div class="text-muted small mb-1">@p.Category?.Name</div>
-                                    <h6 class="fw-bold mb-1"><a asp-controller="Products" asp-action="Details" asp-route-slug="@p.Slug" style="color:var(--heading);text-decoration:none;">@p.Name</a></h6>
+                                    <h6 class="fw-bold mb-1"><a asp-area="" asp-controller="Products" asp-action="Details" asp-route-slug="@p.Slug" style="color:var(--heading);text-decoration:none;">@p.Name</a></h6>
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <span class="fw-bold text-primary-green" style="font-size:16px;">$@p.PricePerKg.ToString("0.00")<span class="small text-muted">/kg</span></span>
                                         <span class="small text-muted"><i class="fas fa-tractor me-1"></i>@(p.Farmer?.FarmName ?? "Local")</span>
@@ -187,7 +187,7 @@
                                 </div>
                                 <h6 class="fw-bold mb-1" style="color:var(--heading);">@f.FarmName</h6>
                                 <p class="text-muted small mb-3">@(f.Bio ?? "Passionate local sustainable producer.")</p>
-                                <a asp-controller="Farmers" asp-action="Details" asp-route-id="@f.Id" class="btn btn-outline-green btn-sm mt-auto w-100">
+                                <a asp-area="" asp-controller="Farmers" asp-action="Details" asp-route-id="@f.Id" class="btn btn-outline-green btn-sm mt-auto w-100">
                                     View Farm Profile
                                 </a>
                             </div>

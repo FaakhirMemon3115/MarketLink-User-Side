@@ -167,6 +167,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcRmFybWVyXFZpZXdzXEludmVudG9yeVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/USER/Desktop/MarketLink-User-Side/MarketLink.Web/Areas/Farmer/Views/Notifications/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcRmFybWVyXFZpZXdzXE5vdGlmaWNhdGlvbnNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/USER/Desktop/MarketLink-User-Side/MarketLink.Web/Areas/Farmer/Views/Orders/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcRmFybWVyXFZpZXdzXE9yZGVyc1xEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
