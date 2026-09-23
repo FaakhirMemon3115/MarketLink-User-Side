@@ -290,5 +290,7 @@ C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\bin\Debug\net10.0\Micr
 C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\bin\Debug\net10.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerUI.dll
-C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\compressed\vqsvky1ean-{0}-h4qe1902gl-h4qe1902gl.gz
-C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\compressed\b1bjtn3ed9-{0}-04bwbze57d-04bwbze57d.gz
+C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\compressed\b1bjtn3ed9-{0}-s25om95jyj-s25om95jyj.gz
+C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\compressed\gb82d5nbtz-{0}-2eznsp9h99-2eznsp9h99.gz
+C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\compressed\16phxixp2e-{0}-2eznsp9h99-2eznsp9h99.gz
+C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\compressed\vqsvky1ean-{0}-zf4ks39r5s-zf4ks39r5s.gz
