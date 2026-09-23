@@ -10,6 +10,7 @@ public class ApplicationUser : IdentityUser
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }
     public bool IsActive { get; set; } = true;
+    public string FullName => $"{FirstName} {LastName}".Trim();
 
     // Navigation
     public Customer? Customer { get; set; }
