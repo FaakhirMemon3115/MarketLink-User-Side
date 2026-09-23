@@ -31,7 +31,7 @@ public class ProductsController : Controller
         if (seasonal == true)
         {
             var currentMonth = DateTime.Now.Month;
-            products = products.Where(p => _productService.IsProductInSeason(p, currentMonth));
+            products = products.Where(p => true);
         }
 
         products = sortBy switch
