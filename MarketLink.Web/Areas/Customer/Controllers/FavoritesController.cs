@@ -45,7 +45,7 @@ public class FavoritesController : Controller
             int customerId = await GetCustomerIdAsync();
             var favRepo = _unitOfWork.Repository<Favorite>();
 
-            Favorite existing = null;
+            Favorite? existing = null;
             if (type.ToLower() == "product")
             {
                 var favs = await favRepo.FindAsync(f => f.CustomerId == customerId && f.ProductId == id);
@@ -64,7 +64,7 @@ public class FavoritesController : Controller
             bool isFavorite;
             if (existing != null)
             {
-                favRepo.Delete(existing);
+                favRepo.Remove(existing);
                 isFavorite = false;
             }
             else
@@ -82,7 +82,7 @@ public class FavoritesController : Controller
                 isFavorite = true;
             }
 
-            await _unitOfWork.CompleteAsync();
+            await _unitOfWork.SaveChangesAsync();
 
             return Json(new { success = true, isFavorite });
         }
