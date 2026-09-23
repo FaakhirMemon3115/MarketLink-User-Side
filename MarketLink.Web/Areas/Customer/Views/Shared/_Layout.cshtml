@@ -74,12 +74,6 @@
                 </a>
             </li>
             <li class="sidebar-menu-item">
-                <a class="sidebar-nav-item @(currentCtrl == "Markets" ? "active" : "")" asp-area="" asp-controller="Markets" asp-action="Index" title="Markets">
-                    <span class="nav-icon"><i class="fas fa-store"></i></span>
-                    <span class="sidebar-nav-text">Markets</span>
-                </a>
-            </li>
-            <li class="sidebar-menu-item">
                 <a class="sidebar-nav-item @(currentCtrl == "Cart" ? "active" : "")" asp-area="Customer" asp-controller="Cart" asp-action="Index" title="Shopping Cart">
                     <span class="nav-icon"><i class="fas fa-shopping-basket"></i></span>
                     <span class="sidebar-nav-text">Shopping Cart</span>
@@ -142,7 +136,7 @@
 
     <!-- Sidebar Bottom Sign Out -->
     <div class="sidebar-footer-fixed">
-        <form asp-area="" asp-controller="Auth" asp-action="Logout" method="post" class="w-100">
+        <form asp-controller="Auth" asp-action="Logout" method="post" class="w-100">
             @Html.AntiForgeryToken()
             <button type="submit" class="sidebar-signout-btn">
                 <i class="fas fa-sign-out-alt"></i>
@@ -181,14 +175,12 @@
                 <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="border:1px solid var(--border);border-radius:var(--radius);min-width:180px;">
                     <li><h6 class="dropdown-header">@User.Identity?.Name</h6></li>
                     <li><a class="dropdown-item small" asp-area="Customer" asp-controller="Profile" asp-action="Index"><i class="fas fa-user me-2 text-primary-green"></i>Profile</a></li>
-                    <li><a class="dropdown-item small" asp-area="Customer" asp-controller="Profile" asp-action="Index"><i class="fas fa-cog me-2 text-muted"></i>Settings</a></li>
                     <li><a class="dropdown-item small" asp-area="Customer" asp-controller="Profile" asp-action="Addresses"><i class="fas fa-map-marker-alt me-2 text-danger"></i>Addresses</a></li>
                     <li><a class="dropdown-item small" asp-area="Customer" asp-controller="Orders" asp-action="History"><i class="fas fa-history me-2 text-info"></i>Order History</a></li>
-                    <li><a class="dropdown-item small" asp-area="" asp-controller="Products" asp-action="Index"><i class="fas fa-leaf me-2 text-success"></i>Browse Products</a></li>
                     <li><a class="dropdown-item small" asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-store me-2 text-muted"></i>Storefront</a></li>
                     <li><hr class="dropdown-divider my-1"></li>
                     <li>
-                        <form asp-area="" asp-controller="Auth" asp-action="Logout" method="post">
+                        <form asp-controller="Auth" asp-action="Logout" method="post">
                             @Html.AntiForgeryToken()
                             <button type="submit" class="dropdown-item small text-danger"><i class="fas fa-sign-out-alt me-2"></i>Sign Out</button>
                         </form>

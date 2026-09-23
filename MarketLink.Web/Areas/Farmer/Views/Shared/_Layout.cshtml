@@ -13,121 +13,68 @@
 <body data-authenticated="true">
 <div class="dashboard-overlay" id="sidebar-overlay"></div>
 
-@{
-    var currentCtrl = ViewContext.RouteData.Values["Controller"]?.ToString();
-    var currentAct = ViewContext.RouteData.Values["Action"]?.ToString();
-}
-
 <aside class="dashboard-sidebar" id="farmer-sidebar">
-    <div class="sidebar-brand-fixed" id="sidebar-brand-header">
-        <div class="d-flex align-items-center justify-content-between">
-            <a asp-area="Farmer" asp-controller="Dashboard" asp-action="Index" class="brand-link">
-                <div class="brand-icon-box">
-                    <i class="fas fa-tractor"></i>
-                </div>
-                <div class="brand-text-box">
-                    <h4 class="brand-title">Farmer<span> Hub</span></h4>
-                    <p class="brand-user"><i class="fas fa-circle text-success me-1" style="font-size:7px;"></i>@(User.Identity?.Name ?? "Farmer")</p>
-                </div>
-            </a>
-            <button type="button" class="btn btn-sm btn-light d-lg-none rounded-circle" id="sidebar-close-btn" style="width:32px;height:32px;padding:0;display:inline-flex;align-items:center;justify-content:center;" aria-label="Close Sidebar">
-                <i class="fas fa-times text-muted"></i>
-            </button>
-        </div>
+    <div class="sidebar-brand">
+        <h4><i class="fas fa-tractor me-2" style="color:var(--accent)"></i>Farmer<span> Hub</span></h4>
+        <p style="font-size:11px;color:var(--muted);margin:4px 0 0">@User.Identity?.Name</p>
     </div>
-
     <nav class="sidebar-nav">
-        <ul class="sidebar-menu-list">
-            <li class="sidebar-section-header"><span class="sidebar-section-label">Overview</span></li>
-            <li class="sidebar-menu-item">
-                <a class="sidebar-nav-item @(currentCtrl == "Dashboard" && currentAct == "Index" ? "active" : "")" asp-area="Farmer" asp-controller="Dashboard" asp-action="Index" title="Dashboard">
-                    <span class="nav-icon"><i class="fas fa-home"></i></span>
-                    <span class="sidebar-nav-text">Dashboard</span>
-                </a>
-            </li>
+        <div class="sidebar-section-label">Overview</div>
+        <a class="sidebar-nav-item" asp-area="Farmer" asp-controller="Dashboard" asp-action="Index">
+            <span class="nav-icon"><i class="fas fa-home"></i></span> Dashboard
+        </a>
 
-            <li class="sidebar-section-header"><span class="sidebar-section-label">Farm</span></li>
-            <li class="sidebar-menu-item">
-                <a class="sidebar-nav-item @(currentCtrl == "Profile" && currentAct == "Index" ? "active" : "")" asp-area="Farmer" asp-controller="Profile" asp-action="Index" title="My Profile">
-                    <span class="nav-icon"><i class="fas fa-user-circle"></i></span>
-                    <span class="sidebar-nav-text">My Profile</span>
-                </a>
-            </li>
-            <li class="sidebar-menu-item">
-                <a class="sidebar-nav-item @(currentCtrl == "Profile" && currentAct == "Markets" ? "active" : "")" asp-area="Farmer" asp-controller="Profile" asp-action="Markets" title="My Markets">
-                    <span class="nav-icon"><i class="fas fa-store"></i></span>
-                    <span class="sidebar-nav-text">My Markets</span>
-                </a>
-            </li>
-            <li class="sidebar-menu-item">
-                <a class="sidebar-nav-item @(currentCtrl == "PickupSlots" ? "active" : "")" asp-area="Farmer" asp-controller="PickupSlots" asp-action="Index" title="Pickup Slots">
-                    <span class="nav-icon"><i class="fas fa-clock"></i></span>
-                    <span class="sidebar-nav-text">Pickup Slots</span>
-                </a>
-            </li>
+        <div class="sidebar-section-label">Farm</div>
+        <a class="sidebar-nav-item" asp-area="Farmer" asp-controller="Profile" asp-action="Index">
+            <span class="nav-icon"><i class="fas fa-user-circle"></i></span> My Profile
+        </a>
+        <a class="sidebar-nav-item" asp-area="Farmer" asp-controller="Profile" asp-action="Markets">
+            <span class="nav-icon"><i class="fas fa-store"></i></span> My Markets
+        </a>
+        <a class="sidebar-nav-item" asp-area="Farmer" asp-controller="PickupSlots" asp-action="Index">
+            <span class="nav-icon"><i class="fas fa-clock"></i></span> Pickup Slots
+        </a>
 
-            <li class="sidebar-section-header"><span class="sidebar-section-label">Products</span></li>
-            <li class="sidebar-menu-item">
-                <a class="sidebar-nav-item @(currentCtrl == "Products" && currentAct == "Index" ? "active" : "")" asp-area="Farmer" asp-controller="Products" asp-action="Index" title="My Products">
-                    <span class="nav-icon"><i class="fas fa-box-open"></i></span>
-                    <span class="sidebar-nav-text">My Products</span>
-                </a>
-            </li>
-            <li class="sidebar-menu-item">
-                <a class="sidebar-nav-item @(currentCtrl == "Products" && currentAct == "Create" ? "active" : "")" asp-area="Farmer" asp-controller="Products" asp-action="Create" title="Add Product">
-                    <span class="nav-icon"><i class="fas fa-plus-circle"></i></span>
-                    <span class="sidebar-nav-text">Add Product</span>
-                </a>
-            </li>
-            <li class="sidebar-menu-item">
-                <a class="sidebar-nav-item @(currentCtrl == "Inventory" ? "active" : "")" asp-area="Farmer" asp-controller="Inventory" asp-action="Index" title="Inventory">
-                    <span class="nav-icon"><i class="fas fa-warehouse"></i></span>
-                    <span class="sidebar-nav-text">Inventory</span>
-                </a>
-            </li>
+        <div class="sidebar-section-label">Products</div>
+        <a class="sidebar-nav-item" asp-area="Farmer" asp-controller="Products" asp-action="Index">
+            <span class="nav-icon"><i class="fas fa-box-open"></i></span> My Products
+        </a>
+        <a class="sidebar-nav-item" asp-area="Farmer" asp-controller="Products" asp-action="Create">
+            <span class="nav-icon"><i class="fas fa-plus-circle"></i></span> Add Product
+        </a>
+        <a class="sidebar-nav-item" asp-area="Farmer" asp-controller="Inventory" asp-action="Index">
+            <span class="nav-icon"><i class="fas fa-warehouse"></i></span> Inventory
+        </a>
 
-            <li class="sidebar-section-header"><span class="sidebar-section-label">Orders</span></li>
-            <li class="sidebar-menu-item">
-                <a class="sidebar-nav-item @(currentCtrl == "Orders" && string.IsNullOrEmpty(Context.Request.Query["status"]) ? "active" : "")" asp-area="Farmer" asp-controller="Orders" asp-action="Index" title="Orders">
-                    <span class="nav-icon"><i class="fas fa-shopping-cart"></i></span>
-                    <span class="sidebar-nav-text">All Orders</span>
-                </a>
-            </li>
-            <li class="sidebar-menu-item">
-                <a class="sidebar-nav-item @(Context.Request.Query["status"] == "Pending" ? "active" : "")" asp-area="Farmer" asp-controller="Orders" asp-action="Index" asp-route-status="Pending" title="Pending Orders">
-                    <span class="nav-icon"><i class="fas fa-hourglass-half"></i></span>
-                    <span class="sidebar-nav-text">Pending Orders</span>
-                </a>
-            </li>
+        <div class="sidebar-section-label">Orders</div>
+        <a class="sidebar-nav-item" asp-area="Farmer" asp-controller="Orders" asp-action="Index">
+            <span class="nav-icon"><i class="fas fa-shopping-cart"></i></span> Orders
+        </a>
+        <a class="sidebar-nav-item" asp-area="Farmer" asp-controller="Orders" asp-action="Index" asp-route-status="Pending">
+            <span class="nav-icon"><i class="fas fa-clock"></i></span> Pending Orders
+        </a>
 
-            <li class="sidebar-section-header"><span class="sidebar-section-label">Insights</span></li>
-            <li class="sidebar-menu-item">
-                <a class="sidebar-nav-item @(currentCtrl == "Analytics" ? "active" : "")" asp-area="Farmer" asp-controller="Analytics" asp-action="Index" title="Analytics">
-                    <span class="nav-icon"><i class="fas fa-chart-line"></i></span>
-                    <span class="sidebar-nav-text">Analytics</span>
-                </a>
-            </li>
-            <li class="sidebar-menu-item">
-                <a class="sidebar-nav-item @(currentCtrl == "Reviews" ? "active" : "")" asp-area="Farmer" asp-controller="Reviews" asp-action="Index" title="Reviews">
-                    <span class="nav-icon"><i class="fas fa-star"></i></span>
-                    <span class="sidebar-nav-text">Reviews</span>
-                </a>
-            </li>
-            <li class="sidebar-menu-item">
-                <a class="sidebar-nav-item" asp-area="" asp-controller="Home" asp-action="Index" title="View Marketplace">
-                    <span class="nav-icon"><i class="fas fa-globe"></i></span>
-                    <span class="sidebar-nav-text">View Marketplace</span>
-                </a>
-            </li>
-        </ul>
+        <div class="sidebar-section-label">Insights</div>
+        <a class="sidebar-nav-item" asp-area="Farmer" asp-controller="Analytics" asp-action="Index">
+            <span class="nav-icon"><i class="fas fa-chart-line"></i></span> Analytics
+        </a>
+        <a class="sidebar-nav-item" asp-area="Farmer" asp-controller="Reviews" asp-action="Index">
+            <span class="nav-icon"><i class="fas fa-star"></i></span> Reviews
+        </a>
+
+        <div class="sidebar-section-label">Account</div>
+        <a class="sidebar-nav-item" asp-area="Farmer" asp-controller="Dashboard" asp-action="Settings">
+            <span class="nav-icon"><i class="fas fa-cog"></i></span> Settings
+        </a>
+        <a class="sidebar-nav-item" asp-controller="Home" asp-action="Index">
+            <span class="nav-icon"><i class="fas fa-globe"></i></span> View Marketplace
+        </a>
     </nav>
-
-    <div class="sidebar-footer-fixed">
-        <form asp-area="" asp-controller="Auth" asp-action="Logout" method="post" class="w-100">
+    <div style="padding:16px 20px;border-top:1px solid var(--border);">
+        <form asp-controller="Auth" asp-action="Logout" method="post">
             @Html.AntiForgeryToken()
-            <button type="submit" class="sidebar-signout-btn" title="Sign Out">
-                <i class="fas fa-sign-out-alt"></i>
-                <span class="sidebar-nav-text">Sign Out</span>
+            <button type="submit" style="width:100%;background:transparent;border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px;color:var(--muted);font-size:13px;cursor:pointer;transition:var(--transition);">
+                <i class="fas fa-sign-out-alt me-2"></i>Sign Out
             </button>
         </form>
     </div>
@@ -136,64 +83,40 @@
 <div class="dashboard-content">
     <header class="dashboard-topbar">
         <div class="d-flex align-items-center gap-3">
-            <button id="sidebar-toggle" class="btn btn-sm btn-sidebar-toggle" title="Toggle Sidebar" aria-label="Toggle navigation">
-                <i class="fas fa-bars"></i>
+            <button id="sidebar-toggle" class="btn btn-sm" style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);">
+                <i class="fas fa-bars" style="color:var(--heading)"></i>
             </button>
             <div>
-                <h6 class="topbar-title">@ViewData["Title"]</h6>
+                <h6 style="margin:0;font-size:16px;color:var(--heading);">@ViewData["Title"]</h6>
                 @if (ViewData["Subtitle"] != null)
                 {
-                    <p class="mb-0" style="font-size:12px;color:var(--muted);">@ViewData["Subtitle"]</p>
+                    <p style="margin:0;font-size:12px;color:var(--muted);">@ViewData["Subtitle"]</p>
                 }
             </div>
         </div>
-        <div class="d-flex align-items-center gap-2 gap-sm-3">
-            <button class="dark-mode-toggle" title="Toggle dark mode" aria-label="Toggle dark mode"></button>
-            <a asp-area="Farmer" asp-controller="Products" asp-action="Index" class="nav-icon-btn" title="My Products">
-                <i class="fas fa-leaf"></i>
-            </a>
+        <div class="d-flex align-items-center gap-3">
+            <button class="dark-mode-toggle"></button>
             <a asp-area="Farmer" asp-controller="Orders" asp-action="Index" asp-route-status="Pending" class="nav-icon-btn" style="position:relative;" title="Pending Orders">
                 <i class="fas fa-bell"></i>
                 <span class="notif-badge" style="display:none">0</span>
             </a>
-            <div class="dropdown">
-                <button class="nav-icon-btn" data-bs-toggle="dropdown" aria-label="Account">
-                    <i class="fas fa-user-circle"></i>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="border:1px solid var(--border);border-radius:var(--radius);min-width:200px;">
-                    <li><h6 class="dropdown-header">@(User.Identity?.Name ?? "Farmer")</h6></li>
-                    <li><a class="dropdown-item small" asp-area="Farmer" asp-controller="Profile" asp-action="Index"><i class="fas fa-user me-2 text-primary-green"></i>Profile</a></li>
-                    <li><a class="dropdown-item small" asp-area="Farmer" asp-controller="Products" asp-action="Index"><i class="fas fa-box-open me-2 text-success"></i>My Products</a></li>
-                    <li><a class="dropdown-item small" asp-area="Farmer" asp-controller="Dashboard" asp-action="Settings"><i class="fas fa-cog me-2 text-muted"></i>Settings</a></li>
-                    <li><a class="dropdown-item small" asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-store me-2 text-muted"></i>Marketplace</a></li>
-                    <li><hr class="dropdown-divider my-1"></li>
-                    <li>
-                        <form asp-area="" asp-controller="Auth" asp-action="Logout" method="post">
-                            @Html.AntiForgeryToken()
-                            <button type="submit" class="dropdown-item small text-danger"><i class="fas fa-sign-out-alt me-2"></i>Sign Out</button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
         </div>
     </header>
-    <main class="dashboard-body">
+    <div class="dashboard-body">
         @if (TempData["Success"] != null)
         {
-            <div class="alert alert-success auto-dismiss alert-dismissible fade show" role="alert" style="border-radius:var(--radius-sm);border-left:4px solid var(--success);">
+            <div class="alert alert-success auto-dismiss" style="border-radius:var(--radius-sm);border-left:4px solid var(--success);">
                 <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         }
         @if (TempData["Error"] != null)
         {
-            <div class="alert alert-danger auto-dismiss alert-dismissible fade show" role="alert" style="border-radius:var(--radius-sm);border-left:4px solid var(--danger);">
+            <div class="alert alert-danger auto-dismiss" style="border-radius:var(--radius-sm);border-left:4px solid var(--danger);">
                 <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         }
         @RenderBody()
-    </main>
+    </div>
 </div>
 <div class="toast-container-green"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

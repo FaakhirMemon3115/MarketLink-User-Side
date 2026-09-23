@@ -1,88 +1,61 @@
 @{
     ViewData["Title"] = "Dashboard Overview";
-    var revenue = ViewBag.TotalRevenue as decimal? ?? 0m;
 }
 
-<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
-    <div>
-        <h4 class="mb-1" style="font-weight:700;color:var(--heading);">Platform Control Center</h4>
-        <p class="mb-0" style="font-size:13px;color:var(--muted);">Monitor marketplace volume, listings, and operator workflows.</p>
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card p-4 h-100" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div style="width:40px;height:40px;background:var(--soft-highlight);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+                    <i class="fas fa-users text-primary" style="font-size:20px;"></i>
+                </div>
+                <span class="badge badge-success">+12%</span>
+            </div>
+            <h3 style="font-weight:700;margin:0;">@ViewBag.CustomerCount</h3>
+            <div style="font-size:14px;color:var(--muted);margin-top:4px;">Total Customers</div>
+        </div>
     </div>
-    <div class="d-flex flex-wrap gap-2">
-        <a asp-area="Admin" asp-controller="Products" asp-action="Index" class="btn btn-primary-green btn-sm">
-            <i class="fas fa-leaf me-1"></i> Product Catalog
-        </a>
-        <a asp-area="Admin" asp-controller="Dashboard" asp-action="Settings" class="btn btn-outline-secondary btn-sm">
-            <i class="fas fa-cog me-1"></i> Settings
-        </a>
+    <div class="col-md-3">
+        <div class="card p-4 h-100" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div style="width:40px;height:40px;background:rgba(222,128,43,0.1);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+                    <i class="fas fa-tractor text-accent" style="font-size:20px;"></i>
+                </div>
+                <span class="badge badge-success">+5%</span>
+            </div>
+            <h3 style="font-weight:700;margin:0;">@ViewBag.FarmerCount</h3>
+            <div style="font-size:14px;color:var(--muted);margin-top:4px;">Active Farmers</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card p-4 h-100" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div style="width:40px;height:40px;background:rgba(156,171,132,0.1);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+                    <i class="fas fa-box text-success" style="font-size:20px;"></i>
+                </div>
+            </div>
+            <h3 style="font-weight:700;margin:0;">@ViewBag.ProductCount</h3>
+            <div style="font-size:14px;color:var(--muted);margin-top:4px;">Listed Products</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card p-4 h-100" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div style="width:40px;height:40px;background:rgba(216,233,131,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+                    <i class="fas fa-dollar-sign text-primary" style="font-size:20px;"></i>
+                </div>
+            </div>
+            <h3 style="font-weight:700;margin:0;">$14,500</h3>
+            <div style="font-size:14px;color:var(--muted);margin-top:4px;">Platform Volume</div>
+        </div>
     </div>
 </div>
 
-<div class="row g-4 mb-4">
-    <div class="col-6 col-lg-3">
-        <a asp-area="Admin" asp-controller="Customers" asp-action="Index" class="dash-stat-card">
-            <div class="card p-4 h-100" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div style="width:40px;height:40px;background:var(--soft-highlight);border-radius:10px;display:flex;align-items:center;justify-content:center;">
-                        <i class="fas fa-users text-primary" style="font-size:20px;"></i>
-                    </div>
-                    <span class="small text-muted">View &rarr;</span>
-                </div>
-                <h3 style="font-weight:700;margin:0;">@(ViewBag.CustomerCount ?? 0)</h3>
-                <div style="font-size:14px;color:var(--muted);margin-top:4px;">Total Customers</div>
-            </div>
-        </a>
-    </div>
-    <div class="col-6 col-lg-3">
-        <a asp-area="Admin" asp-controller="Farmers" asp-action="Index" class="dash-stat-card">
-            <div class="card p-4 h-100" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div style="width:40px;height:40px;background:rgba(222,128,43,0.1);border-radius:10px;display:flex;align-items:center;justify-content:center;">
-                        <i class="fas fa-tractor text-accent" style="font-size:20px;"></i>
-                    </div>
-                    <span class="small text-muted">View &rarr;</span>
-                </div>
-                <h3 style="font-weight:700;margin:0;">@(ViewBag.FarmerCount ?? 0)</h3>
-                <div style="font-size:14px;color:var(--muted);margin-top:4px;">Active Farmers</div>
-            </div>
-        </a>
-    </div>
-    <div class="col-6 col-lg-3">
-        <a asp-area="Admin" asp-controller="Products" asp-action="Index" class="dash-stat-card">
-            <div class="card p-4 h-100" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div style="width:40px;height:40px;background:rgba(156,171,132,0.1);border-radius:10px;display:flex;align-items:center;justify-content:center;">
-                        <i class="fas fa-box text-success" style="font-size:20px;"></i>
-                    </div>
-                    <span class="small text-muted">View &rarr;</span>
-                </div>
-                <h3 style="font-weight:700;margin:0;">@(ViewBag.ProductCount ?? 0)</h3>
-                <div style="font-size:14px;color:var(--muted);margin-top:4px;">Listed Products</div>
-            </div>
-        </a>
-    </div>
-    <div class="col-6 col-lg-3">
-        <a asp-area="Admin" asp-controller="Orders" asp-action="Index" class="dash-stat-card">
-            <div class="card p-4 h-100" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div style="width:40px;height:40px;background:rgba(216,233,131,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;">
-                        <i class="fas fa-dollar-sign text-primary" style="font-size:20px;"></i>
-                    </div>
-                    <span class="small text-muted">View &rarr;</span>
-                </div>
-                <h3 style="font-weight:700;margin:0;">$@revenue.ToString("N0")</h3>
-                <div style="font-size:14px;color:var(--muted);margin-top:4px;">Completed Volume</div>
-            </div>
-        </a>
-    </div>
-</div>
-
-<div class="row g-4 mb-4">
+<div class="row g-4">
     <div class="col-lg-8">
-        <div class="card h-100" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
-            <div class="card-header d-flex justify-content-between align-items-center" style="background:transparent;border-bottom:1px solid var(--border);padding:20px;">
+        <div class="card" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
+            <div class="card-header" style="background:transparent;border-bottom:1px solid var(--border);padding:20px;">
                 <h6 style="margin:0;font-weight:700;">Revenue Overview</h6>
-                <a asp-area="Admin" asp-controller="Reports" asp-action="Analytics" class="small text-muted text-decoration-none">Full analytics &rarr;</a>
             </div>
             <div class="card-body p-4">
                 <canvas id="revenueChart" height="100"></canvas>
@@ -90,43 +63,12 @@
         </div>
     </div>
     <div class="col-lg-4">
-        <div class="card h-100" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
-            <div class="card-header d-flex justify-content-between align-items-center" style="background:transparent;border-bottom:1px solid var(--border);padding:20px;">
+        <div class="card" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
+            <div class="card-header" style="background:transparent;border-bottom:1px solid var(--border);padding:20px;">
                 <h6 style="margin:0;font-weight:700;">Top Categories</h6>
-                <a asp-area="Admin" asp-controller="Categories" asp-action="Index" class="small text-muted text-decoration-none">Manage &rarr;</a>
             </div>
             <div class="card-body p-4">
                 <canvas id="categoryChart" height="200"></canvas>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="card" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
-    <div class="card-header" style="background:transparent;border-bottom:1px solid var(--border);padding:20px;">
-        <h6 class="mb-0" style="font-weight:700;">Quick Operations</h6>
-    </div>
-    <div class="card-body p-4">
-        <div class="row g-3">
-            <div class="col-sm-6 col-lg-3">
-                <a asp-area="Admin" asp-controller="Products" asp-action="Index" class="btn btn-light w-100 text-start py-3" style="border:1px solid var(--border);border-radius:var(--radius-sm);">
-                    <i class="fas fa-leaf text-success me-2"></i> Moderate Products
-                </a>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-                <a asp-area="Admin" asp-controller="Orders" asp-action="Index" class="btn btn-light w-100 text-start py-3" style="border:1px solid var(--border);border-radius:var(--radius-sm);">
-                    <i class="fas fa-shopping-cart text-warning me-2"></i> Review Orders
-                </a>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-                <a asp-area="Admin" asp-controller="Farmers" asp-action="Index" asp-route-status="Pending" class="btn btn-light w-100 text-start py-3" style="border:1px solid var(--border);border-radius:var(--radius-sm);">
-                    <i class="fas fa-user-check text-info me-2"></i> Farmer Approvals
-                </a>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-                <a asp-area="Admin" asp-controller="Dashboard" asp-action="Notifications" class="btn btn-light w-100 text-start py-3" style="border:1px solid var(--border);border-radius:var(--radius-sm);">
-                    <i class="fas fa-bullhorn text-primary me-2"></i> Broadcast Center
-                </a>
             </div>
         </div>
     </div>

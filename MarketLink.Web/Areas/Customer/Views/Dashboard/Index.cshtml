@@ -250,16 +250,11 @@
                                 @if (fav.Product != null)
                                 {
                                     <div class="d-flex align-items-center gap-3 p-2 rounded" style="background:var(--bg);border:1px solid var(--border);">
-                                        <a asp-area="" asp-controller="Products" asp-action="Details" asp-route-slug="@fav.Product.Slug">
-                                            <img src="@(string.IsNullOrEmpty(fav.Product.ImageUrl) ? "/images/placeholder.png" : fav.Product.ImageUrl)" alt="@fav.Product.Name" style="width:44px;height:44px;border-radius:8px;object-fit:cover;" />
-                                        </a>
+                                        <img src="@(string.IsNullOrEmpty(fav.Product.ImageUrl) ? "/images/placeholder.png" : fav.Product.ImageUrl)" style="width:44px;height:44px;border-radius:8px;object-fit:cover;" />
                                         <div class="flex-grow-1 overflow-hidden">
-                                            <a asp-area="" asp-controller="Products" asp-action="Details" asp-route-slug="@fav.Product.Slug" class="fw-bold text-truncate d-block" style="font-size:13px;color:var(--heading);text-decoration:none;">@fav.Product.Name</a>
+                                            <div class="fw-bold text-truncate" style="font-size:13px;color:var(--heading);">@fav.Product.Name</div>
                                             <div class="text-muted" style="font-size:11px;">$@fav.Product.PricePerKg.ToString("0.00")/kg</div>
                                         </div>
-                                        <a asp-area="" asp-controller="Products" asp-action="Details" asp-route-slug="@fav.Product.Slug" class="btn btn-outline-green btn-sm py-1 px-2" title="View product">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
                                         <button class="btn btn-primary-green btn-sm py-1 px-2" onclick="ML.Cart.addItem(@fav.Product.Id, 1)" title="Add to cart">
                                             <i class="fas fa-plus"></i>
                                         </button>
