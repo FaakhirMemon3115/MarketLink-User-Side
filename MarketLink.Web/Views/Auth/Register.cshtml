@@ -8,10 +8,13 @@
         <div class="row justify-content-center">
             <div class="col-md-5">
                 <div class="card border-0 shadow-lg" style="border-radius:24px;overflow:hidden;">
-                    <div style="background:var(--accent);padding:32px;text-align:center;color:#fff;">
+                    <div style="background:var(--primary);padding:32px;text-align:center;color:#fff;">
+                        <div style="width:64px;height:64px;background:rgba(255,255,255,0.18);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:28px;">
+                            <i class="fas fa-tractor text-white"></i>
+                        </div>
                         <h4 style="font-weight:700;margin:0;">Create Account</h4>
                         <p style="font-size:14px;opacity:0.9;margin:8px 0 0;">
-                            @(Model.Role == "Farmer" ? "Start selling your local produce" : "Join our community of conscious shoppers")
+                            @(Model.Role == "Farmer" ? "Start selling your fresh harvest directly to local buyers" : "Join our community of fresh farm food lovers")
                         </p>
                     </div>
                     <div class="card-body p-4 p-md-5">
@@ -39,7 +42,7 @@
                                 <span asp-validation-for="ConfirmPassword" class="text-danger" style="font-size:12px;"></span>
                             </div>
                             
-                            <button type="submit" class="btn btn-accent btn-lg btn-pill w-100 shadow">Sign Up</button>
+                            <button type="submit" class="btn btn-primary-green btn-lg btn-pill w-100 shadow">Sign Up</button>
                         </form>
                         
                         <div class="text-center mt-4">

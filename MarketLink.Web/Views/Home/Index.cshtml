@@ -4,13 +4,17 @@
 }
 
 <!-- Hero Section -->
-<section class="hero-section" style="padding:100px 0;background:linear-gradient(135deg, var(--bg) 0%, #D8E983 100%);">
-    <div class="container">
+<section class="hero-section" style="padding:100px 0;background:linear-gradient(135deg, var(--bg) 0%, var(--secondary) 100%);position:relative;overflow:hidden;">
+    <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg, var(--primary), var(--accent), var(--success));"></div>
+    <div class="container position-relative">
         <div class="row align-items-center">
             <div class="col-lg-6 animate-on-scroll">
-                <span class="badge badge-success mb-3" style="font-size:14px;padding:8px 16px;">🌱 100% Farm Fresh</span>
+                <div class="d-inline-flex align-items-center gap-2 mb-3 px-3 py-1 rounded-pill" style="background:rgba(45,90,39,0.12);border:1px solid rgba(45,90,39,0.25);">
+                    <i class="fas fa-seedling text-success"></i>
+                    <span style="font-size:13px;font-weight:700;color:var(--primary);letter-spacing:0.5px;text-transform:uppercase;">100% Farm-To-Table Fresh</span>
+                </div>
                 <h1 style="font-size:3.5rem;font-weight:800;color:var(--heading);line-height:1.2;margin-bottom:24px;">
-                    Farm Fresh Food,<br />Delivered <span style="color:var(--primary)">Local</span>.
+                    Farm Fresh Food,<br />Delivered <span style="color:var(--primary);text-decoration:underline;text-decoration-color:var(--accent);">Local</span>.
                 </h1>
                 <p style="font-size:1.1rem;color:var(--body-text);margin-bottom:32px;max-width:500px;">
                     Connect directly with local farmers in your area. Get fresh, seasonal produce while supporting your local community.
