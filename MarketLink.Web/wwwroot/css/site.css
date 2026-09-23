@@ -514,7 +514,9 @@ img { max-width: 100%; }
 /* ── Dashboard Sidebar (Fixed Brand Header & Full Navigation) ── */
 .dashboard-sidebar {
   width: 270px;
-  min-height: 100vh;
+  height: 100vh;
+  max-height: 100vh;
+  bottom: 0;
   background: var(--card);
   border-right: 2px solid var(--border);
   display: flex;
@@ -536,9 +538,9 @@ img { max-width: 100%; }
   right: 0;
   background: var(--card);
   border-bottom: 2px solid var(--border);
-  padding: 18px 20px;
+  padding: 16px 18px;
   flex-shrink: 0;
-  z-index: 20;
+  z-index: 30;
   transition: var(--transition);
 }
 .sidebar-brand-fixed .brand-link {
@@ -582,31 +584,56 @@ img { max-width: 100%; }
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  max-width: 180px;
+  max-width: 170px;
 }
 
-/* Scrollable Navigation Area */
+/* Scrollable Navigation Area (Allows all <li> items to scroll smoothly) */
 .dashboard-sidebar .sidebar-nav {
-  padding: 12px 0;
-  flex: 1;
+  padding: 8px 0 16px;
+  flex: 1 1 auto;
+  min-height: 0; /* Critical for flex child scrollbar in all browsers */
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
 }
 
-/* Semantic Menu List & Items */
+/* Custom Sleek Scrollbar for Sidebar */
+.dashboard-sidebar .sidebar-nav::-webkit-scrollbar {
+  width: 5px;
+}
+.dashboard-sidebar .sidebar-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+.dashboard-sidebar .sidebar-nav::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+.dashboard-sidebar .sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Semantic Menu List & Items - Fully visible */
 .sidebar-menu-list {
-  list-style: none;
-  margin: 0;
-  padding: 0 10px;
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 12px 12px 12px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
 }
 .sidebar-menu-item {
-  list-style: none;
-  margin: 3px 0;
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block !important;
+  width: 100% !important;
 }
 .sidebar-section-header {
-  list-style: none;
-  padding: 16px 12px 6px;
+  list-style: none !important;
+  padding: 14px 10px 4px 10px !important;
+  margin-top: 6px !important;
+  display: block !important;
+  width: 100% !important;
 }
 .sidebar-section-label {
   font-size: 11px;
@@ -619,30 +646,31 @@ img { max-width: 100%; }
 }
 
 .sidebar-nav-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
-  color: var(--body-text);
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: var(--radius-sm);
-  transition: var(--transition);
-  border-left: 3px solid transparent;
-  text-decoration: none;
-  white-space: nowrap;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 10px 14px !important;
+  color: var(--body-text) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  border-radius: var(--radius-sm) !important;
+  transition: var(--transition) !important;
+  border-left: 3px solid transparent !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+  width: 100% !important;
 }
 .sidebar-nav-item:hover {
-  background: rgba(92,111,43,0.08);
-  color: var(--primary);
-  border-left-color: var(--primary);
+  background: rgba(92,111,43,0.08) !important;
+  color: var(--primary) !important;
+  border-left-color: var(--primary) !important;
   transform: translateX(2px);
 }
 .sidebar-nav-item.active {
-  background: rgba(92,111,43,0.12);
-  color: var(--primary);
-  border-left-color: var(--primary);
-  font-weight: 700;
+  background: rgba(92,111,43,0.12) !important;
+  color: var(--primary) !important;
+  border-left-color: var(--primary) !important;
+  font-weight: 700 !important;
 }
 .sidebar-nav-item .nav-icon {
   width: 22px;
@@ -656,15 +684,18 @@ img { max-width: 100%; }
 .sidebar-nav-item .sidebar-nav-text {
   flex: 1;
   white-space: nowrap;
+  display: inline-block;
 }
 
-/* Fixed Footer (Sign out) */
+/* Fixed Footer (Sign out - stays at bottom of sidebar) */
 .sidebar-footer-fixed {
-  padding: 14px 18px;
+  position: sticky;
+  bottom: 0;
+  padding: 12px 16px;
   border-top: 1px solid var(--border);
   background: var(--card);
   flex-shrink: 0;
-  z-index: 20;
+  z-index: 30;
 }
 .sidebar-signout-btn {
   width: 100%;
@@ -686,6 +717,27 @@ img { max-width: 100%; }
   background: rgba(220,53,69,0.08);
   color: #dc3545;
   border-color: #dc3545;
+}
+
+/* Sidebar Toggle Button */
+.btn-sidebar-toggle {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--heading);
+  font-size: 16px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-sidebar-toggle:hover {
+  background: rgba(92,111,43,0.1);
+  color: var(--primary);
+  border-color: var(--primary);
 }
 
 /* ── Desktop Hover Collapsed Mode (Smooth Hover Expansion) ── */

@@ -58,9 +58,10 @@ const Sidebar = {
         const sidebar = document.querySelector('.dashboard-sidebar');
         const overlay = document.querySelector('.dashboard-overlay');
         const toggleBtn = document.querySelector('#sidebar-toggle');
+        const closeBtn = document.querySelector('#sidebar-close-btn');
         if (!sidebar) return;
 
-        // Restore collapsed state only if explicitly set
+        // Ensure sidebar is open and all navigation items are visible by default
         const isCollapsed = localStorage.getItem('ml-sidebar-collapsed') === 'true';
         if (isCollapsed && window.innerWidth >= 993) {
             document.body.classList.add('sidebar-hover-collapsed');
@@ -79,6 +80,11 @@ const Sidebar = {
                 const collapsed = document.body.classList.contains('sidebar-hover-collapsed');
                 localStorage.setItem('ml-sidebar-collapsed', collapsed);
             }
+        });
+
+        closeBtn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.closeMobile(sidebar, overlay);
         });
 
         overlay?.addEventListener('click', () => this.closeMobile(sidebar, overlay));
