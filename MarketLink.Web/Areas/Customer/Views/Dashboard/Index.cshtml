@@ -16,7 +16,7 @@
                     </p>
                 </div>
                 <div class="d-flex gap-2 flex-wrap">
-                    <a href="/Products" asp-area="" asp-controller="Products" asp-action="Index" class="btn btn-primary-green btn-sm">
+                    <a asp-area="" asp-controller="Products" asp-action="Index" class="btn btn-primary-green btn-sm">
                         <i class="fas fa-shopping-basket me-1"></i> Browse Fresh Products
                     </a>
                     <a asp-area="Customer" asp-controller="Profile" asp-action="Index" class="btn btn-outline-secondary btn-sm">
@@ -89,7 +89,7 @@
                 <h5 class="fw-bold mb-1" style="color:var(--heading);"><i class="fas fa-leaf me-2 text-primary-green"></i>Browse Fresh Produce</h5>
                 <p class="text-muted small mb-0">Harvested fresh today from approved local farms in your area.</p>
             </div>
-            <a href="/Products" asp-area="" asp-controller="Products" asp-action="Index" class="btn btn-outline-green btn-sm">
+            <a asp-area="" asp-controller="Products" asp-action="Index" class="btn btn-outline-green btn-sm">
                 Explore Full Catalog <i class="fas fa-arrow-right ms-1"></i>
             </a>
         </div>
@@ -98,7 +98,7 @@
             {
                 <div class="text-center py-4 text-muted">
                     <p class="mb-2">No fresh products currently listed.</p>
-                    <a href="/Products" asp-area="" asp-controller="Products" asp-action="Index" class="btn btn-primary-green btn-sm">Check Marketplace</a>
+                    <a asp-area="" asp-controller="Products" asp-action="Index" class="btn btn-primary-green btn-sm">Check Marketplace</a>
                 </div>
             }
             else
@@ -110,7 +110,7 @@
                         <div class="col-sm-6 col-lg-3">
                             <div class="card product-card h-100 border-0" style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);transition:var(--transition);">
                                 <div style="position:relative;">
-                                    <a href="/products/@p.Slug" asp-area="" asp-controller="Products" asp-action="Details" asp-route-slug="@p.Slug">
+                                    <a asp-area="" asp-controller="Products" asp-action="Details" asp-route-slug="@p.Slug">
                                         <img src="@(string.IsNullOrEmpty(p.ImageUrl) ? "/images/placeholder.png" : p.ImageUrl)" class="card-img-top" alt="@p.Name" style="height:160px;object-fit:cover;">
                                     </a>
                                     @if (p.IsOrganic)
@@ -130,7 +130,7 @@
                                         <span class="fw-bold text-primary-green" style="font-size:14px;">$@p.PricePerKg.ToString("0.00")<span class="text-muted small">/kg</span></span>
                                     </div>
                                     <h6 class="fw-bold mb-1" style="font-size:14px;">
-                                        <a href="/products/@p.Slug" asp-area="" asp-controller="Products" asp-action="Details" asp-route-slug="@p.Slug" style="color:var(--heading);text-decoration:none;">@p.Name</a>
+                                        <a asp-area="" asp-controller="Products" asp-action="Details" asp-route-slug="@p.Slug" style="color:var(--heading);text-decoration:none;">@p.Name</a>
                                     </h6>
                                     <div class="small text-muted mb-3" style="font-size:11px;">
                                         <i class="fas fa-tractor me-1"></i>@(p.Farmer?.FarmName ?? "Local Farm")
@@ -168,7 +168,7 @@
                         <div class="text-center py-5">
                             <div style="font-size:40px;margin-bottom:12px;">📦</div>
                             <h6 class="fw-bold text-muted">No orders placed yet</h6>
-                            <a href="/Products" asp-area="" asp-controller="Products" asp-action="Index" class="btn btn-primary-green btn-sm">
+                            <a asp-area="" asp-controller="Products" asp-action="Index" class="btn btn-primary-green btn-sm">
                                 <i class="fas fa-shopping-basket me-1"></i> Start Your First Order
                             </a>
                         </div>
@@ -237,7 +237,7 @@
                         <div class="text-center py-3 text-muted">
                             <i class="far fa-heart fa-2x mb-2 text-muted opacity-50"></i>
                             <p class="small mb-2">No saved items yet.</p>
-                            <a href="/Products" asp-area="" asp-controller="Products" asp-action="Index" class="btn btn-outline-green btn-sm w-100">
+                            <a asp-area="" asp-controller="Products" asp-action="Index" class="btn btn-outline-green btn-sm w-100">
                                 <i class="fas fa-search me-1"></i> Find Produce
                             </a>
                         </div>
@@ -289,11 +289,11 @@
                 <div class="card-body p-4">
                     <h6 class="fw-bold mb-3" style="color:var(--heading);"><i class="fas fa-compass me-2 text-primary-green"></i>Quick Shortcuts</h6>
                     <div class="d-flex flex-column gap-2">
-                        <a href="/Products" asp-area="" asp-controller="Products" asp-action="Index" class="btn btn-light btn-sm text-start py-2 px-3 d-flex align-items-center justify-content-between" style="border:1px solid var(--border);border-radius:var(--radius-sm);">
+                        <a asp-area="" asp-controller="Products" asp-action="Index" class="btn btn-light btn-sm text-start py-2 px-3 d-flex align-items-center justify-content-between" style="border:1px solid var(--border);border-radius:var(--radius-sm);">
                             <span class="d-flex align-items-center"><i class="fas fa-leaf text-success me-2"></i>Browse Products</span>
                             <i class="fas fa-chevron-right text-muted small"></i>
                         </a>
-                        <a href="/Markets" asp-area="" asp-controller="Markets" asp-action="Index" class="btn btn-light btn-sm text-start py-2 px-3 d-flex align-items-center justify-content-between" style="border:1px solid var(--border);border-radius:var(--radius-sm);">
+                        <a asp-area="" asp-controller="Markets" asp-action="Index" class="btn btn-light btn-sm text-start py-2 px-3 d-flex align-items-center justify-content-between" style="border:1px solid var(--border);border-radius:var(--radius-sm);">
                             <span class="d-flex align-items-center"><i class="fas fa-store text-primary me-2"></i>Explore Markets</span>
                             <i class="fas fa-chevron-right text-muted small"></i>
                         </a>

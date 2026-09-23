@@ -22,7 +22,7 @@
     <!-- Fixed Brand Header (Never Closes / Never Disappears) -->
     <div class="sidebar-brand-fixed" id="sidebar-brand-header">
         <div class="d-flex align-items-center justify-content-between">
-            <a href="/Customer" asp-area="Customer" asp-controller="Dashboard" asp-action="Index" class="brand-link">
+            <a asp-area="Customer" asp-controller="Dashboard" asp-action="Index" class="brand-link">
                 <div class="brand-icon-box">
                     <i class="fas fa-seedling"></i>
                 </div>
@@ -45,19 +45,19 @@
                 <span class="sidebar-section-label">My Account</span>
             </li>
             <li class="sidebar-menu-item">
-                <a href="/Customer" class="sidebar-nav-item @(currentCtrl == "Dashboard" && currentAct == "Index" ? "active" : "")" asp-area="Customer" asp-controller="Dashboard" asp-action="Index" title="Dashboard">
+                <a class="sidebar-nav-item @(currentCtrl == "Dashboard" && currentAct == "Index" ? "active" : "")" asp-area="Customer" asp-controller="Dashboard" asp-action="Index" title="Dashboard">
                     <span class="nav-icon"><i class="fas fa-th-large"></i></span>
                     <span class="sidebar-nav-text">Dashboard</span>
                 </a>
             </li>
             <li class="sidebar-menu-item">
-                <a href="/Customer/Profile" class="sidebar-nav-item @(currentCtrl == "Profile" && currentAct == "Index" ? "active" : "")" asp-area="Customer" asp-controller="Profile" asp-action="Index" title="My Profile">
+                <a class="sidebar-nav-item @(currentCtrl == "Profile" && currentAct == "Index" ? "active" : "")" asp-area="Customer" asp-controller="Profile" asp-action="Index" title="My Profile">
                     <span class="nav-icon"><i class="fas fa-user-circle"></i></span>
                     <span class="sidebar-nav-text">My Profile</span>
                 </a>
             </li>
             <li class="sidebar-menu-item">
-                <a href="/Customer/Profile/Addresses" class="sidebar-nav-item @(currentCtrl == "Profile" && currentAct == "Addresses" ? "active" : "")" asp-area="Customer" asp-controller="Profile" asp-action="Addresses" title="Addresses">
+                <a class="sidebar-nav-item @(currentCtrl == "Profile" && currentAct == "Addresses" ? "active" : "")" asp-area="Customer" asp-controller="Profile" asp-action="Addresses" title="Addresses">
                     <span class="nav-icon"><i class="fas fa-map-marker-alt"></i></span>
                     <span class="sidebar-nav-text">Saved Addresses</span>
                 </a>
@@ -68,19 +68,19 @@
                 <span class="sidebar-section-label">Shopping</span>
             </li>
             <li class="sidebar-menu-item">
-                <a href="/Products" class="sidebar-nav-item @(currentCtrl == "Products" ? "active" : "")" asp-area="" asp-controller="Products" asp-action="Index" title="Browse Products">
+                <a class="sidebar-nav-item @(currentCtrl == "Products" ? "active" : "")" asp-area="" asp-controller="Products" asp-action="Index" title="Browse Products">
                     <span class="nav-icon"><i class="fas fa-leaf"></i></span>
                     <span class="sidebar-nav-text">Browse Products</span>
                 </a>
             </li>
             <li class="sidebar-menu-item">
-                <a href="/Customer/Cart" class="sidebar-nav-item @(currentCtrl == "Cart" ? "active" : "")" asp-area="Customer" asp-controller="Cart" asp-action="Index" title="Shopping Cart">
+                <a class="sidebar-nav-item @(currentCtrl == "Cart" ? "active" : "")" asp-area="Customer" asp-controller="Cart" asp-action="Index" title="Shopping Cart">
                     <span class="nav-icon"><i class="fas fa-shopping-basket"></i></span>
                     <span class="sidebar-nav-text">Shopping Cart</span>
                 </a>
             </li>
             <li class="sidebar-menu-item">
-                <a href="/Customer/Favorites" class="sidebar-nav-item @(currentCtrl == "Favorites" ? "active" : "")" asp-area="Customer" asp-controller="Favorites" asp-action="Index" title="Favorites">
+                <a class="sidebar-nav-item @(currentCtrl == "Favorites" ? "active" : "")" asp-area="Customer" asp-controller="Favorites" asp-action="Index" title="Favorites">
                     <span class="nav-icon"><i class="fas fa-heart text-danger"></i></span>
                     <span class="sidebar-nav-text">My Favorites</span>
                 </a>
@@ -91,13 +91,13 @@
                 <span class="sidebar-section-label">Orders</span>
             </li>
             <li class="sidebar-menu-item">
-                <a href="/Customer/Orders" class="sidebar-nav-item @(currentCtrl == "Orders" && currentAct == "Index" ? "active" : "")" asp-area="Customer" asp-controller="Orders" asp-action="Index" title="My Orders">
+                <a class="sidebar-nav-item @(currentCtrl == "Orders" && currentAct == "Index" ? "active" : "")" asp-area="Customer" asp-controller="Orders" asp-action="Index" title="My Orders">
                     <span class="nav-icon"><i class="fas fa-box"></i></span>
                     <span class="sidebar-nav-text">Active Orders</span>
                 </a>
             </li>
             <li class="sidebar-menu-item">
-                <a href="/Customer/Orders/History" class="sidebar-nav-item @(currentCtrl == "Orders" && currentAct == "History" ? "active" : "")" asp-area="Customer" asp-controller="Orders" asp-action="History" title="Order History">
+                <a class="sidebar-nav-item @(currentCtrl == "Orders" && currentAct == "History" ? "active" : "")" asp-area="Customer" asp-controller="Orders" asp-action="History" title="Order History">
                     <span class="nav-icon"><i class="fas fa-history"></i></span>
                     <span class="sidebar-nav-text">Order History</span>
                 </a>
@@ -108,25 +108,25 @@
                 <span class="sidebar-section-label">Community & Pages</span>
             </li>
             <li class="sidebar-menu-item">
-                <a href="/Customer/Notifications" class="sidebar-nav-item @(currentCtrl == "Notifications" ? "active" : "")" asp-area="Customer" asp-controller="Notifications" asp-action="Index" title="Notifications">
+                <a class="sidebar-nav-item @(currentCtrl == "Notifications" ? "active" : "")" asp-area="Customer" asp-controller="Notifications" asp-action="Index" title="Notifications">
                     <span class="nav-icon"><i class="fas fa-bell"></i></span>
                     <span class="sidebar-nav-text">Notifications</span>
                 </a>
             </li>
             <li class="sidebar-menu-item">
-                <a href="/Customer/Reviews" class="sidebar-nav-item @(currentCtrl == "Reviews" ? "active" : "")" asp-area="Customer" asp-controller="Reviews" asp-action="Index" title="My Reviews">
+                <a class="sidebar-nav-item @(currentCtrl == "Reviews" ? "active" : "")" asp-area="Customer" asp-controller="Reviews" asp-action="Index" title="My Reviews">
                     <span class="nav-icon"><i class="fas fa-star text-warning"></i></span>
                     <span class="sidebar-nav-text">My Reviews</span>
                 </a>
             </li>
             <li class="sidebar-menu-item">
-                <a href="/Home/About" class="sidebar-nav-item @(currentCtrl == "Home" && currentAct == "About" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="About" title="About Us">
+                <a class="sidebar-nav-item @(currentCtrl == "Home" && currentAct == "About" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="About" title="About Us">
                     <span class="nav-icon"><i class="fas fa-info-circle text-info"></i></span>
                     <span class="sidebar-nav-text">About Us</span>
                 </a>
             </li>
             <li class="sidebar-menu-item">
-                <a href="/" class="sidebar-nav-item @(currentCtrl == "Home" && currentAct == "Index" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index" title="Marketplace Storefront">
+                <a class="sidebar-nav-item @(currentCtrl == "Home" && currentAct == "Index" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index" title="Marketplace Storefront">
                     <span class="nav-icon"><i class="fas fa-store text-success"></i></span>
                     <span class="sidebar-nav-text">Storefront Home</span>
                 </a>
