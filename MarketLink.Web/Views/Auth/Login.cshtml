@@ -1,0 +1,65 @@
+@model MarketLink.Web.Controllers.LoginViewModel
+@{
+    ViewData["Title"] = "Log In";
+}
+
+<div style="background:var(--bg);min-height:80vh;display:flex;align-items:center;padding:40px 0;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="card border-0 shadow-lg" style="border-radius:24px;overflow:hidden;">
+                    <div style="background:var(--primary);padding:32px;text-align:center;color:#fff;">
+                        <div style="width:64px;height:64px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:28px;">
+                            <i class="fas fa-seedling text-white"></i>
+                        </div>
+                        <h4 style="font-weight:700;margin:0;">Welcome Back</h4>
+                        <p style="font-size:14px;opacity:0.9;margin:8px 0 0;">Log in to your eGreen Basket account</p>
+                    </div>
+                    <div class="card-body p-4 p-md-5">
+                        <form asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+                            <div asp-validation-summary="ModelOnly" class="text-danger mb-3" style="font-size:14px;"></div>
+                            
+                            <div class="mb-4">
+                                <label asp-for="Email" class="form-label" style="font-size:13px;font-weight:600;color:var(--heading);">Email Address</label>
+                                <input asp-for="Email" class="form-control form-control-lg" style="font-size:14px;background:var(--bg);border:1px solid var(--border);" placeholder="name@example.com" />
+                                <span asp-validation-for="Email" class="text-danger" style="font-size:12px;"></span>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label asp-for="Password" class="form-label" style="font-size:13px;font-weight:600;color:var(--heading);">Password</label>
+                                <input asp-for="Password" class="form-control form-control-lg" style="font-size:14px;background:var(--bg);border:1px solid var(--border);" placeholder="••••••••" />
+                                <span asp-validation-for="Password" class="text-danger" style="font-size:12px;"></span>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div class="form-check">
+                                    <input asp-for="RememberMe" class="form-check-input" />
+                                    <label asp-for="RememberMe" class="form-check-label" style="font-size:13px;color:var(--body-text);">Remember me</label>
+                                </div>
+                                <a href="#" style="font-size:13px;color:var(--primary);text-decoration:none;font-weight:600;">Forgot password?</a>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary-green btn-lg btn-pill w-100 shadow">Log In</button>
+                        </form>
+                        
+                        <div class="text-center mt-4">
+                            <p style="font-size:14px;color:var(--body-text);margin:0;">
+                                Don't have an account? <a asp-action="Register" style="color:var(--accent);font-weight:600;text-decoration:none;">Sign up</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4" style="font-size:13px;color:var(--muted);">
+                    <strong>Demo Accounts:</strong><br/>
+                    Admin: admin@test.com | Farmer: farmer1@test.com | Cust: customer1@test.com<br/>
+                    Password for all: <strong>Pass123$</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
