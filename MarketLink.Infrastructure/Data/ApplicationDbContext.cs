@@ -250,15 +250,15 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             e.HasOne(x => x.Product)
              .WithMany(x => x.Reviews)
              .HasForeignKey(x => x.ProductId)
-             .OnDelete(DeleteBehavior.SetNull);
+             .OnDelete(DeleteBehavior.NoAction);
             e.HasOne(x => x.Farmer)
              .WithMany(x => x.Reviews)
              .HasForeignKey(x => x.FarmerId)
-             .OnDelete(DeleteBehavior.SetNull);
+             .OnDelete(DeleteBehavior.NoAction);
             e.HasOne(x => x.Order)
              .WithMany()
              .HasForeignKey(x => x.OrderId)
-             .OnDelete(DeleteBehavior.SetNull);
+             .OnDelete(DeleteBehavior.NoAction);
         });
 
         // ── Notification ──────────────────────────────────────────────
