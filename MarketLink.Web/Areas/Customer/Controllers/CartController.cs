@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using MarketLink.Core.Interfaces;
+using System.Security.Claims;
 
 namespace MarketLink.Web.Areas.Customer.Controllers;
 
@@ -9,18 +10,31 @@ namespace MarketLink.Web.Areas.Customer.Controllers;
 public class CartController : Controller
 {
     private readonly ICartService _cartService;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CartController(ICartService cartService)
+    public CartController(ICartService cartService, IUnitOfWork unitOfWork)
     {
         _cartService = cartService;
+        _unitOfWork = unitOfWork;
     }
 
-    private int GetCustomerId() => 1; // Demo fallback
+    private async Task<int> GetCustomerIdAsync()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!string.IsNullOrEmpty(userId))
+        {
+            var customers = await _unitOfWork.Repository<MarketLink.Core.Entities.Customer>().FindAsync(c => c.UserId == userId);
+            var customer = customers.FirstOrDefault();
+            if (customer != null) return customer.Id;
+        }
+        return 1; // Demo fallback
+    }
 
     public async Task<IActionResult> Index()
     {
         ViewData["Title"] = "Shopping Cart";
-        var items = await _cartService.GetCartAsync(GetCustomerId());
+        var customerId = await GetCustomerIdAsync();
+        var items = await _cartService.GetCartAsync(customerId);
         return View(items);
     }
 
@@ -33,8 +47,9 @@ public class CartController : Controller
 
         try
         {
-            await _cartService.AddToCartAsync(GetCustomerId(), req.ProductId, req.QuantityKg);
-            var cart = await _cartService.GetCartAsync(GetCustomerId());
+            var customerId = await GetCustomerIdAsync();
+            await _cartService.AddToCartAsync(customerId, req.ProductId, req.QuantityKg);
+            var cart = await _cartService.GetCartAsync(customerId);
             return Json(new { success = true, cartCount = cart.Count() });
         }
         catch (Exception ex)
@@ -51,7 +66,8 @@ public class CartController : Controller
         {
             // Note: RemoveFromCartAsync takes cartItemId, but we just pass productId for demo simplicity. 
             // Better to fetch cart item by productId first.
-            var cart = await _cartService.GetCartAsync(GetCustomerId());
+            var customerId = await GetCustomerIdAsync();
+            var cart = await _cartService.GetCartAsync(customerId);
             var item = cart.FirstOrDefault(c => c.ProductId == req.ProductId);
             if (item != null)
                 await _cartService.RemoveFromCartAsync(item.Id);
@@ -67,7 +83,8 @@ public class CartController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Clear()
     {
-        await _cartService.ClearCartAsync(GetCustomerId());
+        var customerId = await GetCustomerIdAsync();
+        await _cartService.ClearCartAsync(customerId);
         return RedirectToAction(nameof(Index));
     }
 }
