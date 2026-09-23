@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="MarketLink.Core/MarketLink.Core.csproj" />
+  <Project Path="MarketLink.Infrastructure/MarketLink.Infrastructure.csproj" />
+  <Project Path="MarketLink.Web/MarketLink.Web.csproj" />
+</Solution>

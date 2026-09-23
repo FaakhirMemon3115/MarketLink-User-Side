@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "AqTk7wpsYqU=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\USER\\Desktop\\MarketLink-User-Side\\MarketLink.Web\\MarketLink.Web.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\USER\\.nuget\\packages\\microsoft.aspnetcore.identity.ui\\9.0.4\\microsoft.aspnetcore.identity.ui.9.0.4.nupkg.sha512",
+    "C:\\Users\\USER\\.nuget\\packages\\microsoft.extensions.fileproviders.embedded\\9.0.4\\microsoft.extensions.fileproviders.embedded.9.0.4.nupkg.sha512"
+  ],
+  "logs": []
+}
