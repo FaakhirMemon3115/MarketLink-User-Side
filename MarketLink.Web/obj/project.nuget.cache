@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "aNBZvVKSl/k=",
+  "dgSpecHash": "i/U0OccnxRM=",
   "success": true,
   "projectFilePath": "C:\\Users\\USER\\Desktop\\MarketLink-User-Side\\MarketLink.Web\\MarketLink.Web.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\USER\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\USER\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
     "C:\\Users\\USER\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
+    "C:\\Users\\USER\\.nuget\\packages\\microsoft.aspnetcore.identity.entityframeworkcore\\9.0.4\\microsoft.aspnetcore.identity.entityframeworkcore.9.0.4.nupkg.sha512",
     "C:\\Users\\USER\\.nuget\\packages\\microsoft.aspnetcore.identity.ui\\9.0.4\\microsoft.aspnetcore.identity.ui.9.0.4.nupkg.sha512",
     "C:\\Users\\USER\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\7.0.0\\microsoft.bcl.asyncinterfaces.7.0.0.nupkg.sha512",
     "C:\\Users\\USER\\.nuget\\packages\\microsoft.build.framework\\17.8.3\\microsoft.build.framework.17.8.3.nupkg.sha512",
