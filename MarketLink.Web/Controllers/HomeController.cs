@@ -1,24 +1,38 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using MarketLink.Web.Models;
+using MarketLink.Core.Interfaces;
 
 namespace MarketLink.Web.Controllers;
 
 public class HomeController : Controller
 {
-    public IActionResult Index()
+    private readonly IProductService _productService;
+    private readonly IUnitOfWork _unitOfWork;
+
+    public HomeController(IProductService productService, IUnitOfWork unitOfWork)
     {
-        return View();
+        _productService = productService;
+        _unitOfWork = unitOfWork;
     }
 
-    public IActionResult Privacy()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        var products = await _productService.GetActiveProductsAsync();
+        var categories = await _unitOfWork.Categories.GetAllAsync();
+        var markets = await _unitOfWork.Markets.GetAllAsync();
+
+        ViewBag.Categories = categories;
+        ViewBag.Markets = markets;
+        
+        return View(products.Take(8).ToList());
     }
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    }
+    public IActionResult About() => View();
+    
+    public IActionResult Contact() => View();
+    
+    public IActionResult FAQ() => View();
+
+    public IActionResult Privacy() => View();
+    
+    public IActionResult Terms() => View();
 }

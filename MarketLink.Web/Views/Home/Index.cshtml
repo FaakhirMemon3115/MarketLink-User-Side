@@ -1,8 +1,155 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@model IEnumerable<MarketLink.Core.Entities.Product>
+@{
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!-- Hero Section -->
+<section class="hero-section" style="padding:100px 0;background:linear-gradient(135deg, var(--bg) 0%, #D8E983 100%);">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 animate-on-scroll">
+                <span class="badge badge-success mb-3" style="font-size:14px;padding:8px 16px;">🌱 100% Farm Fresh</span>
+                <h1 style="font-size:3.5rem;font-weight:800;color:var(--heading);line-height:1.2;margin-bottom:24px;">
+                    Farm Fresh Food,<br />Delivered <span style="color:var(--primary)">Local</span>.
+                </h1>
+                <p style="font-size:1.1rem;color:var(--body-text);margin-bottom:32px;max-width:500px;">
+                    Connect directly with local farmers in your area. Get fresh, seasonal produce while supporting your local community.
+                </p>
+                <div class="d-flex gap-3">
+                    <a asp-controller="Products" asp-action="Index" class="btn btn-primary-green btn-lg btn-pill px-4 shadow">Shop Now</a>
+                    <a asp-controller="Farmers" asp-action="Index" class="btn btn-outline-green btn-lg btn-pill px-4">Meet Farmers</a>
+                </div>
+                
+                <div class="mt-5 d-flex align-items-center gap-4">
+                    <div class="d-flex align-items-center">
+                        <div class="avatar-group">
+                            <img src="/images/placeholder.png" alt="User" style="width:40px;height:40px;border-radius:50%;border:2px solid #fff;">
+                            <img src="/images/placeholder.png" alt="User" style="width:40px;height:40px;border-radius:50%;border:2px solid #fff;margin-left:-15px;">
+                            <img src="/images/placeholder.png" alt="User" style="width:40px;height:40px;border-radius:50%;border:2px solid #fff;margin-left:-15px;">
+                        </div>
+                        <div class="ms-3">
+                            <div style="font-weight:700;color:var(--heading)">1,200+</div>
+                            <div style="font-size:12px;color:var(--muted)">Happy Customers</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 mt-5 mt-lg-0 animate-on-scroll" style="position:relative;">
+                <div style="position:absolute;top:-20px;right:-20px;width:150px;height:150px;background:var(--accent);border-radius:50%;opacity:0.2;filter:blur(30px);"></div>
+                <img src="/images/placeholder.png" alt="Fresh Produce" class="img-fluid rounded-4 shadow-lg" style="border:8px solid #fff;transform:rotate(2deg);transition:transform 0.3s;" onmouseover="this.style.transform='rotate(0deg)'" onmouseout="this.style.transform='rotate(2deg)'" />
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section data-counters style="padding:60px 0;background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+    <div class="container">
+        <div class="row text-center g-4">
+            <div class="col-md-3 col-6">
+                <h2 style="font-weight:800;color:var(--primary);margin-bottom:8px;"><span data-count="150">0</span>+</h2>
+                <div style="font-size:14px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Local Farmers</div>
+            </div>
+            <div class="col-md-3 col-6">
+                <h2 style="font-weight:800;color:var(--primary);margin-bottom:8px;"><span data-count="5000">0</span>+</h2>
+                <div style="font-size:14px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Products Sold</div>
+            </div>
+            <div class="col-md-3 col-6">
+                <h2 style="font-weight:800;color:var(--primary);margin-bottom:8px;"><span data-count="45">0</span></h2>
+                <div style="font-size:14px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Active Markets</div>
+            </div>
+            <div class="col-md-3 col-6">
+                <h2 style="font-weight:800;color:var(--primary);margin-bottom:8px;">100%</h2>
+                <div style="font-size:14px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Fresh Guarantee</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Categories -->
+<section style="padding:80px 0;background:var(--bg);">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-end mb-5">
+            <div>
+                <span style="color:var(--accent);font-weight:600;text-transform:uppercase;letter-spacing:1px;font-size:13px;">Browse by</span>
+                <h2 style="font-weight:700;color:var(--heading);margin:0;">Categories</h2>
+            </div>
+            <a asp-controller="Products" asp-action="Index" class="btn btn-outline-green btn-sm btn-pill">View All</a>
+        </div>
+        
+        <div class="row g-4">
+            @foreach (var cat in ViewBag.Categories)
+            {
+                <div class="col-lg-2 col-md-4 col-6 animate-on-scroll">
+                    <a asp-controller="Products" asp-action="Index" asp-route-categorySlug="@cat.Slug" style="text-decoration:none;">
+                        <div class="card product-card text-center h-100" style="padding:24px 16px;border-radius:24px;">
+                            <div style="width:60px;height:60px;background:var(--soft-highlight);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+                                <i class="fas @cat.IconClass" style="font-size:24px;color:var(--primary);"></i>
+                            </div>
+                            <h6 style="color:var(--heading);font-weight:600;margin:0;">@cat.Name</h6>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Fresh Products -->
+<section style="padding:80px 0;background:var(--card);">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span style="color:var(--accent);font-weight:600;text-transform:uppercase;letter-spacing:1px;font-size:13px;">Freshly Harvested</span>
+            <h2 style="font-weight:700;color:var(--heading);margin:0;">New Arrivals</h2>
+        </div>
+        
+        <div class="row g-4">
+            @foreach (var p in Model)
+            {
+                <div class="col-lg-3 col-md-6 animate-on-scroll">
+                    <div class="card product-card h-100">
+                        <div style="position:relative;">
+                            <a asp-controller="Products" asp-action="Details" asp-route-slug="@p.Slug">
+                                <img src="@(string.IsNullOrEmpty(p.ImageUrl) ? "/images/placeholder.png" : p.ImageUrl)" class="card-img-top" alt="@p.Name" style="height:200px;object-fit:cover;">
+                            </a>
+                            @if (p.IsOrganic)
+                            {
+                                <span class="badge badge-success" style="position:absolute;top:10px;left:10px;">Organic</span>
+                            }
+                            <button class="btn btn-sm btn-light btn-circle shadow-sm" style="position:absolute;top:10px;right:10px;" onclick="ML.Favorites.toggle('Product', @p.Id, this)">
+                                <i class="far fa-heart text-danger"></i>
+                            </button>
+                        </div>
+                        <div class="card-body p-4 d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">@p.Category?.Name</div>
+                                    <h6 style="margin:0;"><a asp-controller="Products" asp-action="Details" asp-route-slug="@p.Slug" style="color:var(--heading);text-decoration:none;">@p.Name</a></h6>
+                                </div>
+                                <div style="font-weight:700;color:var(--primary);font-size:18px;">$@p.PricePerKg.ToString("0.00")<span style="font-size:12px;color:var(--muted);font-weight:normal;">/kg</span></div>
+                            </div>
+                            <div style="font-size:13px;color:var(--muted);margin-bottom:16px;">By @p.Farmer?.FarmName</div>
+                            
+                            <div class="mt-auto d-flex gap-2">
+                                <a asp-controller="Products" asp-action="Details" asp-route-slug="@p.Slug" class="btn btn-outline-green btn-sm flex-grow-1">View</a>
+                                <button class="btn btn-primary-green btn-sm flex-grow-1" onclick="ML.Cart.addItem(@p.Id, 1)">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section style="padding:100px 0;background:var(--primary);color:#fff;text-align:center;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:-50%;left:-10%;width:50%;height:200%;background:rgba(255,255,255,0.05);transform:rotate(30deg);"></div>
+    <div class="container animate-on-scroll">
+        <h2 style="font-size:3rem;font-weight:800;margin-bottom:20px;">Are you a local farmer?</h2>
+        <p style="font-size:1.1rem;opacity:0.9;max-width:600px;margin:0 auto 40px;">
+            Join our marketplace and reach thousands of local customers. Setting up your digital farm stand is free and takes minutes.
+        </p>
+        <a asp-controller="Auth" asp-action="Register" asp-route-role="Farmer" class="btn btn-accent btn-lg btn-pill px-5 shadow-lg">Become a Seller</a>
+    </div>
+</section>
