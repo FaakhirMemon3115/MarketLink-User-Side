@@ -1,0 +1,148 @@
+@model IEnumerable<MarketLink.Core.Entities.Order>
+@{
+    ViewData["Title"] = "Order History";
+    string currentFilter = ViewBag.StatusFilter as string ?? "";
+    string currentQ = ViewBag.Query as string ?? "";
+}
+
+<div class="container-fluid px-0">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 mb-4">
+        <div>
+            <h4 class="fw-bold mb-1" style="color:var(--heading);"><i class="fas fa-history me-2 text-primary-green"></i>Order History</h4>
+            <p class="text-muted small mb-0">Track all your past orders, reorder your favorite produce, and download receipts.</p>
+        </div>
+        <a asp-controller="Products" asp-action="Index" class="btn btn-primary-green btn-sm">
+            <i class="fas fa-shopping-basket me-2"></i>New Fresh Order
+        </a>
+    </div>
+
+    <!-- Filter & Search Bar -->
+    <div class="card border-0 mb-4" style="background:var(--card);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);">
+        <div class="card-body p-3">
+            <form method="get" class="row g-2 align-items-center">
+                <div class="col-12 col-md-5">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-transparent border-end-0"><i class="fas fa-search text-muted"></i></span>
+                        <input type="text" name="q" value="@currentQ" class="form-control border-start-0" placeholder="Search by Order #, Farm, or Product..." />
+                    </div>
+                </div>
+                <div class="col-6 col-md-4">
+                    <select name="statusFilter" class="form-select form-select-sm" onchange="this.form.submit()">
+                        <option value="">All Statuses</option>
+                        <option value="Completed" selected="@(currentFilter == "Completed")">Completed</option>
+                        <option value="Pending" selected="@(currentFilter == "Pending")">Pending</option>
+                        <option value="Accepted" selected="@(currentFilter == "Accepted")">Accepted</option>
+                        <option value="ReadyForPickup" selected="@(currentFilter == "ReadyForPickup")">Ready for Pickup</option>
+                        <option value="Cancelled" selected="@(currentFilter == "Cancelled")">Cancelled</option>
+                    </select>
+                </div>
+                <div class="col-6 col-md-3 d-flex gap-2">
+                    <button type="submit" class="btn btn-outline-green btn-sm flex-grow-1">Filter</button>
+                    @if (!string.IsNullOrEmpty(currentFilter) || !string.IsNullOrEmpty(currentQ))
+                    {
+                        <a asp-action="History" class="btn btn-outline-secondary btn-sm" title="Clear Filters"><i class="fas fa-times"></i></a>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="card border-0 text-center py-5" style="background:var(--card);border-radius:var(--radius);border:1px dashed var(--border);">
+            <div class="card-body">
+                <div style="font-size:52px;margin-bottom:16px;">📦</div>
+                <h5 class="fw-bold" style="color:var(--heading);">No orders found</h5>
+                <p class="text-muted" style="max-width:420px;margin:0 auto 20px;">
+                    @(string.IsNullOrEmpty(currentFilter) && string.IsNullOrEmpty(currentQ)
+                        ? "You haven't placed any orders yet. Fresh farm produce is just a click away!"
+                        : "No orders matched your search or status filter.")
+                </p>
+                <a asp-controller="Products" asp-action="Index" class="btn btn-primary-green btn-pill px-4">
+                    <i class="fas fa-leaf me-2"></i>Start Shopping
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="d-flex flex-column gap-3">
+            @foreach (var order in Model)
+            {
+                <div class="card border-0" style="background:var(--card);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);transition:var(--transition);">
+                    <div class="card-body p-4">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 pb-3 mb-3 border-bottom">
+                            <div>
+                                <div class="d-flex align-items-center gap-2 mb-1">
+                                    <h6 class="fw-bold mb-0" style="color:var(--heading);">Order #@(string.IsNullOrEmpty(order.OrderNumber) ? order.Id.ToString() : order.OrderNumber)</h6>
+                                    @{
+                                        string badgeClass = order.Status switch
+                                        {
+                                            MarketLink.Core.Enums.OrderStatus.Completed => "badge-success",
+                                            MarketLink.Core.Enums.OrderStatus.Cancelled => "badge bg-danger",
+                                            MarketLink.Core.Enums.OrderStatus.ReadyForPickup => "badge bg-info text-white",
+                                            MarketLink.Core.Enums.OrderStatus.Accepted => "badge bg-primary",
+                                            _ => "badge bg-warning text-dark"
+                                        };
+                                    }
+                                    <span class="badge @badgeClass" style="font-size:11px;">@order.Status</span>
+                                </div>
+                                <div class="text-muted small">
+                                    <i class="fas fa-calendar-alt me-1"></i> Placed on @order.OrderedAt.ToString("MMM dd, yyyy · hh:mm tt")
+                                    • <i class="fas fa-tractor ms-1 me-1"></i> @(order.Farmer?.FarmName ?? "Local Farmer")
+                                </div>
+                            </div>
+                            <div class="text-md-end">
+                                <div class="fw-bold" style="font-size:18px;color:var(--primary);">$@order.TotalAmount.ToString("0.00")</div>
+                                <div class="text-muted small">@order.PaymentMethod</div>
+                            </div>
+                        </div>
+
+                        <!-- Order items preview -->
+                        <div class="mb-3">
+                            <div class="text-muted small fw-semibold mb-2">ITEMS PURCHASED (@order.Items.Count):</div>
+                            <div class="d-flex flex-wrap gap-2">
+                                @foreach (var item in order.Items)
+                                {
+                                    <span class="badge" style="background:var(--bg);color:var(--body-text);border:1px solid var(--border);font-weight:normal;padding:6px 12px;font-size:12px;">
+                                        <i class="fas fa-check text-success me-1"></i>@(item.ProductNameSnapshot) <strong>(@(item.QuantityKg)kg)</strong>
+                                    </span>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Card footer / actions -->
+                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pt-2">
+                            <div class="small text-muted">
+                                @if (order.Status == MarketLink.Core.Enums.OrderStatus.Completed && order.CompletedAt.HasValue)
+                                {
+                                    <span><i class="fas fa-check-double text-success me-1"></i>Completed on @order.CompletedAt.Value.ToString("MMM dd, yyyy")</span>
+                                }
+                                else if (order.Status == MarketLink.Core.Enums.OrderStatus.Cancelled)
+                                {
+                                    <span class="text-danger"><i class="fas fa-ban me-1"></i>Cancelled</span>
+                                }
+                                else
+                                {
+                                    <span><i class="fas fa-clock text-warning me-1"></i>In Progress</span>
+                                }
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <form asp-action="Reorder" asp-route-id="@order.Id" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-outline-green btn-sm">
+                                        <i class="fas fa-redo-alt me-1"></i> Reorder
+                                    </button>
+                                </form>
+                                <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-primary-green btn-sm">
+                                    View Details <i class="fas fa-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

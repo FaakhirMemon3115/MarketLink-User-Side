@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using MarketLink.Core.Interfaces;
 using MarketLink.Core.Enums;
+using MarketLink.Core.Entities;
 using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 
 namespace MarketLink.Web.Areas.Customer.Controllers;
 
@@ -41,12 +43,89 @@ public class OrdersController : Controller
         return View(orders);
     }
 
+    public async Task<IActionResult> History(string? statusFilter, string? q)
+    {
+        ViewData["Title"] = "Order History";
+        var customerId = await GetCustomerIdAsync();
+
+        var query = _unitOfWork.Repository<Order>().Query()
+            .Include(o => o.Farmer)
+            .Include(o => o.Items).ThenInclude(i => i.Product)
+            .Where(o => o.CustomerId == customerId);
+
+        if (!string.IsNullOrWhiteSpace(statusFilter) && Enum.TryParse<OrderStatus>(statusFilter, true, out var parsedStatus))
+        {
+            query = query.Where(o => o.Status == parsedStatus);
+        }
+
+        if (!string.IsNullOrWhiteSpace(q))
+        {
+            var search = q.Trim();
+            query = query.Where(o => o.OrderNumber.Contains(search) || 
+                                     o.Farmer.FarmName.Contains(search) ||
+                                     o.Items.Any(i => i.ProductNameSnapshot.Contains(search)));
+        }
+
+        var orders = await query.OrderByDescending(o => o.OrderedAt).ToListAsync();
+
+        ViewBag.StatusFilter = statusFilter;
+        ViewBag.Query = q;
+        return View(orders);
+    }
+
     public async Task<IActionResult> Details(int id)
     {
-        var order = await _unitOfWork.Repository<MarketLink.Core.Entities.Order>().GetByIdAsync(id);
+        var order = await _unitOfWork.Repository<Order>().Query()
+            .Include(o => o.Farmer).ThenInclude(f => f.User)
+            .Include(o => o.Market)
+            .Include(o => o.PickupSlot)
+            .Include(o => o.Items).ThenInclude(i => i.Product)
+            .FirstOrDefaultAsync(o => o.Id == id);
+
         var customerId = await GetCustomerIdAsync();
         if (order == null || order.CustomerId != customerId) return NotFound();
         return View(order);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Reorder(int id)
+    {
+        var customerId = await GetCustomerIdAsync();
+        var order = await _unitOfWork.Repository<Order>().Query()
+            .Include(o => o.Items)
+            .FirstOrDefaultAsync(o => o.Id == id && o.CustomerId == customerId);
+
+        if (order == null)
+        {
+            TempData["Error"] = "Order not found.";
+            return RedirectToAction(nameof(History));
+        }
+
+        int addedCount = 0;
+        foreach (var item in order.Items)
+        {
+            try
+            {
+                await _cartService.AddToCartAsync(customerId, item.ProductId, item.QuantityKg);
+                addedCount++;
+            }
+            catch
+            {
+                // In case a product is unavailable, skip it
+            }
+        }
+
+        if (addedCount > 0)
+        {
+            TempData["Success"] = $"Added {addedCount} item(s) from Order #{order.OrderNumber} to your basket!";
+            return RedirectToAction("Index", "Cart");
+        }
+        else
+        {
+            TempData["Error"] = "Items from this order are currently out of stock or unavailable.";
+            return RedirectToAction(nameof(History));
+        }
     }
 
     [HttpPost]

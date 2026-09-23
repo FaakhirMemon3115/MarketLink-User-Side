@@ -3,8 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using MarketLink.Core.Interfaces;
 using MarketLink.Core.Entities;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace MarketLink.Web.Areas.Customer.Controllers;
 
@@ -29,6 +28,24 @@ public class FavoritesController : Controller
             if (customer != null) return customer.Id;
         }
         return 1; // Demo fallback
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Index()
+    {
+        ViewData["Title"] = "My Favorites";
+        int customerId = await GetCustomerIdAsync();
+
+        var favorites = await _unitOfWork.Repository<Favorite>().Query()
+            .Include(f => f.Product).ThenInclude(p => p.Category)
+            .Include(f => f.Product).ThenInclude(p => p.Farmer)
+            .Include(f => f.Product).ThenInclude(p => p.Images)
+            .Include(f => f.Farmer).ThenInclude(farmer => farmer.User)
+            .Where(f => f.CustomerId == customerId)
+            .OrderByDescending(f => f.CreatedAt)
+            .ToListAsync();
+
+        return View(favorites);
     }
 
     [HttpPost]
@@ -72,7 +89,7 @@ public class FavoritesController : Controller
                 var newFav = new Favorite
                 {
                     CustomerId = customerId,
-                    CreatedAt = System.DateTime.UtcNow
+                    CreatedAt = DateTime.UtcNow
                 };
 
                 if (type.ToLower() == "product") newFav.ProductId = id;
@@ -86,9 +103,27 @@ public class FavoritesController : Controller
 
             return Json(new { success = true, isFavorite });
         }
-        catch (System.Exception ex)
+        catch (Exception ex)
         {
             return Json(new { success = false, message = ex.Message });
         }
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Remove(int id)
+    {
+        int customerId = await GetCustomerIdAsync();
+        var favRepo = _unitOfWork.Repository<Favorite>();
+        var fav = await favRepo.GetByIdAsync(id);
+
+        if (fav != null && fav.CustomerId == customerId)
+        {
+            favRepo.Remove(fav);
+            await _unitOfWork.SaveChangesAsync();
+            TempData["Success"] = "Item removed from favorites.";
+        }
+
+        return RedirectToAction(nameof(Index));
     }
 }

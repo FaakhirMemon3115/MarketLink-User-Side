@@ -1,0 +1,82 @@
+@model IEnumerable<MarketLink.Core.Entities.Review>
+@{
+    ViewData["Title"] = "My Reviews";
+}
+
+<div class="container-fluid px-0">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 mb-4">
+        <div>
+            <h4 class="fw-bold mb-1" style="color:var(--heading);"><i class="fas fa-star me-2 text-warning"></i>My Product & Farmer Reviews</h4>
+            <p class="text-muted small mb-0">Feedback and ratings you've shared with the local agricultural community.</p>
+        </div>
+        <a asp-controller="Products" asp-action="Index" class="btn btn-outline-green btn-sm">
+            <i class="fas fa-leaf me-1"></i> Browse Products
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="card border-0 text-center py-5" style="background:var(--card);border-radius:var(--radius);border:1px dashed var(--border);">
+            <div class="card-body">
+                <div style="font-size:48px;margin-bottom:16px;">⭐</div>
+                <h5 class="fw-bold" style="color:var(--heading);">No reviews yet</h5>
+                <p class="text-muted" style="max-width:400px;margin:0 auto 20px;">Once you order and taste fresh produce, leave reviews on product or farmer pages to help other conscious consumers!</p>
+                <a asp-area="Customer" asp-controller="Orders" asp-action="History" class="btn btn-primary-green btn-pill px-4">
+                    <i class="fas fa-box me-1"></i> Check Past Orders
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var r in Model)
+            {
+                <div class="col-md-6">
+                    <div class="card h-100 border-0" style="background:var(--card);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    @if (r.Product != null)
+                                    {
+                                        <h6 class="fw-bold mb-1"><a asp-controller="Products" asp-action="Details" asp-route-slug="@r.Product.Slug" style="color:var(--heading);text-decoration:none;">@r.Product.Name</a></h6>
+                                        <div class="small text-muted"><i class="fas fa-box me-1"></i>Product Review</div>
+                                    }
+                                    else if (r.Farmer != null)
+                                    {
+                                        <h6 class="fw-bold mb-1"><a asp-controller="Farmers" asp-action="Details" asp-route-id="@r.Farmer.Id" style="color:var(--heading);text-decoration:none;">@r.Farmer.FarmName</a></h6>
+                                        <div class="small text-muted"><i class="fas fa-tractor me-1"></i>Farmer Review</div>
+                                    }
+                                </div>
+                                <div class="text-warning small">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <i class="fas fa-star @(i <= r.Rating ? "" : "text-muted opacity-25")"></i>
+                                    }
+                                </div>
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(r.Title))
+                            {
+                                <div class="fw-bold small mb-1" style="color:var(--heading);">@r.Title</div>
+                            }
+                            <p class="text-muted small mb-3">@r.Comment</p>
+
+                            @if (!string.IsNullOrEmpty(r.FarmerResponse))
+                            {
+                                <div class="p-3 rounded mb-2" style="background:rgba(92,111,43,0.06);border-left:3px solid var(--primary);">
+                                    <div class="fw-bold small" style="color:var(--primary);"><i class="fas fa-reply me-1"></i>Farmer's Response:</div>
+                                    <div class="small text-muted">@r.FarmerResponse</div>
+                                </div>
+                            }
+
+                            <div class="text-muted" style="font-size:11px;">
+                                Reviewed on @r.CreatedAt.ToString("MMM dd, yyyy")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

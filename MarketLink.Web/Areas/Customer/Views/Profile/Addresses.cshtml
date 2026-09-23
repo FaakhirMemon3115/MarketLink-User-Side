@@ -1,0 +1,202 @@
+@model IEnumerable<MarketLink.Core.Entities.CustomerAddress>
+@{
+    ViewData["Title"] = "Manage Addresses";
+}
+
+<div class="container-fluid px-0">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 mb-4">
+        <div>
+            <h4 class="fw-bold mb-1" style="color:var(--heading);"><i class="fas fa-map-marker-alt me-2 text-danger"></i>My Delivery & Pickup Addresses</h4>
+            <p class="text-muted small mb-0">Add and manage your shipping and pickup locations for quick order placement.</p>
+        </div>
+        <button type="button" class="btn btn-primary-green" data-bs-toggle="modal" data-bs-target="#addAddressModal">
+            <i class="fas fa-plus me-2"></i>Add New Address
+        </button>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="card border-0 text-center py-5" style="background:var(--card);border-radius:var(--radius);border:1px dashed var(--border);">
+            <div class="card-body">
+                <div style="font-size:52px;margin-bottom:16px;">📍</div>
+                <h5 class="fw-bold" style="color:var(--heading);">No addresses found</h5>
+                <p class="text-muted" style="max-width:400px;margin:0 auto 20px;">You haven't added any delivery addresses yet. Add your home or office address to checkout faster!</p>
+                <button type="button" class="btn btn-primary-green btn-pill px-4" data-bs-toggle="modal" data-bs-target="#addAddressModal">
+                    <i class="fas fa-plus me-2"></i>Add First Address
+                </button>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var addr in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0" style="background:var(--card);border-radius:var(--radius);border:1px solid @(addr.IsDefault ? "var(--primary)" : "var(--border)");box-shadow:var(--shadow-sm);position:relative;overflow:hidden;">
+                        @if (addr.IsDefault)
+                        {
+                            <div style="position:absolute;top:0;right:0;background:var(--primary);color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-bottom-left-radius:8px;">
+                                <i class="fas fa-check-circle me-1"></i>DEFAULT
+                            </div>
+                        }
+                        <div class="card-body p-4 d-flex flex-column">
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <span class="badge" style="background:rgba(92,111,43,0.1);color:var(--primary);font-size:13px;padding:6px 12px;border-radius:50px;">
+                                    <i class="fas fa-tag me-1"></i>@addr.Label
+                                </span>
+                            </div>
+
+                            <h6 class="fw-bold mb-1" style="color:var(--heading);">@addr.AddressLine1</h6>
+                            @if (!string.IsNullOrEmpty(addr.AddressLine2))
+                            {
+                                <div class="text-muted small mb-1">@addr.AddressLine2</div>
+                            }
+                            <div class="text-muted small mb-3">
+                                @addr.City, @addr.State @addr.PostalCode
+                            </div>
+
+                            <div class="mt-auto pt-3 border-top d-flex flex-wrap align-items-center justify-content-between gap-2">
+                                @if (!addr.IsDefault)
+                                {
+                                    <form asp-action="SetDefaultAddress" asp-route-id="@addr.Id" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-outline-secondary btn-sm" style="font-size:12px;padding:4px 10px;">
+                                            Set as Default
+                                        </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <span class="small text-success fw-bold"><i class="fas fa-shield-alt me-1"></i>Primary Address</span>
+                                }
+
+                                <div class="d-flex gap-2">
+                                    <button type="button" class="btn btn-sm btn-outline-primary" style="padding:4px 10px;"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#editModal-@addr.Id"
+                                            title="Edit Address">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <form asp-action="DeleteAddress" asp-route-id="@addr.Id" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to remove this address?');">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" style="padding:4px 10px;" title="Delete Address">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edit Modal for this address -->
+                <div class="modal fade" id="editModal-@addr.Id" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content" style="border-radius:var(--radius);border:1px solid var(--border);">
+                            <form asp-action="EditAddress" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="Id" value="@addr.Id" />
+                                <div class="modal-header" style="border-bottom:1px solid var(--border);">
+                                    <h6 class="modal-title fw-bold" style="color:var(--heading);"><i class="fas fa-edit me-2 text-primary-green"></i>Edit Address (@addr.Label)</h6>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body p-4">
+                                    <div class="mb-3">
+                                        <label class="form-label small fw-semibold">Label</label>
+                                        <input type="text" name="Label" class="form-control form-control-sm" value="@addr.Label" required placeholder="e.g. Home, Office, Cottage" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label small fw-semibold">Address Line 1</label>
+                                        <input type="text" name="AddressLine1" class="form-control form-control-sm" value="@addr.AddressLine1" required placeholder="Street address or P.O. Box" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label small fw-semibold">Address Line 2 (Optional)</label>
+                                        <input type="text" name="AddressLine2" class="form-control form-control-sm" value="@addr.AddressLine2" placeholder="Apt, Suite, Building floor" />
+                                    </div>
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-6">
+                                            <label class="form-label small fw-semibold">City</label>
+                                            <input type="text" name="City" class="form-control form-control-sm" value="@addr.City" required />
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label small fw-semibold">State / Province</label>
+                                            <input type="text" name="State" class="form-control form-control-sm" value="@addr.State" required />
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label small fw-semibold">Postal / ZIP Code</label>
+                                        <input type="text" name="PostalCode" class="form-control form-control-sm" value="@addr.PostalCode" required />
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="IsDefault" value="true" id="editDefault-@addr.Id" @(addr.IsDefault ? "checked" : "") />
+                                        <label class="form-check-label small" for="editDefault-@addr.Id">
+                                            Set as default address
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="modal-footer" style="border-top:1px solid var(--border);">
+                                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-primary-green btn-sm">Update Address</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<!-- Add Address Modal -->
+<div class="modal fade" id="addAddressModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:var(--radius);border:1px solid var(--border);">
+            <form asp-action="AddAddress" method="post">
+                @Html.AntiForgeryToken()
+                <div class="modal-header" style="border-bottom:1px solid var(--border);">
+                    <h6 class="modal-title fw-bold" style="color:var(--heading);"><i class="fas fa-plus-circle me-2 text-primary-green"></i>Add New Address</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Label (e.g. Home, Work, Farmhouse)</label>
+                        <input type="text" name="Label" class="form-control form-control-sm" required placeholder="e.g. Home" value="Home" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Address Line 1</label>
+                        <input type="text" name="AddressLine1" class="form-control form-control-sm" required placeholder="Street address or House #" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Address Line 2 (Optional)</label>
+                        <input type="text" name="AddressLine2" class="form-control form-control-sm" placeholder="Apartment, suite, unit, etc." />
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label small fw-semibold">City</label>
+                            <input type="text" name="City" class="form-control form-control-sm" required placeholder="City" />
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-semibold">State / Province</label>
+                            <input type="text" name="State" class="form-control form-control-sm" required placeholder="State" />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Postal / ZIP Code</label>
+                        <input type="text" name="PostalCode" class="form-control form-control-sm" required placeholder="Postal Code" />
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="IsDefault" value="true" id="addDefault" checked />
+                        <label class="form-check-label small" for="addDefault">
+                            Set as default address
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top:1px solid var(--border);">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary-green btn-sm">Save Address</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

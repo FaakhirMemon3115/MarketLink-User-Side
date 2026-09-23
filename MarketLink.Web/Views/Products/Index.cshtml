@@ -1,58 +1,189 @@
 @model IEnumerable<MarketLink.Core.Entities.Product>
 @{
     ViewData["Title"] = "Shop Fresh Products";
+    var favIds = ViewBag.FavoriteProductIds as HashSet<int> ?? new HashSet<int>();
+    string currentCat = ViewBag.CurrentCategory as string ?? "";
+    string currentQ = ViewBag.Query as string ?? "";
+    bool isOrg = ViewBag.IsOrganic == true;
+    bool isSea = ViewBag.Seasonal == true;
+    decimal? minP = ViewBag.MinPrice as decimal?;
+    decimal? maxP = ViewBag.MaxPrice as decimal?;
+    string sortBy = ViewBag.SortBy as string ?? "";
+    var categories = ViewBag.Categories as IEnumerable<MarketLink.Core.Entities.Category> ?? Enumerable.Empty<MarketLink.Core.Entities.Category>();
+
+    bool hasActiveFilters = !string.IsNullOrEmpty(currentCat) ||
+                            !string.IsNullOrEmpty(currentQ) ||
+                            isOrg || isSea ||
+                            minP.HasValue || maxP.HasValue ||
+                            !string.IsNullOrEmpty(sortBy);
 }
 
-<div style="background:var(--card);border-bottom:1px solid var(--border);padding:40px 0;">
+<!-- Page Header with Search -->
+<div style="background:linear-gradient(135deg, var(--card) 0%, var(--bg) 100%);border-bottom:1px solid var(--border);padding:40px 0;">
     <div class="container text-center">
-        <h1 style="font-weight:700;color:var(--heading);margin-bottom:16px;">Shop Farm Fresh</h1>
-        <p style="color:var(--muted);max-width:600px;margin:0 auto;">
-            Discover locally grown, organic, and seasonal produce directly from farmers in your community.
+        <h1 style="font-weight:700;color:var(--heading);margin-bottom:12px;">Farm Fresh Marketplace</h1>
+        <p style="color:var(--muted);max-width:620px;margin:0 auto 24px;font-size:15px;">
+            Shop 100% locally harvested fruits, vegetables, dairy, and grains directly from passionate growers in your community.
         </p>
+
+        <!-- Inline search bar -->
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <form method="get" class="d-flex gap-2">
+                    <input type="hidden" name="categorySlug" value="@currentCat" />
+                    <input type="hidden" name="isOrganic" value="@(isOrg ? "true" : "")" />
+                    <input type="hidden" name="seasonal" value="@(isSea ? "true" : "")" />
+                    <input type="hidden" name="sortBy" value="@sortBy" />
+                    @if (minP.HasValue) { <input type="hidden" name="minPrice" value="@minP.Value" /> }
+                    @if (maxP.HasValue) { <input type="hidden" name="maxPrice" value="@maxP.Value" /> }
+
+                    <div class="input-group" style="border-radius:50px;box-shadow:var(--shadow-sm);background:#fff;border:2px solid var(--border);overflow:hidden;padding:3px 6px;">
+                        <span class="input-group-text bg-transparent border-0"><i class="fas fa-search text-muted"></i></span>
+                        <input type="text" name="q" value="@currentQ" class="form-control border-0 shadow-none" placeholder="Search tomatoes, organic carrots, honey, apples..." />
+                        @if (!string.IsNullOrEmpty(currentQ))
+                        {
+                            <a href="@Url.Action("Index", new { categorySlug = currentCat, isOrganic = isOrg ? "true" : (string)null, seasonal = isSea ? "true" : (string)null, minPrice = minP, maxPrice = maxP, sortBy })" class="btn btn-link text-muted" title="Clear query">
+                                <i class="fas fa-times"></i>
+                            </a>
+                        }
+                        <button type="submit" class="btn btn-primary-green btn-pill px-4">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="container py-5">
+<div class="container py-4">
+    <!-- Active filters bar & Mobile filter button -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+            <!-- Mobile Filter Trigger -->
+            <button class="btn btn-outline-green btn-sm d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas" aria-controls="filterOffcanvas">
+                <i class="fas fa-filter me-1"></i> Filters @(hasActiveFilters ? "•" : "")
+            </button>
+
+            <span class="text-muted small">Showing <strong>@Model.Count()</strong> fresh item(s)</span>
+
+            <!-- Active filter chips -->
+            @if (hasActiveFilters)
+            {
+                <div class="d-flex flex-wrap gap-2 align-items-center ms-2">
+                    @if (!string.IsNullOrEmpty(currentCat))
+                    {
+                        var catObj = categories.FirstOrDefault(c => c.Slug == currentCat);
+                        <a href="@Url.Action("Index", new { q = currentQ, isOrganic = isOrg ? "true" : (string)null, seasonal = isSea ? "true" : (string)null, minPrice = minP, maxPrice = maxP, sortBy })"
+                           class="badge bg-light text-dark border p-2 text-decoration-none" title="Remove category filter">
+                            Category: @(catObj?.Name ?? currentCat) <i class="fas fa-times ms-1 text-danger"></i>
+                        </a>
+                    }
+                    @if (isOrg)
+                    {
+                        <a href="@Url.Action("Index", new { categorySlug = currentCat, q = currentQ, seasonal = isSea ? "true" : (string)null, minPrice = minP, maxPrice = maxP, sortBy })"
+                           class="badge bg-light text-dark border p-2 text-decoration-none">
+                            Organic Only <i class="fas fa-times ms-1 text-danger"></i>
+                        </a>
+                    }
+                    @if (isSea)
+                    {
+                        <a href="@Url.Action("Index", new { categorySlug = currentCat, q = currentQ, isOrganic = isOrg ? "true" : (string)null, minPrice = minP, maxPrice = maxP, sortBy })"
+                           class="badge bg-light text-dark border p-2 text-decoration-none">
+                            In Season <i class="fas fa-times ms-1 text-danger"></i>
+                        </a>
+                    }
+                    @if (minP.HasValue || maxP.HasValue)
+                    {
+                        <a href="@Url.Action("Index", new { categorySlug = currentCat, q = currentQ, isOrganic = isOrg ? "true" : (string)null, seasonal = isSea ? "true" : (string)null, sortBy })"
+                           class="badge bg-light text-dark border p-2 text-decoration-none">
+                            Price: $@(minP ?? 0) - $@(maxP ?? 100) <i class="fas fa-times ms-1 text-danger"></i>
+                        </a>
+                    }
+                    <a asp-action="Index" class="btn btn-link text-danger btn-sm p-0 ms-1" style="font-size:12px;text-decoration:none;">
+                        Clear All
+                    </a>
+                </div>
+            }
+        </div>
+
+        <!-- Sort dropdown (Desktop & Mobile) -->
+        <div class="d-flex align-items-center gap-2">
+            <label class="text-muted small fw-semibold d-none d-sm-inline">Sort by:</label>
+            <form method="get" id="sortForm">
+                <input type="hidden" name="categorySlug" value="@currentCat" />
+                <input type="hidden" name="q" value="@currentQ" />
+                <input type="hidden" name="isOrganic" value="@(isOrg ? "true" : "")" />
+                <input type="hidden" name="seasonal" value="@(isSea ? "true" : "")" />
+                @if (minP.HasValue) { <input type="hidden" name="minPrice" value="@minP.Value" /> }
+                @if (maxP.HasValue) { <input type="hidden" name="maxPrice" value="@maxP.Value" /> }
+
+                <select name="sortBy" class="form-select form-select-sm" onchange="document.getElementById('sortForm').submit()" style="border-radius:var(--radius-sm);min-width:160px;">
+                    <option value="">Featured</option>
+                    <option value="newest" selected="@(sortBy == "newest")">Newest Harvest</option>
+                    <option value="price_asc" selected="@(sortBy == "price_asc")">Price: Low to High</option>
+                    <option value="price_desc" selected="@(sortBy == "price_desc")">Price: High to Low</option>
+                    <option value="name" selected="@(sortBy == "name")">Name: A to Z</option>
+                    <option value="bestseller" selected="@(sortBy == "bestseller")">Best Sellers</option>
+                </select>
+            </form>
+        </div>
+    </div>
+
     <div class="row">
-        <!-- Sidebar Filters -->
-        <div class="col-lg-3 mb-4">
-            <div class="card" style="border:none;box-shadow:var(--shadow-sm);border-radius:var(--radius);position:sticky;top:100px;">
+        <!-- Desktop Sidebar Filters -->
+        <div class="col-lg-3 d-none d-lg-block mb-4">
+            <div class="card border-0" style="border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);position:sticky;top:100px;background:var(--card);">
                 <div class="card-body p-4">
-                    <form method="get" id="filterForm">
-                        <input type="hidden" name="q" value="@ViewBag.Query" />
-                        
-                        <h6 style="font-weight:700;margin-bottom:16px;">Categories</h6>
+                    <form method="get" id="desktopFilterForm">
+                        <input type="hidden" name="q" value="@currentQ" />
+                        <input type="hidden" name="sortBy" value="@sortBy" />
+
+                        <!-- Categories -->
+                        <h6 class="fw-bold mb-3" style="color:var(--heading);"><i class="fas fa-th-large me-2 text-primary-green"></i>Categories</h6>
                         <div class="d-flex flex-column gap-2 mb-4">
-                            <a href="@Url.Action("Index", new { q = ViewBag.Query, isOrganic = ViewBag.IsOrganic, seasonal = ViewBag.Seasonal, sortBy = ViewBag.SortBy })" 
-                               class="text-decoration-none @(string.IsNullOrEmpty(ViewBag.CurrentCategory) ? "text-primary fw-bold" : "text-muted")">
-                               All Products
+                            <a href="@Url.Action("Index", new { q = currentQ, isOrganic = isOrg ? "true" : (string)null, seasonal = isSea ? "true" : (string)null, minPrice = minP, maxPrice = maxP, sortBy })"
+                               class="d-flex justify-content-between align-items-center text-decoration-none py-1 px-2 rounded @(string.IsNullOrEmpty(currentCat) ? "bg-soft text-primary fw-bold" : "text-muted")">
+                                <span>All Products</span>
                             </a>
-                            @foreach(var cat in ViewBag.Categories)
+                            @foreach (var cat in categories)
                             {
-                                <a href="@Url.Action("Index", new { categorySlug = cat.Slug, q = ViewBag.Query, isOrganic = ViewBag.IsOrganic, seasonal = ViewBag.Seasonal, sortBy = ViewBag.SortBy })" 
-                                   class="text-decoration-none @(ViewBag.CurrentCategory == cat.Slug ? "text-primary fw-bold" : "text-muted")">
-                                    @cat.Name
+                                <a href="@Url.Action("Index", new { categorySlug = cat.Slug, q = currentQ, isOrganic = isOrg ? "true" : (string)null, seasonal = isSea ? "true" : (string)null, minPrice = minP, maxPrice = maxP, sortBy })"
+                                   class="d-flex justify-content-between align-items-center text-decoration-none py-1 px-2 rounded @(currentCat == cat.Slug ? "bg-soft text-primary fw-bold" : "text-muted")">
+                                    <span>@cat.Name</span>
                                 </a>
                             }
                         </div>
 
-                        <h6 style="font-weight:700;margin-bottom:16px;">Filters</h6>
+                        <!-- Special attributes -->
+                        <h6 class="fw-bold mb-3" style="color:var(--heading);"><i class="fas fa-check-circle me-2 text-accent"></i>Produce Type</h6>
                         <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" name="isOrganic" value="true" id="isOrganic" @(ViewBag.IsOrganic == true ? "checked" : "") onchange="document.getElementById('filterForm').submit()">
-                            <label class="form-check-label" for="isOrganic">Organic Only</label>
+                            <input class="form-check-input" type="checkbox" name="isOrganic" value="true" id="desktopIsOrganic" @(isOrg ? "checked" : "") onchange="document.getElementById('desktopFilterForm').submit()">
+                            <label class="form-check-label" for="desktopIsOrganic" style="font-size:14px;">Organic Certified</label>
                         </div>
                         <div class="form-check mb-4">
-                            <input class="form-check-input" type="checkbox" name="seasonal" value="true" id="seasonal" @(ViewBag.Seasonal == true ? "checked" : "") onchange="document.getElementById('filterForm').submit()">
-                            <label class="form-check-label" for="seasonal">In Season Now</label>
+                            <input class="form-check-input" type="checkbox" name="seasonal" value="true" id="desktopSeasonal" @(isSea ? "checked" : "") onchange="document.getElementById('desktopFilterForm').submit()">
+                            <label class="form-check-label" for="desktopSeasonal" style="font-size:14px;">In Season Right Now</label>
                         </div>
 
-                        <h6 style="font-weight:700;margin-bottom:16px;">Sort By</h6>
-                        <select name="sortBy" class="form-select form-select-sm" onchange="document.getElementById('filterForm').submit()">
-                            <option value="">Newest</option>
-                            <option value="price_asc" selected="@(ViewBag.SortBy == "price_asc")">Price: Low to High</option>
-                            <option value="price_desc" selected="@(ViewBag.SortBy == "price_desc")">Price: High to Low</option>
-                            <option value="name" selected="@(ViewBag.SortBy == "name")">Name: A-Z</option>
-                        </select>
+                        <!-- Price Range -->
+                        <h6 class="fw-bold mb-3" style="color:var(--heading);"><i class="fas fa-dollar-sign me-2 text-success"></i>Price per kg ($)</h6>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="small text-muted">Min</label>
+                                <input type="number" step="0.5" min="0" name="minPrice" value="@minP" class="form-control form-control-sm" placeholder="0" />
+                            </div>
+                            <div class="col-6">
+                                <label class="small text-muted">Max</label>
+                                <input type="number" step="0.5" min="0" name="maxPrice" value="@maxP" class="form-control form-control-sm" placeholder="50" />
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary-green btn-sm w-100">Apply Filter</button>
+                            @if (hasActiveFilters)
+                            {
+                                <a asp-action="Index" class="btn btn-outline-secondary btn-sm" title="Clear all"><i class="fas fa-undo"></i></a>
+                            }
+                        </div>
                     </form>
                 </div>
             </div>
@@ -60,23 +191,19 @@
 
         <!-- Product Grid -->
         <div class="col-lg-9">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <div style="color:var(--muted);font-size:14px;">
-                    Showing <strong>@Model.Count()</strong> results
-                    @if(!string.IsNullOrEmpty(ViewBag.Query)) { <span>for "@ViewBag.Query"</span> }
-                </div>
-                <div class="d-flex gap-2">
-                    <button class="btn btn-outline-green btn-sm" onclick="document.querySelector('.ai-toggle-btn').click()"><i class="fas fa-magic me-2"></i>Smart Search</button>
-                </div>
-            </div>
-
             @if (!Model.Any())
             {
-                <div class="text-center py-5">
-                    <div style="font-size:48px;margin-bottom:16px;">🛒</div>
-                    <h5>No products found</h5>
-                    <p class="text-muted">Try adjusting your filters or search query.</p>
-                    <a asp-action="Index" class="btn btn-outline-green mt-3">Clear Filters</a>
+                <div class="card border-0 text-center py-5" style="background:var(--card);border-radius:var(--radius);border:1px dashed var(--border);">
+                    <div class="card-body">
+                        <div style="font-size:52px;margin-bottom:16px;">🛒</div>
+                        <h5 class="fw-bold" style="color:var(--heading);">No matching products found</h5>
+                        <p class="text-muted" style="max-width:440px;margin:0 auto 20px;">
+                            We couldn't find any produce matching your current search or filter criteria. Try clearing some filters or searching for something else.
+                        </p>
+                        <a asp-action="Index" class="btn btn-primary-green btn-pill px-4">
+                            <i class="fas fa-undo me-2"></i>Reset All Filters
+                        </a>
+                    </div>
                 </div>
             }
             else
@@ -84,31 +211,46 @@
                 <div class="row g-4">
                     @foreach (var p in Model)
                     {
-                        <div class="col-md-4 col-sm-6 animate-on-scroll">
-                            <div class="card product-card h-100">
+                        bool isSaved = favIds.Contains(p.Id);
+                        <div class="col-sm-6 col-md-4">
+                            <div class="card product-card h-100 border-0" style="background:var(--card);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow-sm);transition:var(--transition);">
                                 <div style="position:relative;">
                                     <a asp-action="Details" asp-route-slug="@p.Slug">
-                                        <img src="@(string.IsNullOrEmpty(p.ImageUrl) ? "/images/placeholder.png" : p.ImageUrl)" class="card-img-top" alt="@p.Name" style="height:200px;object-fit:cover;">
+                                        <img src="@(string.IsNullOrEmpty(p.ImageUrl) ? "/images/placeholder.png" : p.ImageUrl)" class="card-img-top" alt="@p.Name" style="height:210px;object-fit:cover;">
                                     </a>
+
                                     @if (p.IsOrganic)
                                     {
-                                        <span class="badge badge-success" style="position:absolute;top:10px;left:10px;">Organic</span>
+                                        <span class="badge badge-success" style="position:absolute;top:10px;left:10px;box-shadow:var(--shadow-sm);">Organic</span>
                                     }
+
+                                    <!-- Favorite Toggle Button -->
+                                    <button type="button" class="btn btn-sm btn-light rounded-circle shadow-sm favorite-btn @(isSaved ? "active" : "")"
+                                            style="position:absolute;top:10px;right:10px;width:34px;height:34px;padding:0;display:flex;align-items:center;justify-content:center;color:@(isSaved ? "#dc3545" : "#6c757d");border:none;background:#fff;"
+                                            onclick="toggleProductFavorite(this, @p.Id)"
+                                            title="@(isSaved ? "Remove from favorites" : "Save to favorites")">
+                                        <i class="@(isSaved ? "fas fa-heart text-danger" : "far fa-heart")"></i>
+                                    </button>
                                 </div>
-                                <div class="card-body p-4 d-flex flex-column">
-                                    <div class="d-flex justify-content-between align-items-start mb-2">
-                                        <div>
-                                            <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">@p.Category?.Name</div>
-                                            <h6 style="margin:0;"><a asp-action="Details" asp-route-slug="@p.Slug" style="color:var(--heading);text-decoration:none;">@p.Name</a></h6>
-                                        </div>
-                                        <div style="font-weight:700;color:var(--primary);font-size:16px;">$@p.PricePerKg.ToString("0.00")<span style="font-size:11px;color:var(--muted);font-weight:normal;">/kg</span></div>
+
+                                <div class="card-body p-3 d-flex flex-column">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span style="font-size:12px;color:var(--muted);">@p.Category?.Name</span>
+                                        <span style="font-size:16px;font-weight:700;color:var(--primary);">$@p.PricePerKg.ToString("0.00")<span style="font-size:11px;color:var(--muted);font-weight:normal;">/kg</span></span>
                                     </div>
-                                    <div style="font-size:13px;color:var(--muted);margin-bottom:16px;">
-                                        <i class="fas fa-tractor me-1"></i> @p.Farmer?.FarmName
+
+                                    <h6 class="fw-bold mb-1">
+                                        <a asp-action="Details" asp-route-slug="@p.Slug" style="color:var(--heading);text-decoration:none;">@p.Name</a>
+                                    </h6>
+
+                                    <div class="small text-muted mb-3">
+                                        <i class="fas fa-tractor me-1 text-muted"></i>@(p.Farmer?.FarmName ?? "Local Farm")
                                     </div>
-                                    
-                                    <div class="mt-auto d-flex gap-2">
-                                        <button class="btn btn-primary-green btn-sm w-100" onclick="ML.Cart.addItem(@p.Id, 1)"><i class="fas fa-shopping-basket me-2"></i>Add</button>
+
+                                    <div class="mt-auto pt-2 d-flex gap-2">
+                                        <button class="btn btn-primary-green btn-sm w-100" onclick="ML.Cart.addItem(@p.Id, 1)">
+                                            <i class="fas fa-shopping-basket me-2"></i>Add to Cart
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -119,3 +261,100 @@
         </div>
     </div>
 </div>
+
+<!-- Mobile Offcanvas Filter Drawer -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="filterOffcanvas" aria-labelledby="filterOffcanvasLabel">
+    <div class="offcanvas-header" style="border-bottom:1px solid var(--border);">
+        <h5 class="offcanvas-title fw-bold" id="filterOffcanvasLabel" style="color:var(--heading);"><i class="fas fa-filter me-2 text-primary-green"></i>Filters</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-4">
+        <form method="get">
+            <input type="hidden" name="q" value="@currentQ" />
+            <input type="hidden" name="sortBy" value="@sortBy" />
+
+            <h6 class="fw-bold mb-3" style="color:var(--heading);">Categories</h6>
+            <div class="d-flex flex-column gap-2 mb-4">
+                <a href="@Url.Action("Index", new { q = currentQ, isOrganic = isOrg ? "true" : (string)null, seasonal = isSea ? "true" : (string)null, minPrice = minP, maxPrice = maxP, sortBy })"
+                   class="py-1 px-2 rounded text-decoration-none @(string.IsNullOrEmpty(currentCat) ? "bg-soft text-primary fw-bold" : "text-muted")">
+                    All Products
+                </a>
+                @foreach (var cat in categories)
+                {
+                    <a href="@Url.Action("Index", new { categorySlug = cat.Slug, q = currentQ, isOrganic = isOrg ? "true" : (string)null, seasonal = isSea ? "true" : (string)null, minPrice = minP, maxPrice = maxP, sortBy })"
+                       class="py-1 px-2 rounded text-decoration-none @(currentCat == cat.Slug ? "bg-soft text-primary fw-bold" : "text-muted")">
+                        @cat.Name
+                    </a>
+                }
+            </div>
+
+            <h6 class="fw-bold mb-3" style="color:var(--heading);">Special Attributes</h6>
+            <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" name="isOrganic" value="true" id="mobIsOrganic" @(isOrg ? "checked" : "")>
+                <label class="form-check-label" for="mobIsOrganic">Organic Only</label>
+            </div>
+            <div class="form-check mb-4">
+                <input class="form-check-input" type="checkbox" name="seasonal" value="true" id="mobSeasonal" @(isSea ? "checked" : "")>
+                <label class="form-check-label" for="mobSeasonal">In Season Now</label>
+            </div>
+
+            <h6 class="fw-bold mb-3" style="color:var(--heading);">Price per kg ($)</h6>
+            <div class="row g-2 mb-4">
+                <div class="col-6">
+                    <input type="number" step="0.5" min="0" name="minPrice" value="@minP" class="form-control form-control-sm" placeholder="Min" />
+                </div>
+                <div class="col-6">
+                    <input type="number" step="0.5" min="0" name="maxPrice" value="@maxP" class="form-control form-control-sm" placeholder="Max" />
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary-green w-100 mb-2">Apply Filters</button>
+            <a asp-action="Index" class="btn btn-outline-secondary w-100">Reset All</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    async function toggleProductFavorite(btn, productId) {
+        try {
+            const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value || '';
+            const formData = new FormData();
+            formData.append('type', 'product');
+            formData.append('id', productId);
+
+            // Using standard fetch with antiforgery token
+            const res = await fetch('/Customer/Favorites/Toggle', {
+                method: 'POST',
+                headers: {
+                    'RequestVerificationToken': token
+                },
+                body: formData
+            });
+
+            if (res.status === 401 || res.redirected) {
+                window.location.href = '/Auth/Login';
+                return;
+            }
+
+            const data = await res.json();
+            if (data.success) {
+                const icon = btn.querySelector('i');
+                if (data.isFavorite) {
+                    icon.className = 'fas fa-heart text-danger';
+                    btn.style.color = '#dc3545';
+                    ML.Toast.show('Saved to your favorites!', 'success');
+                } else {
+                    icon.className = 'far fa-heart';
+                    btn.style.color = '#6c757d';
+                    ML.Toast.show('Removed from favorites', 'info');
+                }
+            } else {
+                ML.Toast.show(data.message || 'Please log in to save favorites.', 'warning');
+            }
+        } catch (err) {
+            ML.Toast.show('Please log in to save favorites.', 'warning');
+        }
+    }
+</script>
+}

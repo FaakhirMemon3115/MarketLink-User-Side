@@ -1,0 +1,200 @@
+@model IEnumerable<MarketLink.Core.Entities.Favorite>
+@{
+    ViewData["Title"] = "My Favorites";
+    var productFavs = Model.Where(f => f.Product != null).ToList();
+    var farmerFavs = Model.Where(f => f.Farmer != null).ToList();
+}
+
+<div class="container-fluid px-0">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 mb-4">
+        <div>
+            <h4 class="fw-bold mb-1" style="color:var(--heading);"><i class="fas fa-heart me-2 text-danger"></i>My Favorite Produce & Farmers</h4>
+            <p class="text-muted small mb-0">Your saved fresh items and favorite local growers in one convenient place.</p>
+        </div>
+        <a asp-controller="Products" asp-action="Index" class="btn btn-outline-green btn-sm">
+            <i class="fas fa-search me-1"></i> Browse More Products
+        </a>
+    </div>
+
+    <!-- Navigation pills / tabs -->
+    <ul class="nav nav-pills mb-4 gap-2" id="favTabs" role="tablist">
+        <li class="nav-item">
+            <button class="nav-link active px-3 py-2 fw-semibold" id="all-tab" data-bs-toggle="pill" data-bs-target="#all-favs" type="button">
+                All Saved <span class="badge bg-secondary ms-1">@Model.Count()</span>
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link px-3 py-2 fw-semibold" id="products-tab" data-bs-toggle="pill" data-bs-target="#products-favs" type="button">
+                Produce <span class="badge bg-secondary ms-1">@productFavs.Count</span>
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link px-3 py-2 fw-semibold" id="farmers-tab" data-bs-toggle="pill" data-bs-target="#farmers-favs" type="button">
+                Farmers <span class="badge bg-secondary ms-1">@farmerFavs.Count</span>
+            </button>
+        </li>
+    </ul>
+
+    @if (!Model.Any())
+    {
+        <div class="card border-0 text-center py-5" style="background:var(--card);border-radius:var(--radius);border:1px dashed var(--border);">
+            <div class="card-body">
+                <div style="font-size:52px;margin-bottom:16px;">🌱</div>
+                <h5 class="fw-bold" style="color:var(--heading);">No favorites yet</h5>
+                <p class="text-muted" style="max-width:440px;margin:0 auto 20px;">
+                    When you find fresh items or local farmers you love, click the heart icon on any product or farm to save them here!
+                </p>
+                <a asp-controller="Products" asp-action="Index" class="btn btn-primary-green btn-pill px-4">
+                    <i class="fas fa-shopping-basket me-2"></i>Explore Fresh Products
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="tab-content" id="favTabsContent">
+            <!-- All Items Tab -->
+            <div class="tab-pane fade show active" id="all-favs">
+                <div class="row g-4">
+                    @foreach (var fav in productFavs)
+                    {
+                        var p = fav.Product!;
+                        <div class="col-sm-6 col-lg-4 col-xl-3">
+                            <div class="card product-card h-100 border-0" style="border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);">
+                                <div style="position:relative;">
+                                    <a asp-controller="Products" asp-action="Details" asp-route-slug="@p.Slug">
+                                        <img src="@(string.IsNullOrEmpty(p.ImageUrl) ? "/images/placeholder.png" : p.ImageUrl)" class="card-img-top" alt="@p.Name" style="height:180px;object-fit:cover;">
+                                    </a>
+                                    @if (p.IsOrganic)
+                                    {
+                                        <span class="badge badge-success" style="position:absolute;top:10px;left:10px;">Organic</span>
+                                    }
+                                    <form asp-action="Remove" asp-route-id="@fav.Id" method="post" style="position:absolute;top:10px;right:10px;">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-sm btn-light rounded-circle shadow-sm" style="width:32px;height:32px;padding:0;display:flex;align-items:center;justify-content:center;color:#dc3545;" title="Remove from favorites">
+                                            <i class="fas fa-heart"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="card-body p-3 d-flex flex-column">
+                                    <div class="text-muted small mb-1">@p.Category?.Name</div>
+                                    <h6 class="fw-bold mb-1"><a asp-controller="Products" asp-action="Details" asp-route-slug="@p.Slug" style="color:var(--heading);text-decoration:none;">@p.Name</a></h6>
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="fw-bold text-primary-green" style="font-size:16px;">$@p.PricePerKg.ToString("0.00")<span class="small text-muted font-monospace">/kg</span></span>
+                                        <span class="small text-muted"><i class="fas fa-tractor me-1"></i>@(p.Farmer?.FarmName ?? "Local Farm")</span>
+                                    </div>
+                                    <div class="mt-auto pt-2">
+                                        <button class="btn btn-primary-green btn-sm w-100" onclick="ML.Cart.addItem(@p.Id, 1)">
+                                            <i class="fas fa-shopping-basket me-1"></i> Add to Cart
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    @foreach (var fav in farmerFavs)
+                    {
+                        var f = fav.Farmer!;
+                        <div class="col-sm-6 col-lg-4 col-xl-3">
+                            <div class="card h-100 border-0 text-center p-4" style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);position:relative;">
+                                <form asp-action="Remove" asp-route-id="@fav.Id" method="post" style="position:absolute;top:12px;right:12px;">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-light rounded-circle shadow-sm" style="width:32px;height:32px;padding:0;color:#dc3545;" title="Remove favorite farmer">
+                                        <i class="fas fa-heart"></i>
+                                    </button>
+                                </form>
+                                <div class="mx-auto mb-3" style="width:70px;height:70px;border-radius:50%;background:rgba(92,111,43,0.1);display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--primary);">
+                                    <i class="fas fa-tractor"></i>
+                                </div>
+                                <h6 class="fw-bold mb-1" style="color:var(--heading);">@f.FarmName</h6>
+                                <p class="text-muted small mb-3">@(f.Bio ?? "Passionate local sustainable producer.")</p>
+                                <a asp-controller="Farmers" asp-action="Details" asp-route-id="@f.Id" class="btn btn-outline-green btn-sm mt-auto w-100">
+                                    View Farm Profile
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Produce Tab -->
+            <div class="tab-pane fade" id="products-favs">
+                <div class="row g-4">
+                    @if (!productFavs.Any())
+                    {
+                        <div class="col-12 text-center py-4 text-muted">No favorite produce added yet.</div>
+                    }
+                    @foreach (var fav in productFavs)
+                    {
+                        var p = fav.Product!;
+                        <div class="col-sm-6 col-lg-4 col-xl-3">
+                            <div class="card product-card h-100 border-0" style="border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);">
+                                <div style="position:relative;">
+                                    <a asp-controller="Products" asp-action="Details" asp-route-slug="@p.Slug">
+                                        <img src="@(string.IsNullOrEmpty(p.ImageUrl) ? "/images/placeholder.png" : p.ImageUrl)" class="card-img-top" alt="@p.Name" style="height:180px;object-fit:cover;">
+                                    </a>
+                                    @if (p.IsOrganic)
+                                    {
+                                        <span class="badge badge-success" style="position:absolute;top:10px;left:10px;">Organic</span>
+                                    }
+                                    <form asp-action="Remove" asp-route-id="@fav.Id" method="post" style="position:absolute;top:10px;right:10px;">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-sm btn-light rounded-circle shadow-sm" style="width:32px;height:32px;padding:0;color:#dc3545;" title="Remove from favorites">
+                                            <i class="fas fa-heart"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="card-body p-3 d-flex flex-column">
+                                    <div class="text-muted small mb-1">@p.Category?.Name</div>
+                                    <h6 class="fw-bold mb-1"><a asp-controller="Products" asp-action="Details" asp-route-slug="@p.Slug" style="color:var(--heading);text-decoration:none;">@p.Name</a></h6>
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="fw-bold text-primary-green" style="font-size:16px;">$@p.PricePerKg.ToString("0.00")<span class="small text-muted">/kg</span></span>
+                                        <span class="small text-muted"><i class="fas fa-tractor me-1"></i>@(p.Farmer?.FarmName ?? "Local")</span>
+                                    </div>
+                                    <div class="mt-auto pt-2">
+                                        <button class="btn btn-primary-green btn-sm w-100" onclick="ML.Cart.addItem(@p.Id, 1)">
+                                            <i class="fas fa-shopping-basket me-1"></i> Add to Cart
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Farmers Tab -->
+            <div class="tab-pane fade" id="farmers-favs">
+                <div class="row g-4">
+                    @if (!farmerFavs.Any())
+                    {
+                        <div class="col-12 text-center py-4 text-muted">No favorite farmers added yet.</div>
+                    }
+                    @foreach (var fav in farmerFavs)
+                    {
+                        var f = fav.Farmer!;
+                        <div class="col-sm-6 col-lg-4 col-xl-3">
+                            <div class="card h-100 border-0 text-center p-4" style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);position:relative;">
+                                <form asp-action="Remove" asp-route-id="@fav.Id" method="post" style="position:absolute;top:12px;right:12px;">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-light rounded-circle shadow-sm" style="width:32px;height:32px;padding:0;color:#dc3545;" title="Remove favorite farmer">
+                                        <i class="fas fa-heart"></i>
+                                    </button>
+                                </form>
+                                <div class="mx-auto mb-3" style="width:70px;height:70px;border-radius:50%;background:rgba(92,111,43,0.1);display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--primary);">
+                                    <i class="fas fa-tractor"></i>
+                                </div>
+                                <h6 class="fw-bold mb-1" style="color:var(--heading);">@f.FarmName</h6>
+                                <p class="text-muted small mb-3">@(f.Bio ?? "Passionate local sustainable producer.")</p>
+                                <a asp-controller="Farmers" asp-action="Details" asp-route-id="@f.Id" class="btn btn-outline-green btn-sm mt-auto w-100">
+                                    View Farm Profile
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>

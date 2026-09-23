@@ -1,0 +1,219 @@
+@model MarketLink.Core.ViewModels.CustomerProfileViewModel
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="container-fluid px-0">
+    <!-- Header banner -->
+    <div class="card mb-4 border-0" style="background:linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);color:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);">
+        <div class="card-body p-4 p-md-5">
+            <div class="d-flex flex-column flex-md-row align-items-center gap-4 text-center text-md-start">
+                <div style="position:relative;">
+                    <div style="width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:38px;color:#fff;border:3px solid #fff;box-shadow:var(--shadow);">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+                <div class="flex-grow-1">
+                    <h2 class="mb-1" style="font-weight:700;color:#fff;">@Model.FirstName @Model.LastName</h2>
+                    <p class="mb-2 opacity-75" style="font-size:14px;"><i class="fas fa-envelope me-2"></i>@Model.Email @(string.IsNullOrEmpty(Model.PhoneNumber) ? "" : $" • {Model.PhoneNumber}")</p>
+                    <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start">
+                        <span class="badge bg-white text-dark px-3 py-2 rounded-pill"><i class="fas fa-calendar-alt text-success me-1"></i> Member since @Model.MemberSince.ToString("MMM yyyy")</span>
+                        <span class="badge bg-white text-dark px-3 py-2 rounded-pill"><i class="fas fa-map-marker-alt text-danger me-1"></i> @(Model.DefaultCity ?? "Local Community")</span>
+                    </div>
+                </div>
+                <div class="d-flex gap-3">
+                    <a asp-action="Addresses" class="btn btn-light btn-sm text-primary fw-bold px-3">
+                        <i class="fas fa-map-marked-alt me-1"></i> My Addresses (@Model.TotalAddresses)
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats row -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-4">
+            <div class="card p-3 border-0 h-100" style="background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);">
+                <div class="d-flex align-items-center gap-3">
+                    <div style="width:44px;height:44px;border-radius:12px;background:rgba(92,111,43,0.1);display:flex;align-items:center;justify-content:center;color:var(--primary);font-size:18px;">
+                        <i class="fas fa-shopping-bag"></i>
+                    </div>
+                    <div>
+                        <div class="text-muted" style="font-size:12px;font-weight:600;text-transform:uppercase;">Orders Placed</div>
+                        <h4 class="mb-0 fw-bold" style="color:var(--heading);">@Model.TotalOrders</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4">
+            <div class="card p-3 border-0 h-100" style="background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);">
+                <div class="d-flex align-items-center gap-3">
+                    <div style="width:44px;height:44px;border-radius:12px;background:rgba(222,128,43,0.1);display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:18px;">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <div>
+                        <div class="text-muted" style="font-size:12px;font-weight:600;text-transform:uppercase;">Saved Items</div>
+                        <h4 class="mb-0 fw-bold" style="color:var(--heading);">@Model.TotalFavorites</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="card p-3 border-0 h-100" style="background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);">
+                <div class="d-flex align-items-center gap-3">
+                    <div style="width:44px;height:44px;border-radius:12px;background:rgba(156,171,132,0.15);display:flex;align-items:center;justify-content:center;color:var(--primary-dark);font-size:18px;">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div>
+                        <div class="text-muted" style="font-size:12px;font-weight:600;text-transform:uppercase;">Saved Addresses</div>
+                        <h4 class="mb-0 fw-bold" style="color:var(--heading);">@Model.TotalAddresses</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Edit Form -->
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card border-0" style="background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);">
+                <div class="card-header bg-transparent p-4" style="border-bottom:1px solid var(--border);">
+                    <h5 class="mb-0 fw-bold" style="color:var(--heading);"><i class="fas fa-user-edit me-2 text-primary-green"></i>Edit Profile Details</h5>
+                    <p class="text-muted mb-0 small mt-1">Keep your personal information up to date for smooth orders and deliveries.</p>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Index" method="post">
+                        @Html.AntiForgeryToken()
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="border-radius:var(--radius-sm);"></div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="FirstName" class="form-label fw-semibold" style="font-size:13px;"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-user text-muted"></i></span>
+                                    <input asp-for="FirstName" class="form-control border-start-0" placeholder="e.g. John" />
+                                </div>
+                                <span asp-validation-for="FirstName" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="LastName" class="form-label fw-semibold" style="font-size:13px;"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-user text-muted"></i></span>
+                                    <input asp-for="LastName" class="form-control border-start-0" placeholder="e.g. Doe" />
+                                </div>
+                                <span asp-validation-for="LastName" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Email" class="form-label fw-semibold" style="font-size:13px;"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-envelope text-muted"></i></span>
+                                    <input asp-for="Email" class="form-control border-start-0" readonly disabled style="background:var(--bg);" />
+                                </div>
+                                <small class="text-muted">Email cannot be changed directly.</small>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="PhoneNumber" class="form-label fw-semibold" style="font-size:13px;"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-phone text-muted"></i></span>
+                                    <input asp-for="PhoneNumber" class="form-control border-start-0" placeholder="+1 (555) 000-0000" />
+                                </div>
+                                <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-12">
+                                <label asp-for="DefaultCity" class="form-label fw-semibold" style="font-size:13px;"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-city text-muted"></i></span>
+                                    <input asp-for="DefaultCity" class="form-control border-start-0" placeholder="e.g. Austin, Texas" />
+                                </div>
+                                <span asp-validation-for="DefaultCity" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="Bio" class="form-label fw-semibold" style="font-size:13px;"></label>
+                                <textarea asp-for="Bio" class="form-control" rows="3" placeholder="Tell local farmers a bit about yourself, dietary preferences, or your passion for farm-fresh food..."></textarea>
+                                <span asp-validation-for="Bio" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-top d-flex gap-2">
+                            <button type="submit" class="btn btn-primary-green px-4">
+                                <i class="fas fa-save me-2"></i> Save Changes
+                            </button>
+                            <a asp-controller="Dashboard" asp-action="Index" class="btn btn-outline-secondary px-3">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Summary & Addresses card -->
+        <div class="col-lg-4">
+            <div class="card border-0 mb-4" style="background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);">
+                <div class="card-header bg-transparent p-4 d-flex justify-content-between align-items-center" style="border-bottom:1px solid var(--border);">
+                    <h6 class="mb-0 fw-bold" style="color:var(--heading);"><i class="fas fa-map-marker-alt me-2 text-danger"></i>Saved Addresses</h6>
+                    <a asp-action="Addresses" class="btn btn-outline-green btn-sm">Manage</a>
+                </div>
+                <div class="card-body p-4">
+                    @if (!Model.Addresses.Any())
+                    {
+                        <div class="text-center py-3">
+                            <div class="text-muted mb-2"><i class="fas fa-map-pin fa-2x"></i></div>
+                            <p class="small text-muted mb-3">No addresses saved yet. Add your delivery or pickup address.</p>
+                            <a asp-action="Addresses" class="btn btn-primary-green btn-sm w-100"><i class="fas fa-plus me-1"></i> Add Address</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="d-flex flex-column gap-3">
+                            @foreach (var addr in Model.Addresses.Take(2))
+                            {
+                                <div class="p-3 rounded" style="background:var(--bg);border:1px solid var(--border);">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span class="fw-bold small" style="color:var(--heading);"><i class="fas fa-tag me-1 text-muted"></i>@addr.Label</span>
+                                        @if (addr.IsDefault)
+                                        {
+                                            <span class="badge badge-success" style="font-size:10px;">Default</span>
+                                        }
+                                    </div>
+                                    <div class="small text-muted">@addr.AddressLine1 @(string.IsNullOrEmpty(addr.AddressLine2) ? "" : $", {addr.AddressLine2}")</div>
+                                    <div class="small text-muted">@addr.City, @addr.State @addr.PostalCode</div>
+                                </div>
+                            }
+                            @if (Model.Addresses.Count() > 2)
+                            {
+                                <a asp-action="Addresses" class="small text-center text-primary-green fw-bold text-decoration-none mt-1">
+                                    +@(Model.Addresses.Count() - 2) more address(es)
+                                </a>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Quick Navigation Card -->
+            <div class="card border-0" style="background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);">
+                <div class="card-body p-4">
+                    <h6 class="fw-bold mb-3" style="color:var(--heading);"><i class="fas fa-compass me-2 text-accent"></i>Quick Shortcuts</h6>
+                    <div class="d-flex flex-column gap-2">
+                        <a asp-area="Customer" asp-controller="Orders" asp-action="Index" class="btn btn-light btn-sm text-start py-2 d-flex align-items-center justify-content-between">
+                            <span><i class="fas fa-box text-primary me-2"></i>My Orders</span>
+                            <i class="fas fa-chevron-right text-muted small"></i>
+                        </a>
+                        <a asp-area="Customer" asp-controller="Favorites" asp-action="Index" class="btn btn-light btn-sm text-start py-2 d-flex align-items-center justify-content-between">
+                            <span><i class="fas fa-heart text-danger me-2"></i>My Favorites</span>
+                            <i class="fas fa-chevron-right text-muted small"></i>
+                        </a>
+                        <a asp-controller="Products" asp-action="Index" class="btn btn-light btn-sm text-start py-2 d-flex align-items-center justify-content-between">
+                            <span><i class="fas fa-leaf text-success me-2"></i>Browse Products</span>
+                            <i class="fas fa-chevron-right text-muted small"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
