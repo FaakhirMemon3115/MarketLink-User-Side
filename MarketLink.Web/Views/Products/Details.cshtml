@@ -1,0 +1,93 @@
+@model MarketLink.Core.Entities.Product
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="container py-5">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index">Products</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index" asp-route-categorySlug="@Model.Category?.Slug">@Model.Category?.Name</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
+        </ol>
+    </nav>
+
+    <div class="row g-5 mb-5">
+        <!-- Product Images -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm" style="border-radius:24px;overflow:hidden;">
+                <img id="product-main-image" src="@(string.IsNullOrEmpty(Model.ImageUrl) ? "/images/placeholder.png" : Model.ImageUrl)" alt="@Model.Name" style="width:100%;height:450px;object-fit:cover;" />
+                @if (Model.IsOrganic)
+                {
+                    <span class="badge badge-success" style="position:absolute;top:20px;left:20px;font-size:14px;padding:8px 16px;">100% Organic</span>
+                }
+            </div>
+            <!-- Optional thumbnails could go here -->
+        </div>
+
+        <!-- Product Details -->
+        <div class="col-lg-6">
+            <div class="mb-4">
+                <h1 style="font-weight:800;color:var(--heading);margin-bottom:8px;">@Model.Name</h1>
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div style="font-size:2rem;font-weight:700;color:var(--primary);">$@Model.PricePerKg.ToString("0.00")<span style="font-size:1rem;color:var(--muted);font-weight:normal;"> / kg</span></div>
+                    @if (Model.StockKg > 0)
+                    {
+                        <span class="badge bg-success" style="background-color:rgba(156,171,132,0.1)!important;color:var(--success)!important;border:1px solid var(--success);">In Stock (@Model.StockKg kg)</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Out of Stock</span>
+                    }
+                </div>
+                <p style="font-size:1.1rem;color:var(--body-text);line-height:1.6;">
+                    @Model.Description
+                </p>
+            </div>
+
+            <hr style="border-color:var(--border);" class="my-4" />
+
+            <div class="mb-4">
+                <h6 style="font-weight:700;margin-bottom:12px;">Sold By</h6>
+                <div class="d-flex align-items-center p-3" style="background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border);">
+                    <div style="width:50px;height:50px;background:var(--primary);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:bold;margin-right:16px;">
+                        @(Model.Farmer?.FarmName.Substring(0,1))
+                    </div>
+                    <div class="flex-grow-1">
+                        <h6 style="margin:0;font-weight:700;">@Model.Farmer?.FarmName</h6>
+                        <div style="font-size:13px;color:var(--muted);"><i class="fas fa-map-marker-alt me-1"></i> Local Farm</div>
+                    </div>
+                    <a asp-controller="Farmers" asp-action="Details" asp-route-id="@Model.FarmerId" class="btn btn-sm btn-outline-green">View Profile</a>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h6 style="font-weight:700;margin-bottom:12px;">Select Quantity</h6>
+                <div class="qty-selector d-flex gap-2">
+                    <button type="button" class="qty-option selected" data-qty="1">1 kg</button>
+                    <button type="button" class="qty-option" data-qty="2">2 kg</button>
+                    <button type="button" class="qty-option" data-qty="5">5 kg</button>
+                    <button type="button" class="qty-option" data-qty="10">10 kg</button>
+                </div>
+                <input type="hidden" id="selectedQuantity" value="1" />
+            </div>
+
+            <div class="d-flex gap-3">
+                <button class="btn btn-primary-green btn-lg btn-pill flex-grow-1 shadow" onclick="ML.Cart.addItem(@Model.Id, parseInt(document.getElementById('selectedQuantity').value))" @(Model.StockKg <= 0 ? "disabled" : "")>
+                    <i class="fas fa-cart-plus me-2"></i> Add to Cart
+                </button>
+                <button class="btn btn-outline-green btn-lg btn-circle" onclick="ML.Favorites.toggle('Product', @Model.Id, this)" title="Add to Favorites">
+                    <i class="far fa-heart"></i>
+                </button>
+            </div>
+            
+            <div class="mt-4 p-3" style="background:rgba(216,233,131,0.2);border-radius:var(--radius-sm);display:flex;gap:12px;align-items:start;">
+                <i class="fas fa-info-circle text-primary mt-1"></i>
+                <div style="font-size:13px;color:var(--heading);">
+                    <strong>Pickup Only:</strong> MarketLink currently supports farm pickup. You will select a pickup time at checkout and pay directly to the farmer.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,70 @@
+@model IEnumerable<MarketLink.Core.Entities.Market>
+@{
+    ViewData["Title"] = "Local Markets";
+}
+
+<div style="background:var(--card);border-bottom:1px solid var(--border);padding:40px 0;">
+    <div class="container text-center">
+        <h1 style="font-weight:700;color:var(--heading);margin-bottom:16px;">Local Markets</h1>
+        <p style="color:var(--muted);max-width:600px;margin:0 auto;">
+            Find farmers markets near you where our sellers offer order pickups.
+        </p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row g-5">
+        <div class="col-lg-8">
+            <div class="row g-4">
+                @foreach (var m in Model)
+                {
+                    <div class="col-md-6 animate-on-scroll">
+                        <div class="card h-100" style="border:1px solid var(--border);border-radius:var(--radius);padding:24px;">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h5 style="font-weight:700;margin:0;">@m.Name</h5>
+                                <span class="badge badge-success">Active</span>
+                            </div>
+                            <div style="font-size:14px;color:var(--body-text);margin-bottom:8px;">
+                                <i class="fas fa-map-marker-alt text-danger me-2"></i>@m.Address
+                            </div>
+                            <div style="font-size:14px;color:var(--body-text);margin-bottom:16px;">
+                                <i class="fas fa-clock text-primary me-2"></i>@m.OperatingHours
+                            </div>
+                            <p style="font-size:13px;color:var(--muted);">@m.Description</p>
+                            <div class="mt-auto pt-3" style="border-top:1px solid var(--border);">
+                                <a asp-action="Details" asp-route-id="@m.Id" class="btn btn-sm btn-outline-green">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card" style="border:none;box-shadow:var(--shadow-lg);border-radius:var(--radius);overflow:hidden;position:sticky;top:100px;">
+                <div id="market-map" style="height:400px;width:100%;background:#e9ecef;"></div>
+                <div class="card-body p-4 bg-primary text-white">
+                    <h6 style="font-weight:700;margin-bottom:8px;"><i class="fas fa-map me-2"></i>Interactive Map</h6>
+                    <p style="font-size:13px;margin:0;opacity:0.9;">Explore all our active market locations on the map. Click a marker to see details.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const locations = [
+                @foreach(var m in Model)
+                {
+                    <text>{ name: '@m.Name.Replace("'","\\'")', address: '@m.Address.Replace("'","\\'")', lat: @m.Latitude, lng: @m.Longitude },</text>
+                }
+            ];
+            const map = ML.initMarketMap('market-map', locations);
+            if(map && locations.length > 0) {
+                const group = new L.featureGroup(locations.map(l => L.marker([l.lat, l.lng])));
+                map.fitBounds(group.getBounds().pad(0.1));
+            }
+        });
+    </script>
+}
