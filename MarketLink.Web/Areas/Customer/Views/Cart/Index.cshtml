@@ -1,0 +1,138 @@
+@model MarketLink.Core.Entities.Cart
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
+            <div class="card-header" style="background:transparent;border-bottom:1px solid var(--border);padding:20px;">
+                <h5 style="margin:0;font-weight:700;">Cart Items (@Model.Items.Count)</h5>
+            </div>
+            <div class="card-body p-0">
+                @if (!Model.Items.Any())
+                {
+                    <div class="text-center py-5">
+                        <div style="font-size:48px;margin-bottom:16px;">🛒</div>
+                        <h6 style="font-weight:700;margin-bottom:8px;">Your cart is empty</h6>
+                        <p style="font-size:14px;color:var(--muted);margin-bottom:24px;">Looks like you haven't added any fresh produce yet.</p>
+                        <a href="/Products" class="btn btn-primary-green btn-pill px-4">Start Shopping</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table mb-0 align-middle">
+                            <thead style="background:var(--bg);">
+                                <tr>
+                                    <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);">Product</th>
+                                    <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);">Price</th>
+                                    <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);">Quantity</th>
+                                    <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);">Total</th>
+                                    <th style="padding:16px 20px;border-bottom:none;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Items)
+                                {
+                                    <tr id="cart-item-@item.ProductId">
+                                        <td style="padding:16px 20px;">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <img src="@(string.IsNullOrEmpty(item.Product.ImageUrl) ? "/images/placeholder.png" : item.Product.ImageUrl)" style="width:60px;height:60px;border-radius:8px;object-fit:cover;">
+                                                <div>
+                                                    <div style="font-weight:600;color:var(--heading);">@item.Product.Name</div>
+                                                    <div style="font-size:12px;color:var(--muted);">By @item.Product.Farmer?.FarmName</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td style="padding:16px 20px;font-weight:600;">$@item.PriceAtAdded.ToString("0.00")<span style="font-size:12px;color:var(--muted);font-weight:normal;">/kg</span></td>
+                                        <td style="padding:16px 20px;">
+                                            <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);display:inline-flex;align-items:center;padding:4px 12px;font-weight:600;">
+                                                @item.QuantityKg kg
+                                            </div>
+                                        </td>
+                                        <td style="padding:16px 20px;font-weight:700;color:var(--primary);">$@item.TotalPrice.ToString("0.00")</td>
+                                        <td style="padding:16px 20px;text-align:right;">
+                                            <button class="btn btn-sm btn-light text-danger btn-circle shadow-sm" onclick="removeItem(@item.ProductId)"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+            @if (Model.Items.Any())
+            {
+                <div class="card-footer d-flex justify-content-between align-items-center" style="background:transparent;border-top:1px solid var(--border);padding:20px;">
+                    <form asp-action="Clear" method="post">
+                        <button type="submit" class="btn btn-outline-danger btn-sm btn-pill">Clear Cart</button>
+                    </form>
+                    <a href="/Products" class="btn btn-outline-green btn-sm btn-pill">Continue Shopping</a>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);position:sticky;top:100px;">
+            <div class="card-header" style="background:transparent;border-bottom:1px solid var(--border);padding:20px;">
+                <h5 style="margin:0;font-weight:700;">Order Summary</h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between mb-3">
+                    <span style="color:var(--body-text);">Subtotal</span>
+                    <span style="font-weight:600;color:var(--heading);">$@Model.TotalAmount.ToString("0.00")</span>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                    <span style="color:var(--body-text);">Service Fee</span>
+                    <span style="font-weight:600;color:var(--heading);">$0.00</span>
+                </div>
+                <hr style="border-color:var(--border);" class="my-3">
+                <div class="d-flex justify-content-between mb-4">
+                    <span style="font-weight:700;color:var(--heading);font-size:18px;">Total</span>
+                    <span style="font-weight:800;color:var(--primary);font-size:22px;">$@Model.TotalAmount.ToString("0.00")</span>
+                </div>
+                
+                @if (Model.Items.Any())
+                {
+                    <form asp-controller="Orders" asp-action="Checkout" method="post">
+                        <div class="mb-3">
+                            <label class="form-label" style="font-size:13px;font-weight:600;">Pickup Market</label>
+                            <select name="marketId" class="form-select" required>
+                                <option value="1">Downtown Farmers Market</option>
+                                <option value="2">Westside Weekend Market</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label" style="font-size:13px;font-weight:600;">Pickup Date & Time</label>
+                            <input type="datetime-local" name="pickupTime" class="form-control" required value="@DateTime.Now.AddDays(1).ToString("yyyy-MM-ddTHH:mm")">
+                        </div>
+                        
+                        <div class="alert alert-info" style="font-size:12px;padding:10px;border-radius:var(--radius-sm);">
+                            <i class="fas fa-info-circle me-1"></i> Payment is collected at pickup (Cash/Card).
+                        </div>
+                        <button type="submit" class="btn btn-primary-green btn-lg btn-pill w-100 shadow">Complete Checkout</button>
+                    </form>
+                }
+                else
+                {
+                    <button class="btn btn-secondary btn-lg btn-pill w-100" disabled>Checkout</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        async function removeItem(id) {
+            if(!confirm('Remove this item?')) return;
+            const res = await fetch('/Customer/Cart/RemoveItem', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value },
+                body: JSON.stringify({ productId: id })
+            });
+            if(res.ok) window.location.reload();
+        }
+    </script>
+}

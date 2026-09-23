@@ -1,0 +1,43 @@
+@model IEnumerable<MarketLink.Core.Entities.Farmer>
+@{
+    ViewData["Title"] = "Farmers";
+}
+
+<div class="card" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
+    <div class="card-header d-flex justify-content-between align-items-center" style="background:transparent;border-bottom:1px solid var(--border);padding:20px;">
+        <h5 style="margin:0;font-weight:700;">Registered Farmers</h5>
+        <button class="btn btn-primary-green btn-sm btn-pill"><i class="fas fa-plus me-2"></i>Add New</button>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table mb-0 align-middle">
+                <thead style="background:var(--bg);">
+                    <tr>
+                        <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);">Farmer</th>
+                        <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);">Location</th>
+                        <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);">Status</th>
+                        <th style="padding:16px 20px;border-bottom:none;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var f in Model)
+                    {
+                        <tr>
+                            <td style="padding:16px 20px;">
+                                <div style="font-weight:600;color:var(--heading);">@f.FarmName</div>
+                                <div style="font-size:12px;color:var(--muted);">ID: @f.Id</div>
+                            </td>
+                            <td style="padding:16px 20px;">@f.Location</td>
+                            <td style="padding:16px 20px;">
+                                <span class="badge badge-success">Active</span>
+                            </td>
+                            <td style="padding:16px 20px;text-align:right;">
+                                <button class="btn btn-sm btn-light btn-circle shadow-sm"><i class="fas fa-edit"></i></button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

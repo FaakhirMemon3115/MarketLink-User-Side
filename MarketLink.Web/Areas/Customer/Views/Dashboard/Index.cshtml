@@ -1,0 +1,87 @@
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card p-4 h-100" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div style="width:40px;height:40px;background:var(--soft-highlight);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+                    <i class="fas fa-shopping-basket text-primary" style="font-size:20px;"></i>
+                </div>
+                <span class="badge badge-success">This Month</span>
+            </div>
+            <h3 style="font-weight:700;margin:0;">12</h3>
+            <div style="font-size:14px;color:var(--muted);margin-top:4px;">Total Orders</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card p-4 h-100" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div style="width:40px;height:40px;background:rgba(222,128,43,0.1);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+                    <i class="fas fa-heart text-accent" style="font-size:20px;"></i>
+                </div>
+                <a href="#" style="font-size:12px;text-decoration:none;">View all</a>
+            </div>
+            <h3 style="font-weight:700;margin:0;">5</h3>
+            <div style="font-size:14px;color:var(--muted);margin-top:4px;">Saved Favorites</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card p-4 h-100" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div style="width:40px;height:40px;background:rgba(156,171,132,0.1);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+                    <i class="fas fa-leaf text-success" style="font-size:20px;"></i>
+                </div>
+            </div>
+            <h3 style="font-weight:700;margin:0;">$145.50</h3>
+            <div style="font-size:14px;color:var(--muted);margin-top:4px;">Saved supporting local</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
+            <div class="card-header" style="background:transparent;border-bottom:1px solid var(--border);padding:16px 20px;">
+                <h6 style="margin:0;font-weight:700;">Recent Orders</h6>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table mb-0" style="font-size:14px;">
+                        <thead style="background:var(--bg);">
+                            <tr>
+                                <th style="border-bottom:none;padding:12px 20px;color:var(--muted);font-weight:600;">Order ID</th>
+                                <th style="border-bottom:none;padding:12px 20px;color:var(--muted);font-weight:600;">Date</th>
+                                <th style="border-bottom:none;padding:12px 20px;color:var(--muted);font-weight:600;">Amount</th>
+                                <th style="border-bottom:none;padding:12px 20px;color:var(--muted);font-weight:600;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Placeholder Data -->
+                            <tr>
+                                <td style="padding:16px 20px;vertical-align:middle;color:var(--heading);font-weight:600;">#ORD-1002</td>
+                                <td style="padding:16px 20px;vertical-align:middle;color:var(--body-text);">Oct 12, 2026</td>
+                                <td style="padding:16px 20px;vertical-align:middle;color:var(--heading);">$34.50</td>
+                                <td style="padding:16px 20px;vertical-align:middle;"><span class="badge badge-success">Completed</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer text-center" style="background:transparent;border-top:1px solid var(--border);padding:12px;">
+                <a asp-controller="Orders" asp-action="Index" style="font-size:13px;text-decoration:none;font-weight:600;">View All Orders</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card h-100" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--primary);color:#fff;position:relative;overflow:hidden;">
+            <div style="position:absolute;top:-50px;right:-50px;width:150px;height:150px;background:rgba(255,255,255,0.1);border-radius:50%;"></div>
+            <div class="card-body p-4" style="position:relative;z-index:1;">
+                <h5 style="font-weight:700;margin-bottom:16px;">Ready to shop?</h5>
+                <p style="font-size:14px;opacity:0.9;margin-bottom:24px;">New seasonal products have just arrived from local farmers.</p>
+                <a href="/Products" class="btn btn-accent btn-pill w-100">Shop Fresh Produce</a>
+            </div>
+        </div>
+    </div>
+</div>

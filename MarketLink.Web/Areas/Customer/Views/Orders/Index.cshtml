@@ -1,0 +1,73 @@
+@model IEnumerable<MarketLink.Core.Entities.Order>
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<div class="card" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
+    <div class="card-header d-flex justify-content-between align-items-center" style="background:transparent;border-bottom:1px solid var(--border);padding:20px;">
+        <h5 style="margin:0;font-weight:700;">Order History</h5>
+        <div class="d-flex gap-2">
+            <select class="form-select form-select-sm" style="width:150px;">
+                <option>All Orders</option>
+                <option>Pending</option>
+                <option>Completed</option>
+            </select>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5">
+                <i class="fas fa-box-open mb-3" style="font-size:48px;color:var(--muted);opacity:0.5;"></i>
+                <h6 style="font-weight:700;margin-bottom:8px;">No orders found</h6>
+                <p style="font-size:14px;color:var(--muted);margin-bottom:24px;">You haven't placed any orders yet.</p>
+                <a href="/Products" class="btn btn-primary-green btn-pill px-4">Start Shopping</a>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table mb-0 align-middle">
+                    <thead style="background:var(--bg);">
+                        <tr>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);">Order ID</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);">Date</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);">Market</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);">Total</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);">Status</th>
+                            <th style="padding:16px 20px;border-bottom:none;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in Model)
+                        {
+                            <tr>
+                                <td style="padding:16px 20px;font-weight:600;">#@order.Id.ToString("D5")</td>
+                                <td style="padding:16px 20px;">@order.OrderDate.ToString("MMM dd, yyyy")</td>
+                                <td style="padding:16px 20px;">@order.Market?.Name</td>
+                                <td style="padding:16px 20px;font-weight:700;color:var(--primary);">$@order.TotalAmount.ToString("0.00")</td>
+                                <td style="padding:16px 20px;">
+                                    @{
+                                        var badgeClass = order.Status switch
+                                        {
+                                            MarketLink.Core.Enums.OrderStatus.Pending => "badge-warning",
+                                            MarketLink.Core.Enums.OrderStatus.Confirmed => "badge-primary",
+                                            MarketLink.Core.Enums.OrderStatus.ReadyForPickup => "badge-info",
+                                            MarketLink.Core.Enums.OrderStatus.Completed => "badge-success",
+                                            MarketLink.Core.Enums.OrderStatus.Cancelled => "badge-danger",
+                                            _ => "badge-secondary"
+                                        };
+                                    }
+                                    <span class="badge @badgeClass">@order.Status</span>
+                                </td>
+                                <td style="padding:16px 20px;text-align:right;">
+                                    <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-sm btn-outline-green">View</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

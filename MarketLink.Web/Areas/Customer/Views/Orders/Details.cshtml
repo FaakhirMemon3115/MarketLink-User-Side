@@ -1,0 +1,105 @@
+@model MarketLink.Core.Entities.Order
+@{
+    ViewData["Title"] = $"Order #{Model.Id.ToString("D5")}";
+}
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card mb-4" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
+            <div class="card-header d-flex justify-content-between align-items-center" style="background:transparent;border-bottom:1px solid var(--border);padding:20px;">
+                <h5 style="margin:0;font-weight:700;">Order Details</h5>
+                @{
+                    var badgeClass = Model.Status switch
+                    {
+                        MarketLink.Core.Enums.OrderStatus.Pending => "badge-warning",
+                        MarketLink.Core.Enums.OrderStatus.Confirmed => "badge-primary",
+                        MarketLink.Core.Enums.OrderStatus.ReadyForPickup => "badge-info",
+                        MarketLink.Core.Enums.OrderStatus.Completed => "badge-success",
+                        MarketLink.Core.Enums.OrderStatus.Cancelled => "badge-danger",
+                        _ => "badge-secondary"
+                    };
+                }
+                <span class="badge @badgeClass" style="font-size:14px;padding:6px 12px;">@Model.Status</span>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table mb-0 align-middle">
+                        <thead style="background:var(--bg);">
+                            <tr>
+                                <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);">Product</th>
+                                <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);">Price</th>
+                                <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);">Qty</th>
+                                <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);text-align:right;">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr>
+                                    <td style="padding:16px 20px;">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div style="width:50px;height:50px;background:var(--bg);border-radius:8px;display:flex;align-items:center;justify-content:center;">
+                                                <i class="fas fa-box text-muted"></i>
+                                            </div>
+                                            <div>
+                                                <div style="font-weight:600;color:var(--heading);">@item.Product?.Name</div>
+                                                <div style="font-size:12px;color:var(--muted);">By @item.Product?.Farmer?.FarmName</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="padding:16px 20px;">$@item.UnitPrice.ToString("0.00")/kg</td>
+                                    <td style="padding:16px 20px;">@item.QuantityKg kg</td>
+                                    <td style="padding:16px 20px;font-weight:700;color:var(--primary);text-align:right;">$@item.TotalPrice.ToString("0.00")</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot style="border-top:1px solid var(--border);">
+                            <tr>
+                                <td colspan="3" style="padding:20px;text-align:right;font-weight:600;">Total Amount</td>
+                                <td style="padding:20px;text-align:right;font-weight:800;color:var(--primary);font-size:20px;">$@Model.TotalAmount.ToString("0.00")</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card mb-4" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
+            <div class="card-header" style="background:transparent;border-bottom:1px solid var(--border);padding:20px;">
+                <h6 style="margin:0;font-weight:700;">Pickup Information</h6>
+            </div>
+            <div class="card-body p-4">
+                <div class="mb-4">
+                    <label style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Market Location</label>
+                    <div style="font-weight:600;color:var(--heading);">@Model.Market?.Name</div>
+                    <div style="font-size:14px;color:var(--body-text);">@Model.Market?.Address</div>
+                </div>
+                <div class="mb-4">
+                    <label style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Scheduled Time</label>
+                    <div style="font-weight:600;color:var(--heading);">
+                        <i class="far fa-calendar-alt me-2 text-primary"></i>@Model.PickupTime.ToString("dddd, MMM dd, yyyy")
+                    </div>
+                    <div style="font-size:14px;color:var(--body-text);margin-top:4px;">
+                        <i class="far fa-clock me-2 text-primary"></i>@Model.PickupTime.ToString("hh:mm tt")
+                    </div>
+                </div>
+                <div>
+                    <label style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Payment Method</label>
+                    <div style="font-weight:600;color:var(--heading);">
+                        <i class="fas fa-money-bill-wave me-2 text-success"></i>@Model.PaymentMethod
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        @if (Model.Status == MarketLink.Core.Enums.OrderStatus.Pending)
+        {
+            <form asp-action="Cancel" method="post" onsubmit="return confirm('Are you sure you want to cancel this order?');">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <button type="submit" class="btn btn-outline-danger w-100 btn-pill">Cancel Order</button>
+            </form>
+        }
+    </div>
+</div>
