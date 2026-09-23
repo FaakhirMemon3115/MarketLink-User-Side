@@ -22,7 +22,7 @@ public class CategoriesController : Controller
         ViewData["Title"] = "Category Management";
         var categories = await _unitOfWork.Repository<Category>().Query()
             .Include(c => c.Products)
-            .OrderBy(c => c.DisplayOrder)
+            .OrderBy(c => c.SortOrder)
             .ThenBy(c => c.Name)
             .ToListAsync();
 
@@ -42,7 +42,7 @@ public class CategoriesController : Controller
                 Slug = slug,
                 Description = description?.Trim(),
                 IconClass = iconClass?.Trim() ?? "fas fa-leaf",
-                DisplayOrder = displayOrder,
+                SortOrder = displayOrder,
                 IsActive = true
             };
 
@@ -68,7 +68,7 @@ public class CategoriesController : Controller
             cat.Name = name.Trim();
             cat.Description = description?.Trim();
             cat.IconClass = iconClass?.Trim() ?? "fas fa-leaf";
-            cat.DisplayOrder = displayOrder;
+            cat.SortOrder = displayOrder;
             cat.IsActive = isActive;
 
             await _unitOfWork.Repository<Category>().UpdateAsync(cat);

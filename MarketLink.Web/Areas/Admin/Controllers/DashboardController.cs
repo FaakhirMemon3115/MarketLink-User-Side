@@ -5,6 +5,8 @@ using MarketLink.Core.Interfaces;
 using MarketLink.Core.Entities;
 using MarketLink.Core.Enums;
 using Microsoft.EntityFrameworkCore;
+using FarmerEntity = MarketLink.Core.Entities.Farmer;
+using CustomerEntity = MarketLink.Core.Entities.Customer;
 
 namespace MarketLink.Web.Areas.Admin.Controllers;
 
@@ -29,8 +31,8 @@ public class DashboardController : Controller
     public async Task<IActionResult> Index()
     {
         ViewData["Title"] = "Admin Overview";
-        var farmers  = await _unitOfWork.Repository<Farmer>().GetAllAsync();
-        var customers = await _unitOfWork.Repository<Customer>().GetAllAsync();
+        var farmers  = await _unitOfWork.Repository<FarmerEntity>().GetAllAsync();
+        var customers = await _unitOfWork.Repository<CustomerEntity>().GetAllAsync();
         var products  = await _unitOfWork.Repository<Product>().GetAllAsync();
         var markets   = await _unitOfWork.Repository<Market>().GetAllAsync();
         var orders    = await _unitOfWork.Repository<Order>().GetAllAsync();

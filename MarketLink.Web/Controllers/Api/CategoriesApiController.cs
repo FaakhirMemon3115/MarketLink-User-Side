@@ -21,7 +21,7 @@ public class CategoriesApiController : ControllerBase
     public async Task<IActionResult> GetCategories()
     {
         var categories = await _unitOfWork.Repository<Category>().Query()
-            .Include(c => c.SubCategories)
+            .Include(c => c.Children)                         // Children not SubCategories
             .Where(c => c.ParentId == null && c.IsActive)
             .OrderBy(c => c.SortOrder)
             .Select(c => new
@@ -30,12 +30,10 @@ public class CategoriesApiController : ControllerBase
                 c.Name,
                 c.Slug,
                 c.IconClass,
-                SubCategories = c.SubCategories.Where(s => s.IsActive).OrderBy(s => s.SortOrder).Select(s => new
-                {
-                    s.Id,
-                    s.Name,
-                    s.Slug
-                })
+                SubCategories = c.Children
+                    .Where(s => s.IsActive)
+                    .OrderBy(s => s.SortOrder)
+                    .Select(s => new { s.Id, s.Name, s.Slug })
             })
             .ToListAsync();
 

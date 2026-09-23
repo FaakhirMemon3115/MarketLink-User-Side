@@ -28,7 +28,7 @@ public class MarketsApiController : ControllerBase
             query = query.Where(m => m.City.Contains(city));
 
         if (!string.IsNullOrWhiteSpace(day))
-            query = query.Where(m => m.OpenDays.Contains(day));
+            query = query.Where(m => m.OpenDays!.Contains(day));
 
         var markets = await query
             .Select(m => new
@@ -39,7 +39,6 @@ public class MarketsApiController : ControllerBase
                 m.Address,
                 m.City,
                 m.State,
-                m.PostalCode,
                 m.Latitude,
                 m.Longitude,
                 m.OperatingHours,
@@ -57,7 +56,9 @@ public class MarketsApiController : ControllerBase
     public async Task<IActionResult> GetMarketById(int id)
     {
         var m = await _unitOfWork.Repository<Market>().Query()
-            .Include(m => m.FarmerMarkets).ThenInclude(fm => fm.Farmer).ThenInclude(f => f.User)
+            .Include(m => m.FarmerMarkets)
+                .ThenInclude(fm => fm.Farmer)
+                    .ThenInclude(f => f.User)
             .FirstOrDefaultAsync(x => x.Id == id && x.IsActive);
 
         if (m == null) return NotFound(new { success = false, message = "Market not found." });
@@ -73,7 +74,6 @@ public class MarketsApiController : ControllerBase
                 m.Address,
                 m.City,
                 m.State,
-                m.PostalCode,
                 m.Latitude,
                 m.Longitude,
                 m.OperatingHours,
@@ -83,8 +83,8 @@ public class MarketsApiController : ControllerBase
                 {
                     fm.Farmer.Id,
                     fm.Farmer.FarmName,
-                    fm.StallLocation,
-                    FarmerName = $"{fm.Farmer.User.FirstName} {fm.Farmer.User.LastName}".Trim()
+                    StallNumber = fm.StallNumber,     // StallLocation → StallNumber
+                    FarmerName = fm.Farmer.User.FullName
                 })
             }
         });

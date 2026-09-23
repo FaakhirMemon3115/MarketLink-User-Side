@@ -88,7 +88,7 @@
                                         @(order.Customer?.User?.FullName ?? order.Customer?.User?.UserName ?? "Valued Customer")
                                     </div>
                                     <div style="font-size:12px;color:var(--muted);">
-                                        <i class="fas fa-phone me-1"></i>@(order.Customer?.Phone ?? "No phone")
+                                        <i class="fas fa-phone me-1"></i>@(order.Customer?.User?.PhoneNumber ?? "No phone")
                                     </div>
                                 </td>
                                 <td style="padding:16px 20px;">

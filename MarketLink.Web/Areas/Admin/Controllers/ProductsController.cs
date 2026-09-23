@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using MarketLink.Core.Interfaces;
 using MarketLink.Core.Entities;
 using Microsoft.EntityFrameworkCore;
+using FarmerEntity = MarketLink.Core.Entities.Farmer;
 
 namespace MarketLink.Web.Areas.Admin.Controllers;
 
@@ -35,7 +36,7 @@ public class ProductsController : Controller
         var products = await query.OrderByDescending(p => p.CreatedAt).ToListAsync();
 
         var categories = await _unitOfWork.Repository<Category>().GetAllAsync();
-        var farmers = await _unitOfWork.Repository<Farmer>().GetAllAsync();
+        var farmers = await _unitOfWork.Repository<FarmerEntity>().GetAllAsync();
 
         ViewBag.Categories = categories.OrderBy(c => c.Name).ToList();
         ViewBag.Farmers = farmers.OrderBy(f => f.FarmName).ToList();
