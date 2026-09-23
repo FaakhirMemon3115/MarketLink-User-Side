@@ -63,6 +63,16 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "MarketLink REST API",
+        Version = "v1",
+        Description = "Production-grade REST APIs for MarketLink Farmers Marketplace platform (Auth, Products, Categories, Markets, Orders, Reviews, Favorites, Notifications)."
+    });
+});
 builder.Services.AddHttpContextAccessor();
 
 // ── Email (SMTP) ──────────────────────────────────────────────────────────────
@@ -98,6 +108,15 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+// ── Swagger REST API Documentation ─────────────────────────────────────────────
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "MarketLink REST API v1");
+    c.RoutePrefix = "swagger";
+});
+
 app.UseRouting();
 app.UseSession();
 app.UseAuthentication();
