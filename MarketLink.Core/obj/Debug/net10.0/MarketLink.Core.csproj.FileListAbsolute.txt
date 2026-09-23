@@ -3,3 +3,11 @@ C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Core\obj\Debug\net10.0\Mar
 C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Core\obj\Debug\net10.0\MarketLink.Core.AssemblyInfo.cs
 C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Core\obj\Debug\net10.0\MarketLink.Core.csproj.CoreCompileInputs.cache
 C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Core\obj\Debug\net10.0\MarketLink.Core.sourcelink.json
+C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Core\bin\Debug\net10.0\MarketLink.Core.deps.json
+C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Core\bin\Debug\net10.0\MarketLink.Core.dll
+C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Core\bin\Debug\net10.0\MarketLink.Core.pdb
+C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Core\obj\Debug\net10.0\MarketLink.Core.csproj.AssemblyReference.cache
+C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Core\obj\Debug\net10.0\MarketLink.Core.dll
+C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Core\obj\Debug\net10.0\refint\MarketLink.Core.dll
+C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Core\obj\Debug\net10.0\MarketLink.Core.pdb
+C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Core\obj\Debug\net10.0\ref\MarketLink.Core.dll

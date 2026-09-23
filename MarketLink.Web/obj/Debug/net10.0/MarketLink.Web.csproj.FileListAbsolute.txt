@@ -1,0 +1,11 @@
+C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\MarketLink.Web.csproj.AssemblyReference.cache
+C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\rpswa.dswa.cache.json
+C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\MarketLink.Web.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\MarketLink.Web.AssemblyInfoInputs.cache
+C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\MarketLink.Web.AssemblyInfo.cs
+C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\MarketLink.Web.csproj.CoreCompileInputs.cache
+C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\MarketLink.Web.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\MarketLink.Web.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\MarketLink.Web.RazorAssemblyInfo.cache
+C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\MarketLink.Web.RazorAssemblyInfo.cs
+C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\MarketLink.Web.sourcelink.json
