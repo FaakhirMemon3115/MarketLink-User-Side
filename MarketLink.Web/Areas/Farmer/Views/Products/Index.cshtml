@@ -1,0 +1,59 @@
+@model IEnumerable<MarketLink.Core.Entities.Product>
+@{
+    ViewData["Title"] = "My Products";
+}
+
+<div class="card" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
+    <div class="card-header d-flex justify-content-between align-items-center" style="background:transparent;border-bottom:1px solid var(--border);padding:20px;">
+        <h5 style="margin:0;font-weight:700;">Inventory</h5>
+        <a asp-action="Create" class="btn btn-primary-green btn-sm btn-pill"><i class="fas fa-plus me-2"></i>Add Product</a>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table mb-0 align-middle">
+                <thead style="background:var(--bg);">
+                    <tr>
+                        <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);">Product Name</th>
+                        <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);">Price/kg</th>
+                        <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);">Stock</th>
+                        <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);">Status</th>
+                        <th style="padding:16px 20px;border-bottom:none;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in Model)
+                    {
+                        <tr>
+                            <td style="padding:16px 20px;">
+                                <div class="d-flex align-items-center gap-3">
+                                    <img src="@(string.IsNullOrEmpty(p.ImageUrl) ? "/images/placeholder.png" : p.ImageUrl)" style="width:40px;height:40px;border-radius:6px;object-fit:cover;">
+                                    <div style="font-weight:600;color:var(--heading);">@p.Name</div>
+                                </div>
+                            </td>
+                            <td style="padding:16px 20px;font-weight:600;">$@p.PricePerKg.ToString("0.00")</td>
+                            <td style="padding:16px 20px;">
+                                <div style="display:flex;align-items:center;gap:8px;">
+                                    <span>@p.StockKg kg</span>
+                                    @if(p.StockKg < 5) { <i class="fas fa-exclamation-circle text-danger" title="Low Stock"></i> }
+                                </div>
+                            </td>
+                            <td style="padding:16px 20px;">
+                                @if (p.IsActive)
+                                {
+                                    <span class="badge badge-success">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-secondary">Draft</span>
+                                }
+                            </td>
+                            <td style="padding:16px 20px;text-align:right;">
+                                <button class="btn btn-sm btn-light btn-circle shadow-sm"><i class="fas fa-edit"></i></button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
