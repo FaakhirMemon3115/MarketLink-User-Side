@@ -30,7 +30,7 @@ public class DashboardController : Controller
         ViewData["Title"] = "Farmer Dashboard";
         int farmerId = GetFarmerId();
         
-        var products = await _unitOfWork.Products.FindAsync(p => p.FarmerId == farmerId);
+        var products = await _unitOfWork.Repository<MarketLink.Core.Entities.Product>().FindAsync(p => p.FarmerId == farmerId);
         ViewBag.ProductCount = products.Count();
         ViewBag.LowStockCount = products.Count(p => p.StockKg < 5);
         

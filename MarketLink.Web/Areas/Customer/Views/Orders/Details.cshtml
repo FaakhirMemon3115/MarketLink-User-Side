@@ -79,10 +79,10 @@
                 <div class="mb-4">
                     <label style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Scheduled Time</label>
                     <div style="font-weight:600;color:var(--heading);">
-                        <i class="far fa-calendar-alt me-2 text-primary"></i>@Model.PickupTime.ToString("dddd, MMM dd, yyyy")
+                        <i class="far fa-calendar-alt me-2 text-primary"></i>@Model.PickupTime?.ToString("dddd, MMM dd, yyyy")
                     </div>
                     <div style="font-size:14px;color:var(--body-text);margin-top:4px;">
-                        <i class="far fa-clock me-2 text-primary"></i>@Model.PickupTime.ToString("hh:mm tt")
+                        <i class="far fa-clock me-2 text-primary"></i>@Model.PickupTime?.ToString("hh:mm tt")
                     </div>
                 </div>
                 <div>

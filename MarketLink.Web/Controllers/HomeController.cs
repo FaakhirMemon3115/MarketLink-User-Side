@@ -5,10 +5,10 @@ namespace MarketLink.Web.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly IProductService _productService;
+    private readonly MarketLink.Core.Interfaces.IProductService _productService;
     private readonly IUnitOfWork _unitOfWork;
 
-    public HomeController(IProductService productService, IUnitOfWork unitOfWork)
+    public HomeController(MarketLink.Core.Interfaces.IProductService productService, IUnitOfWork unitOfWork)
     {
         _productService = productService;
         _unitOfWork = unitOfWork;
@@ -16,9 +16,9 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var products = await _productService.GetActiveProductsAsync();
-        var categories = await _unitOfWork.Categories.GetAllAsync();
-        var markets = await _unitOfWork.Markets.GetAllAsync();
+        var products = await _productService.GetFeaturedAsync();
+        var categories = await _unitOfWork.Repository<MarketLink.Core.Entities.Category>().GetAllAsync();
+        var markets = await _unitOfWork.Repository<MarketLink.Core.Entities.Market>().GetAllAsync();
 
         ViewBag.Categories = categories;
         ViewBag.Markets = markets;

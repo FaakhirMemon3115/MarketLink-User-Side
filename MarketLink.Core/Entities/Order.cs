@@ -9,6 +9,7 @@ public class Order
     public int CustomerId { get; set; }
     public int FarmerId { get; set; }
     public int? PickupSlotId { get; set; }
+    public DateTime? PickupTime { get; set; }
     public OrderStatus Status { get; set; } = OrderStatus.Pending;
     public decimal SubTotal { get; set; }
     public decimal TotalAmount { get; set; }
@@ -20,6 +21,11 @@ public class Order
     public DateTime? CompletedAt { get; set; }
     public DateTime? CancelledAt { get; set; }
     public string? CancellationReason { get; set; }
+    
+    // View Compatibility
+    public string PaymentMethod { get; set; } = "Cash on Pickup";
+    public DateTime OrderDate { get => OrderedAt; set => OrderedAt = value; }
+    public Market? Market { get; set; }
 
     // Navigation
     public Customer Customer { get; set; } = null!;
@@ -35,6 +41,7 @@ public class OrderItem
     public int ProductId { get; set; }
     public int QuantityKg { get; set; }
     public decimal PricePerKgSnapshot { get; set; }
+    public decimal UnitPrice { get => PricePerKgSnapshot; set => PricePerKgSnapshot = value; }
     public decimal TotalPrice { get; set; }
     public string ProductNameSnapshot { get; set; } = string.Empty;
 

@@ -5,10 +5,10 @@ namespace MarketLink.Web.Controllers;
 
 public class ProductsController : Controller
 {
-    private readonly IProductService _productService;
+    private readonly MarketLink.Core.Interfaces.IProductService _productService;
     private readonly IUnitOfWork _unitOfWork;
 
-    public ProductsController(IProductService productService, IUnitOfWork unitOfWork)
+    public ProductsController(MarketLink.Core.Interfaces.IProductService productService, IUnitOfWork unitOfWork)
     {
         _productService = productService;
         _unitOfWork = unitOfWork;
@@ -16,7 +16,7 @@ public class ProductsController : Controller
 
     public async Task<IActionResult> Index(string categorySlug, string q, bool? isOrganic, bool? seasonal, string sortBy, int page = 1)
     {
-        var products = await _productService.GetActiveProductsAsync();
+        var products = await _productService.GetFeaturedAsync();
 
         if (!string.IsNullOrEmpty(categorySlug))
             products = products.Where(p => p.Category?.Slug == categorySlug);
@@ -42,7 +42,7 @@ public class ProductsController : Controller
             _ => products.OrderByDescending(p => p.Id)
         };
 
-        var categories = await _unitOfWork.Categories.GetAllAsync();
+        var categories = await _unitOfWork.Repository<MarketLink.Core.Entities.Category>().GetAllAsync();
         ViewBag.Categories = categories;
         ViewBag.CurrentCategory = categorySlug;
         ViewBag.Query = q;
@@ -56,7 +56,7 @@ public class ProductsController : Controller
     public async Task<IActionResult> Details(string slug)
     {
         if (string.IsNullOrEmpty(slug)) return NotFound();
-        var product = await _productService.GetProductBySlugAsync(slug);
+        var product = await _productService.GetBySlugAsync(slug);
         if (product == null) return NotFound();
         return View(product);
     }
@@ -65,7 +65,7 @@ public class ProductsController : Controller
     public async Task<IActionResult> Autocomplete(string q)
     {
         if (string.IsNullOrWhiteSpace(q)) return Json(new object[] {});
-        var products = await _productService.GetActiveProductsAsync();
+        var products = await _productService.GetFeaturedAsync();
         var results = products
             .Where(p => p.Name.Contains(q, StringComparison.OrdinalIgnoreCase))
             .Take(6)

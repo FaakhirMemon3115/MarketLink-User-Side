@@ -18,9 +18,9 @@ public class DashboardController : Controller
     public async Task<IActionResult> Index()
     {
         ViewData["Title"] = "Admin Dashboard";
-        var farmers = await _unitOfWork.Farmers.GetAllAsync();
-        var customers = await _unitOfWork.Customers.GetAllAsync();
-        var products = await _unitOfWork.Products.GetAllAsync();
+        var farmers = await _unitOfWork.Repository<MarketLink.Core.Entities.Farmer>().GetAllAsync();
+        var customers = await _unitOfWork.Repository<MarketLink.Core.Entities.Customer>().GetAllAsync();
+        var products = await _unitOfWork.Repository<MarketLink.Core.Entities.Product>().GetAllAsync();
         
         ViewBag.FarmerCount = farmers.Count();
         ViewBag.CustomerCount = customers.Count();

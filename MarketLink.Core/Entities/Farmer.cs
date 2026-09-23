@@ -8,6 +8,7 @@ public class Farmer
     public string UserId { get; set; } = string.Empty;
     public string FarmName { get; set; } = string.Empty;
     public string? Description { get; set; }
+    public string? Bio { get => Description; set => Description = value; }
     public string? StallNumber { get; set; }
     public string? Website { get; set; }
     public string? Phone { get; set; }

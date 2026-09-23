@@ -12,6 +12,11 @@ public class Product
     public string? Description { get; set; }
     public decimal PricePerKg { get; set; }
     public int StockQuantityKg { get; set; }
+    
+    // View Compatibility Properties
+    public string? ImageUrl { get; set; }
+    public int StockKg { get => StockQuantityKg; set => StockQuantityKg = value; }
+    public bool IsActive { get => IsAvailable; set => IsAvailable = value; }
     public string Unit { get; set; } = "KG";
     public bool IsOrganic { get; set; }
     public bool IsAvailable { get; set; } = true;

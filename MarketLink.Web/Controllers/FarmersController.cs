@@ -15,16 +15,16 @@ public class FarmersController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var farmers = await _unitOfWork.Farmers.GetAllAsync();
+        var farmers = await _unitOfWork.Repository<MarketLink.Core.Entities.Farmer>().GetAllAsync();
         return View(farmers);
     }
 
     public async Task<IActionResult> Details(int id)
     {
-        var farmer = await _unitOfWork.Farmers.GetByIdAsync(id);
+        var farmer = await _unitOfWork.Repository<MarketLink.Core.Entities.Farmer>().GetByIdAsync(id);
         if (farmer == null) return NotFound();
         
-        var products = await _unitOfWork.Products.FindAsync(p => p.FarmerId == id && p.IsActive);
+        var products = await _unitOfWork.Repository<MarketLink.Core.Entities.Product>().FindAsync(p => p.FarmerId == id && p.IsActive);
         ViewBag.Products = products.ToList();
         
         return View(farmer);

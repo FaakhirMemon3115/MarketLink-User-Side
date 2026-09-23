@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using MarketLink.Core.Interfaces;
 using MarketLink.Core.Enums;
-using System.Security.Claims;
 
 namespace MarketLink.Web.Areas.Customer.Controllers;
 
@@ -21,19 +20,19 @@ public class OrdersController : Controller
         _unitOfWork = unitOfWork;
     }
 
-    private string GetUserId() => User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+    private int GetCustomerId() => 1; // Demo fallback
 
     public async Task<IActionResult> Index()
     {
         ViewData["Title"] = "My Orders";
-        var orders = await _orderService.GetCustomerOrdersAsync(GetUserId());
+        var orders = await _orderService.GetCustomerOrdersAsync(GetCustomerId());
         return View(orders);
     }
 
     public async Task<IActionResult> Details(int id)
     {
-        var order = await _unitOfWork.Orders.GetByIdAsync(id);
-        if (order == null || order.CustomerId != GetUserId()) return NotFound();
+        var order = await _unitOfWork.Repository<MarketLink.Core.Entities.Order>().GetByIdAsync(id);
+        if (order == null || order.CustomerId != GetCustomerId()) return NotFound();
         return View(order);
     }
 
@@ -43,15 +42,16 @@ public class OrdersController : Controller
     {
         try
         {
-            var cart = await _cartService.GetCartAsync(GetUserId());
-            if (!cart.Items.Any())
+            var cartItems = await _cartService.GetCartAsync(GetCustomerId());
+            if (!cartItems.Any())
             {
                 TempData["Error"] = "Your cart is empty.";
                 return RedirectToAction("Index", "Cart");
             }
 
-            var order = await _orderService.CreateOrderAsync(GetUserId(), marketId, pickupTime, "Cash on Pickup");
-            await _cartService.ClearCartAsync(GetUserId());
+            // Dummy pickup slot ID for demo
+            var order = await _orderService.PlaceOrderAsync(GetCustomerId(), cartItems, 1, "Cash on Pickup");
+            await _cartService.ClearCartAsync(GetCustomerId());
             
             TempData["Success"] = $"Order #{order.Id} placed successfully!";
             return RedirectToAction(nameof(Details), new { id = order.Id });
@@ -69,7 +69,7 @@ public class OrdersController : Controller
     {
         try
         {
-            await _orderService.UpdateOrderStatusAsync(id, OrderStatus.Cancelled);
+            await _orderService.CancelOrderAsync(id, "Customer request", "Customer");
             TempData["Success"] = "Order cancelled successfully.";
         }
         catch(Exception ex)

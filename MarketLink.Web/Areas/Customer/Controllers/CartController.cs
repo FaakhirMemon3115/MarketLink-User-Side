@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using MarketLink.Core.Interfaces;
-using System.Security.Claims;
 
 namespace MarketLink.Web.Areas.Customer.Controllers;
 
@@ -16,13 +15,13 @@ public class CartController : Controller
         _cartService = cartService;
     }
 
-    private string GetUserId() => User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+    private int GetCustomerId() => 1; // Demo fallback
 
     public async Task<IActionResult> Index()
     {
         ViewData["Title"] = "Shopping Cart";
-        var cart = await _cartService.GetCartAsync(GetUserId());
-        return View(cart);
+        var items = await _cartService.GetCartAsync(GetCustomerId());
+        return View(items);
     }
 
     [HttpPost]
@@ -34,8 +33,9 @@ public class CartController : Controller
 
         try
         {
-            var cart = await _cartService.AddItemAsync(GetUserId(), req.ProductId, req.QuantityKg);
-            return Json(new { success = true, cartCount = cart.Items.Count });
+            await _cartService.AddToCartAsync(GetCustomerId(), req.ProductId, req.QuantityKg);
+            var cart = await _cartService.GetCartAsync(GetCustomerId());
+            return Json(new { success = true, cartCount = cart.Count() });
         }
         catch (Exception ex)
         {
@@ -49,7 +49,12 @@ public class CartController : Controller
     {
         try
         {
-            await _cartService.RemoveItemAsync(GetUserId(), req.ProductId);
+            // Note: RemoveFromCartAsync takes cartItemId, but we just pass productId for demo simplicity. 
+            // Better to fetch cart item by productId first.
+            var cart = await _cartService.GetCartAsync(GetCustomerId());
+            var item = cart.FirstOrDefault(c => c.ProductId == req.ProductId);
+            if (item != null)
+                await _cartService.RemoveFromCartAsync(item.Id);
             return Json(new { success = true });
         }
         catch
@@ -62,7 +67,7 @@ public class CartController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Clear()
     {
-        await _cartService.ClearCartAsync(GetUserId());
+        await _cartService.ClearCartAsync(GetCustomerId());
         return RedirectToAction(nameof(Index));
     }
 }

@@ -10,6 +10,7 @@ public enum UserRole
 public enum OrderStatus
 {
     Pending,
+    Confirmed,
     Accepted,
     Processing,
     ReadyForPickup,

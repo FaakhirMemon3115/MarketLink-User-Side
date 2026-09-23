@@ -26,7 +26,7 @@ public class ProductsController : Controller
     {
         ViewData["Title"] = "My Products";
         int farmerId = GetFarmerId();
-        var products = await _unitOfWork.Products.FindAsync(p => p.FarmerId == farmerId);
+        var products = await _unitOfWork.Repository<MarketLink.Core.Entities.Product>().FindAsync(p => p.FarmerId == farmerId);
         return View(products);
     }
 }

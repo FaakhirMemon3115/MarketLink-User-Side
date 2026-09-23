@@ -14,13 +14,13 @@ public class MarketsController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var markets = await _unitOfWork.Markets.GetAllAsync();
+        var markets = await _unitOfWork.Repository<MarketLink.Core.Entities.Market>().GetAllAsync();
         return View(markets);
     }
 
     public async Task<IActionResult> Details(int id)
     {
-        var market = await _unitOfWork.Markets.GetByIdAsync(id);
+        var market = await _unitOfWork.Repository<MarketLink.Core.Entities.Market>().GetByIdAsync(id);
         if (market == null) return NotFound();
         return View(market);
     }

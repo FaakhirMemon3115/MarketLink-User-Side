@@ -18,7 +18,7 @@ public class FarmersController : Controller
     public async Task<IActionResult> Index()
     {
         ViewData["Title"] = "Manage Farmers";
-        var farmers = await _unitOfWork.Farmers.GetAllAsync();
+        var farmers = await _unitOfWork.Repository<MarketLink.Core.Entities.Farmer>().GetAllAsync();
         return View(farmers);
     }
 }
