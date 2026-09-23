@@ -218,7 +218,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             e.HasOne(x => x.Product)
              .WithMany(x => x.CartItems)
              .HasForeignKey(x => x.ProductId)
-             .OnDelete(DeleteBehavior.Cascade);
+             .OnDelete(DeleteBehavior.Restrict);
         });
 
         // ── Favorite ──────────────────────────────────────────────────
