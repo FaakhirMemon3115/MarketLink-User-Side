@@ -1,50 +1,205 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MarketLink.Web</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <meta name="description" content="@ViewData["Description"] ?? "MarketLink – eGreen Basket | Farm Fresh, Delivered Local. Connect with local farmers and buy fresh produce directly."" />
+    <meta name="keywords" content="@ViewData["Keywords"] ?? "farmers market, fresh produce, organic, local food, eGreen Basket"" />
+    <title>@ViewData["Title"] – MarketLink eGreen Basket</title>
+
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Bootstrap 5.3 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <!-- Leaflet.js -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Custom Theme -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/MarketLink.Web.styles.css" asp-append-version="true" />
+
+    @await RenderSectionAsync("Styles", required: false)
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MarketLink.Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+<body data-authenticated="@User.Identity?.IsAuthenticated.ToString().ToLower()">
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-green sticky-top">
+    <div class="container">
+        <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+            <i class="fas fa-seedling me-1" style="color:var(--accent)"></i>
+            MarketLink<span class="brand-dot">.</span>eGreen
+        </a>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-label="Toggle navigation">
+            <i class="fas fa-bars" style="color:var(--heading)"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav mx-auto gap-1">
+                <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="nav-item"><a class="nav-link" asp-controller="Products" asp-action="Index">Products</a></li>
+                <li class="nav-item"><a class="nav-link" asp-controller="Farmers" asp-action="Index">Farmers</a></li>
+                <li class="nav-item"><a class="nav-link" asp-controller="Markets" asp-action="Index">Markets</a></li>
+                <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="About">About</a></li>
+            </ul>
+
+            <!-- Search Box -->
+            <div class="d-none d-lg-block me-3" style="position:relative">
+                <input id="nav-search" type="text" placeholder="Search products..." class="form-control form-control-sm"
+                       style="border-radius:50px;border:2px solid var(--border);min-width:220px;padding:7px 16px;font-size:13px;" />
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+                <!-- Dark Mode -->
+                <button class="dark-mode-toggle" aria-label="Toggle dark mode" title="Dark mode"></button>
+
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <!-- Cart -->
+                    <a class="nav-icon-btn" asp-area="Customer" asp-controller="Cart" asp-action="Index" title="Shopping Cart">
+                        <i class="fas fa-shopping-basket"></i>
+                        <span class="cart-badge" style="display:none">0</span>
+                    </a>
+                    <!-- Notifications -->
+                    <a class="nav-icon-btn" asp-controller="Notifications" asp-action="Index" title="Notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notif-badge" style="display:none">0</span>
+                    </a>
+                    <!-- User Menu -->
+                    <div class="dropdown">
+                        <button class="nav-icon-btn" data-bs-toggle="dropdown" aria-label="User menu">
+                            <i class="fas fa-user"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" style="border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-lg);min-width:200px;padding:8px;">
+                            <li><h6 class="dropdown-header px-3 py-2" style="font-size:12px;color:var(--muted);">@User.Identity.Name</h6></li>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li><a class="dropdown-item" asp-area="Admin" asp-controller="Dashboard" asp-action="Index"><i class="fas fa-shield-alt me-2 text-primary-green"></i>Admin Panel</a></li>
+                            }
+                            @if (User.IsInRole("Farmer"))
+                            {
+                                <li><a class="dropdown-item" asp-area="Farmer" asp-controller="Dashboard" asp-action="Index"><i class="fas fa-tractor me-2 text-primary-green"></i>Farmer Dashboard</a></li>
+                            }
+                            @if (User.IsInRole("Customer"))
+                            {
+                                <li><a class="dropdown-item" asp-area="Customer" asp-controller="Dashboard" asp-action="Index"><i class="fas fa-home me-2 text-primary-green"></i>My Dashboard</a></li>
+                            }
+                            <li><hr class="dropdown-divider my-1" style="border-color:var(--border)"></li>
+                            <li>
+                                <form asp-controller="Auth" asp-action="Logout" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="dropdown-item text-danger"><i class="fas fa-sign-out-alt me-2"></i>Sign Out</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                    <a class="btn btn-outline-green btn-sm btn-pill px-3" asp-controller="Auth" asp-action="Login">Login</a>
+                    <a class="btn btn-accent btn-sm btn-pill px-3" asp-controller="Auth" asp-action="Register">Get Started</a>
+                }
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Page Content -->
+<main>
+    @RenderBody()
+</main>
+
+<!-- Footer -->
+<footer class="footer-green mt-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="footer-brand"><i class="fas fa-seedling me-2" style="color:var(--secondary)"></i>MarketLink<span>.</span>eGreen</div>
+                <p style="font-size:14px;color:rgba(255,255,255,.65);line-height:1.7;max-width:300px;">
+                    Connecting local farmers with conscious consumers. Fresh, organic produce from farm to your table.
+                </p>
+                <div class="d-flex gap-3 mt-3">
+                    <a href="#" class="nav-icon-btn" style="background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.7);"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="nav-icon-btn" style="background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.7);"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="nav-icon-btn" style="background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.7);"><i class="fab fa-twitter"></i></a>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - MarketLink.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="col-lg-2 col-sm-4">
+                <h5>Shop</h5>
+                <ul class="list-unstyled" style="display:flex;flex-direction:column;gap:8px;">
+                    <li><a asp-controller="Products" asp-action="Index" asp-route-categorySlug="vegetables">Vegetables</a></li>
+                    <li><a asp-controller="Products" asp-action="Index" asp-route-categorySlug="fruits">Fruits</a></li>
+                    <li><a asp-controller="Products" asp-action="Index" asp-route-categorySlug="dairy">Dairy</a></li>
+                    <li><a asp-controller="Products" asp-action="Index" asp-route-categorySlug="herbs">Herbs</a></li>
+                    <li><a asp-controller="Products" asp-action="Index" asp-route-categorySlug="grains">Grains</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-2 col-sm-4">
+                <h5>Company</h5>
+                <ul class="list-unstyled" style="display:flex;flex-direction:column;gap:8px;">
+                    <li><a asp-controller="Home" asp-action="About">About Us</a></li>
+                    <li><a asp-controller="Farmers" asp-action="Index">Our Farmers</a></li>
+                    <li><a asp-controller="Markets" asp-action="Index">Markets</a></li>
+                    <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    <li><a asp-controller="Home" asp-action="FAQ">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-2 col-sm-4">
+                <h5>Legal</h5>
+                <ul class="list-unstyled" style="display:flex;flex-direction:column;gap:8px;">
+                    <li><a asp-controller="Home" asp-action="Privacy">Privacy Policy</a></li>
+                    <li><a asp-controller="Home" asp-action="Terms">Terms & Conditions</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-2">
+                <h5>Download App</h5>
+                <p style="font-size:13px;color:rgba(255,255,255,.55);">Coming soon on iOS & Android</p>
+                <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+                    <a href="#" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:8px 14px;display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.8);font-size:12px;">
+                        <i class="fab fa-apple" style="font-size:18px;"></i><div><div style="font-size:9px;opacity:.7">Download on the</div>App Store</div>
+                    </a>
+                    <a href="#" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:8px 14px;display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.8);font-size:12px;">
+                        <i class="fab fa-google-play" style="font-size:18px;"></i><div><div style="font-size:9px;opacity:.7">Get it on</div>Google Play</div>
+                    </a>
+                </div>
+            </div>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+        <div class="footer-bottom text-center">
+            <p style="margin:0;color:rgba(255,255,255,.5);">© @DateTime.Now.Year MarketLink – eGreen Basket. All rights reserved. Built with ❤️ for local farmers.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- AI Assistant Widget -->
+<div class="ai-search-widget">
+    <div class="ai-chat-panel">
+        <div class="ai-chat-header">
+            <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:18px;">🤖</div>
+            <div>
+                <h6>eGreen Assistant</h6>
+                <p>Ask me anything about products!</p>
+            </div>
+        </div>
+        <div class="ai-chat-messages"></div>
+        <div class="ai-chat-input">
+            <input type="text" placeholder="Search products, ask about seasons..." />
+            <button><i class="fas fa-paper-plane" style="font-size:13px;"></i></button>
+        </div>
+    </div>
+    <button class="ai-toggle-btn" title="AI Product Assistant">
+        <i class="fas fa-robot"></i>
+    </button>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container-green"></div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
