@@ -213,9 +213,7 @@ C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\comp
 C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\compressed\nezrqnk58p-{0}-muycvpuwrr-muycvpuwrr.gz
 C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\compressed\v0zgfp0y55-{0}-87fc7y1x7t-87fc7y1x7t.gz
 C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\compressed\yfc7ypekbg-{0}-mlv21k5csn-mlv21k5csn.gz
-C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\compressed\b1bjtn3ed9-{0}-1vsr1a939b-1vsr1a939b.gz
 C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\compressed\p4dipbvi6h-{0}-61n19gt1b8-61n19gt1b8.gz
-C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\compressed\vqsvky1ean-{0}-3758sxq2da-3758sxq2da.gz
 C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\compressed\2zuojfsshv-{0}-bqjiyaj88i-bqjiyaj88i.gz
 C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\compressed\kt7nvhbggg-{0}-c2jlpeoesf-c2jlpeoesf.gz
 C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\compressed\6olv352azr-{0}-erw9l3u2r3-erw9l3u2r3.gz
