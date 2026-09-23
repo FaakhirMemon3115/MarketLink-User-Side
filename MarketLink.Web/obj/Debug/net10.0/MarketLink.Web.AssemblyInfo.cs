@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MarketLink.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4243c842aff6ad1f9cf1d59187987659cf6b6997")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0754cccac90b8905eb9c7e392f58084b9ccd3688")]
 [assembly: System.Reflection.AssemblyProductAttribute("MarketLink.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MarketLink.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
