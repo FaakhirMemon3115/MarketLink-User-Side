@@ -1,0 +1,221 @@
+@model MarketLink.Core.Entities.Order
+@{
+    ViewData["Title"] = $"Order #{Model.OrderNumber}";
+    var badgeClass = Model.Status switch
+    {
+        MarketLink.Core.Enums.OrderStatus.Pending => "bg-warning text-dark",
+        MarketLink.Core.Enums.OrderStatus.Accepted => "bg-info text-dark",
+        MarketLink.Core.Enums.OrderStatus.ReadyForPickup => "bg-primary text-white",
+        MarketLink.Core.Enums.OrderStatus.Completed => "bg-success text-white",
+        MarketLink.Core.Enums.OrderStatus.Cancelled => "bg-danger text-white",
+        _ => "bg-secondary text-white"
+    };
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+        <div class="d-flex align-items-center gap-2 mb-1">
+            <a asp-area="Farmer" asp-controller="Orders" asp-action="Index" class="btn btn-sm btn-outline-secondary btn-pill">
+                <i class="fas fa-arrow-left me-1"></i>Orders
+            </a>
+            <h4 style="margin:0;font-weight:700;color:var(--heading);">Order #@Model.OrderNumber</h4>
+            <span class="badge @badgeClass px-3 py-2" style="font-size:13px;border-radius:var(--radius-sm);">@Model.Status</span>
+        </div>
+        <div style="font-size:13px;color:var(--muted);">Placed on @Model.OrderedAt.ToString("f")</div>
+    </div>
+
+    <!-- Fulfillment Action Buttons -->
+    <div class="d-flex flex-wrap gap-2">
+        @if (Model.Status == MarketLink.Core.Enums.OrderStatus.Pending)
+        {
+            <form asp-area="Farmer" asp-controller="Orders" asp-action="Accept" asp-route-id="@Model.Id" method="post" class="d-inline">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-success btn-pill">
+                    <i class="fas fa-check me-1"></i>Accept Order
+                </button>
+            </form>
+            <button type="button" class="btn btn-outline-danger btn-pill" data-bs-toggle="modal" data-bs-target="#rejectModal">
+                <i class="fas fa-times me-1"></i>Reject Order
+            </button>
+        }
+        else if (Model.Status == MarketLink.Core.Enums.OrderStatus.Accepted)
+        {
+            <form asp-area="Farmer" asp-controller="Orders" asp-action="MarkReady" asp-route-id="@Model.Id" method="post" class="d-inline">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-primary btn-pill">
+                    <i class="fas fa-box me-1"></i>Mark Ready for Pickup
+                </button>
+            </form>
+        }
+        else if (Model.Status == MarketLink.Core.Enums.OrderStatus.ReadyForPickup)
+        {
+            <form asp-area="Farmer" asp-controller="Orders" asp-action="Complete" asp-route-id="@Model.Id" method="post" class="d-inline">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-success btn-pill" onclick="return confirm('Confirm customer picked up items and paid in cash/physical payment?');">
+                    <i class="fas fa-check-double me-1"></i>Confirm Pickup & Complete ($@Model.TotalAmount.ToString("F2"))
+                </button>
+            </form>
+        }
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Order Line Items -->
+    <div class="col-lg-8">
+        <div class="card mb-4" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
+            <div class="card-header" style="background:transparent;border-bottom:1px solid var(--border);padding:16px 20px;">
+                <h6 style="margin:0;font-weight:700;color:var(--heading);">Produce Packed in this Order</h6>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table mb-0 align-middle">
+                        <thead style="background:var(--bg);">
+                            <tr>
+                                <th style="padding:12px 20px;border-bottom:none;font-size:12px;color:var(--muted);text-transform:uppercase;">Produce</th>
+                                <th style="padding:12px 20px;border-bottom:none;font-size:12px;color:var(--muted);text-transform:uppercase;">Price / Unit</th>
+                                <th style="padding:12px 20px;border-bottom:none;font-size:12px;color:var(--muted);text-transform:uppercase;">Quantity</th>
+                                <th style="padding:12px 20px;border-bottom:none;font-size:12px;color:var(--muted);text-transform:uppercase;text-align:right;">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr>
+                                    <td style="padding:16px 20px;">
+                                        <div class="d-flex align-items-center gap-3">
+                                            @if (!string.IsNullOrEmpty(item.Product?.ImageUrl))
+                                            {
+                                                <img src="@item.Product.ImageUrl" alt="@item.ProductNameSnapshot" style="width:46px;height:46px;border-radius:8px;object-fit:cover;border:1px solid var(--border);" />
+                                            }
+                                            <div>
+                                                <div style="font-weight:600;color:var(--heading);">@item.ProductNameSnapshot</div>
+                                                <div style="font-size:12px;color:var(--muted);">Product ID: @item.ProductId</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="padding:16px 20px;">
+                                        $@item.PricePerKgSnapshot.ToString("F2") / @(item.Product?.Unit ?? "KG")
+                                    </td>
+                                    <td style="padding:16px 20px;">
+                                        <span class="badge bg-light text-dark border px-2 py-1" style="font-size:13px;font-weight:600;">
+                                            @item.QuantityKg @(item.Product?.Unit ?? "KG")
+                                        </span>
+                                    </td>
+                                    <td style="padding:16px 20px;text-align:right;font-weight:700;color:var(--heading);">
+                                        $@item.TotalPrice.ToString("F2")
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot style="background:var(--bg);border-top:1px solid var(--border);">
+                            <tr>
+                                <td colspan="3" style="padding:14px 20px;font-weight:600;color:var(--muted);text-align:right;">Total Due at Pickup:</td>
+                                <td style="padding:14px 20px;text-align:right;font-size:18px;font-weight:800;color:var(--primary);">$@Model.TotalAmount.ToString("F2")</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.Notes))
+        {
+            <div class="card p-3 mb-4" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
+                <div style="font-weight:600;font-size:13px;color:var(--heading);margin-bottom:4px;">
+                    <i class="fas fa-comment-alt text-muted me-1"></i> Customer Notes / Request:
+                </div>
+                <div style="font-size:14px;color:var(--body-text);background:var(--bg);padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--border);">
+                    @Model.Notes
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Customer & Pickup Details -->
+    <div class="col-lg-4">
+        <!-- Customer Details -->
+        <div class="card mb-4" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
+            <div class="card-header" style="background:transparent;border-bottom:1px solid var(--border);padding:16px 20px;">
+                <h6 style="margin:0;font-weight:700;color:var(--heading);">Customer Information</h6>
+            </div>
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div style="width:48px;height:48px;border-radius:50%;background:var(--soft-highlight);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;">
+                        @(Model.Customer?.User?.FullName?.FirstOrDefault() ?? 'C')
+                    </div>
+                    <div>
+                        <div style="font-weight:700;color:var(--heading);">@(Model.Customer?.User?.FullName ?? Model.Customer?.User?.UserName ?? "Customer")</div>
+                        <div style="font-size:12px;color:var(--muted);">@Model.Customer?.User?.Email</div>
+                    </div>
+                </div>
+                <div style="font-size:13px;color:var(--body-text);display:flex;flex-direction:column;gap:8px;">
+                    <div><i class="fas fa-phone me-2 text-muted"></i>@(Model.Customer?.Phone ?? "No phone provided")</div>
+                    <div><i class="fas fa-map-marker-alt me-2 text-muted"></i>@(Model.Customer?.City ?? "Local"), @(Model.Customer?.State ?? "")</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pickup Slot & Market -->
+        <div class="card" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
+            <div class="card-header" style="background:transparent;border-bottom:1px solid var(--border);padding:16px 20px;">
+                <h6 style="margin:0;font-weight:700;color:var(--heading);">Pickup Details</h6>
+            </div>
+            <div class="card-body p-4">
+                <div class="p-3 mb-3" style="background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border);">
+                    <div style="font-weight:700;color:var(--heading);margin-bottom:2px;">
+                        <i class="fas fa-store me-1" style="color:var(--accent);"></i>
+                        @(Model.PickupSlot?.Market?.Name ?? "Market Location")
+                    </div>
+                    <div style="font-size:12px;color:var(--muted);">
+                        @(Model.PickupSlot?.Market?.Address ?? "Farmer Stall")
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between py-2 border-bottom" style="font-size:13px;">
+                    <span class="text-muted">Pickup Window:</span>
+                    <span style="font-weight:600;color:var(--heading);">
+                        @(Model.PickupSlot != null ? $"{Model.PickupSlot.DayOfWeek} {Model.PickupSlot.StartTime:hh\\:mm} - {Model.PickupSlot.EndTime:hh\\:mm}" : "Scheduled")
+                    </span>
+                </div>
+                <div class="d-flex justify-content-between py-2" style="font-size:13px;">
+                    <span class="text-muted">Payment:</span>
+                    <span class="badge bg-warning text-dark font-weight-bold">
+                        <i class="fas fa-hand-holding-usd me-1"></i>Pay on Pickup
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Reject Modal -->
+<div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius:var(--radius);border:1px solid var(--border);">
+            <div class="modal-header">
+                <h5 class="modal-title" id="rejectModalLabel" style="font-weight:700;">Decline Order</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-area="Farmer" asp-controller="Orders" asp-action="Reject" asp-route-id="@Model.Id" method="post">
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    <p style="font-size:14px;color:var(--body-text);">Please specify a reason for rejecting this pre-order. The customer will receive this notification.</p>
+                    <div class="mb-3">
+                        <label class="form-label" style="font-weight:600;font-size:13px;">Reason</label>
+                        <select name="reason" class="form-select" style="border:1px solid var(--border);">
+                            <option value="Harvest out of stock">Harvest out of stock</option>
+                            <option value="Unable to attend market date">Unable to attend market date</option>
+                            <option value="Capacity reached">Capacity reached for this slot</option>
+                            <option value="Extreme weather conditions">Extreme weather conditions</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Confirm Decline</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

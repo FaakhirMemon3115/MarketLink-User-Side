@@ -1,0 +1,143 @@
+@{
+    ViewData["Title"] = "Sales Analytics";
+    var topProducts = ViewBag.TopProducts as IEnumerable<dynamic> ?? Enumerable.Empty<dynamic>();
+    var chartLabels = ViewBag.ChartLabels as List<string> ?? new List<string>();
+    var chartData = ViewBag.ChartData as List<decimal> ?? new List<decimal>();
+}
+
+<!-- Stat Cards -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card p-4 h-100" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-sm);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div style="width:44px;height:44px;background:rgba(92,111,43,0.15);border-radius:12px;display:flex;align-items:center;justify-content:center;">
+                    <i class="fas fa-dollar-sign text-primary" style="font-size:22px;"></i>
+                </div>
+                <span class="badge bg-success-subtle text-success border border-success-subtle">Physical Cash</span>
+            </div>
+            <h3 style="font-weight:800;color:var(--heading);margin:0;">$@ViewBag.TotalRevenue.ToString("N2")</h3>
+            <div style="font-size:13px;color:var(--muted);margin-top:4px;">Collected Revenue</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card p-4 h-100" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-sm);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div style="width:44px;height:44px;background:rgba(222,128,43,0.15);border-radius:12px;display:flex;align-items:center;justify-content:center;">
+                    <i class="fas fa-shopping-cart text-accent" style="font-size:22px;"></i>
+                </div>
+            </div>
+            <h3 style="font-weight:800;color:var(--heading);margin:0;">@ViewBag.TotalOrders</h3>
+            <div style="font-size:13px;color:var(--muted);margin-top:4px;">Total Pre-Orders Placed</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card p-4 h-100" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-sm);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div style="width:44px;height:44px;background:rgba(40,167,69,0.15);border-radius:12px;display:flex;align-items:center;justify-content:center;">
+                    <i class="fas fa-check-circle text-success" style="font-size:22px;"></i>
+                </div>
+            </div>
+            <h3 style="font-weight:800;color:var(--heading);margin:0;">@ViewBag.CompletedCount</h3>
+            <div style="font-size:13px;color:var(--muted);margin-top:4px;">Completed Pickups</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card p-4 h-100" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-sm);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div style="width:44px;height:44px;background:rgba(13,110,253,0.15);border-radius:12px;display:flex;align-items:center;justify-content:center;">
+                    <i class="fas fa-receipt text-info" style="font-size:22px;"></i>
+                </div>
+            </div>
+            <h3 style="font-weight:800;color:var(--heading);margin:0;">$@ViewBag.AverageOrderValue.ToString("N2")</h3>
+            <div style="font-size:13px;color:var(--muted);margin-top:4px;">Avg Order Value</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Revenue Chart -->
+    <div class="col-lg-8">
+        <div class="card" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-sm);">
+            <div class="card-header d-flex justify-content-between align-items-center" style="background:transparent;border-bottom:1px solid var(--border);padding:20px;">
+                <h6 style="margin:0;font-weight:700;color:var(--heading);">Daily Revenue Performance</h6>
+                <span class="badge bg-light text-muted border">Last 7 Days</span>
+            </div>
+            <div class="card-body p-4">
+                <canvas id="farmerAnalyticsChart" height="120"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Selling Produce -->
+    <div class="col-lg-4">
+        <div class="card h-100" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-sm);">
+            <div class="card-header" style="background:transparent;border-bottom:1px solid var(--border);padding:20px;">
+                <h6 style="margin:0;font-weight:700;color:var(--heading);">Top Selling Produce</h6>
+            </div>
+            <div class="card-body p-0">
+                @if (!topProducts.Any())
+                {
+                    <div class="text-center py-4 text-muted" style="font-size:13px;">
+                        No product sales recorded yet.
+                    </div>
+                }
+                else
+                {
+                    <div class="list-group list-group-flush">
+                        @foreach (var prod in topProducts)
+                        {
+                            <div class="list-group-item d-flex justify-content-between align-items-center" style="padding:16px 20px;border-bottom:1px solid var(--border);background:transparent;">
+                                <div>
+                                    <div style="font-weight:700;color:var(--heading);">@prod.Name</div>
+                                    <div style="font-size:12px;color:var(--muted);">Total Sold: @prod.TotalKg KG</div>
+                                </div>
+                                <div style="font-weight:800;color:var(--primary);font-size:15px;">
+                                    $@prod.Revenue.ToString("N2")
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const labels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(chartLabels));
+            const data = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(chartData));
+
+            const ctx = document.getElementById('farmerAnalyticsChart');
+            if (ctx) {
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Revenue ($)',
+                            data: data,
+                            backgroundColor: '#5C6F2B',
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(val) { return '$' + val; }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+}

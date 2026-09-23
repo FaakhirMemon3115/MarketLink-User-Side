@@ -1,0 +1,129 @@
+@model IEnumerable<MarketLink.Core.Entities.Review>
+@{
+    ViewData["Title"] = "Review Moderation";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+        <h4 style="margin:0;font-weight:700;color:var(--heading);">Marketplace Reviews & Feedback</h4>
+        <p style="margin:4px 0 0;font-size:13px;color:var(--muted);">Moderate user submissions, maintain community standards, and handle flagged ratings.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <span class="badge bg-primary px-3 py-2" style="font-size:13px;border-radius:var(--radius-sm);">
+            Total: @Model.Count() Reviews
+        </span>
+    </div>
+</div>
+
+<div class="card" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-sm);">
+    <div class="card-body p-0">
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5 text-muted">
+                <i class="fas fa-star-half-alt fa-3x mb-3" style="color:var(--border);"></i>
+                <h6>No reviews recorded yet</h6>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table mb-0 align-middle">
+                    <thead style="background:var(--bg);">
+                        <tr>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Customer</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Subject</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Rating</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Comment</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Date</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Status</th>
+                            <th style="padding:16px 20px;border-bottom:none;text-align:right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in Model)
+                        {
+                            <tr>
+                                <td style="padding:16px 20px;">
+                                    <div style="font-weight:700;color:var(--heading);">@(r.Customer?.User?.FullName ?? r.Customer?.User?.UserName ?? "Customer")</div>
+                                    <div style="font-size:12px;color:var(--muted);">@r.Customer?.User?.Email</div>
+                                </td>
+                                <td style="padding:16px 20px;">
+                                    @if (r.Product != null)
+                                    {
+                                        <span class="badge bg-light text-dark border">
+                                            <i class="fas fa-apple-alt text-success me-1"></i>@r.Product.Name
+                                        </span>
+                                    }
+                                    else if (r.Farmer != null)
+                                    {
+                                        <span class="badge bg-light text-dark border">
+                                            <i class="fas fa-tractor text-primary me-1"></i>@r.Farmer.FarmName
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-light text-muted border">Platform</span>
+                                    }
+                                </td>
+                                <td style="padding:16px 20px;">
+                                    <div style="color:#DE802B;font-size:13px;">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <i class="fas fa-star @(i <= r.Rating ? "" : "text-muted opacity-25")"></i>
+                                        }
+                                        <span class="ms-1 font-weight-bold">(@r.Rating)</span>
+                                    </div>
+                                </td>
+                                <td style="padding:16px 20px;max-width:320px;">
+                                    @if (!string.IsNullOrEmpty(r.Title))
+                                    {
+                                        <div style="font-weight:600;font-size:13px;color:var(--heading);">@r.Title</div>
+                                    }
+                                    <div style="font-size:13px;color:var(--body-text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                                        @r.Comment
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(r.FarmerResponse))
+                                    {
+                                        <div style="font-size:11px;color:var(--primary);margin-top:2px;">
+                                            <i class="fas fa-reply me-1"></i>Farmer responded
+                                        </div>
+                                    }
+                                </td>
+                                <td style="padding:16px 20px;font-size:12px;color:var(--muted);">
+                                    @r.CreatedAt.ToString("MMM dd, yyyy")
+                                </td>
+                                <td style="padding:16px 20px;">
+                                    @if (r.IsApproved)
+                                    {
+                                        <span class="badge bg-success">Approved</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    }
+                                </td>
+                                <td style="padding:16px 20px;text-align:right;">
+                                    <div class="d-flex justify-content-end gap-2">
+                                        @if (!r.IsApproved)
+                                        {
+                                            <form asp-area="Admin" asp-controller="Reviews" asp-action="Approve" asp-route-id="@r.Id" method="post" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-sm btn-success btn-pill">Approve</button>
+                                            </form>
+                                        }
+                                        <form asp-area="Admin" asp-controller="Reviews" asp-action="Delete" asp-route-id="@r.Id" method="post" class="d-inline" onsubmit="return confirm('Delete review?');">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm btn-outline-danger btn-circle" title="Delete">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

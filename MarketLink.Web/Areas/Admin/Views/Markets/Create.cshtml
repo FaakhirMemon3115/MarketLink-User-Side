@@ -1,0 +1,95 @@
+@model MarketLink.Core.Entities.Market
+@{
+    ViewData["Title"] = "Add New Market";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-sm);">
+            <div class="card-header d-flex justify-content-between align-items-center" style="background:transparent;border-bottom:1px solid var(--border);padding:20px;">
+                <div>
+                    <h5 style="margin:0;font-weight:700;color:var(--heading);">
+                        <i class="fas fa-store me-2" style="color:var(--primary);"></i>Add New Market
+                    </h5>
+                    <p style="margin:4px 0 0;font-size:13px;color:var(--muted);">Create a farmers market location with schedule and map coordinates.</p>
+                </div>
+                <a asp-area="Admin" asp-controller="Markets" asp-action="Index" class="btn btn-outline-secondary btn-sm btn-pill">
+                    <i class="fas fa-arrow-left me-1"></i>Back to Markets
+                </a>
+            </div>
+            <div class="card-body p-4">
+                <form asp-area="Admin" asp-controller="Markets" asp-action="Create" method="post">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label asp-for="Name" class="form-label" style="font-weight:600;font-size:13px;color:var(--heading);">Market Name <span class="text-danger">*</span></label>
+                            <input asp-for="Name" class="form-control" placeholder="e.g. Ferry Building Farmers Market" required style="border-radius:var(--radius-sm);border:1px solid var(--border);" />
+                            <span asp-validation-for="Name" class="text-danger" style="font-size:12px;"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <label asp-for="Description" class="form-label" style="font-weight:600;font-size:13px;color:var(--heading);">Description</label>
+                            <textarea asp-for="Description" class="form-control" rows="3" placeholder="Overview of the market, features, parking info..." style="border-radius:var(--radius-sm);border:1px solid var(--border);"></textarea>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Address" class="form-label" style="font-weight:600;font-size:13px;color:var(--heading);">Address <span class="text-danger">*</span></label>
+                            <input asp-for="Address" class="form-control" placeholder="1 Ferry Building" required style="border-radius:var(--radius-sm);border:1px solid var(--border);" />
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="City" class="form-label" style="font-weight:600;font-size:13px;color:var(--heading);">City <span class="text-danger">*</span></label>
+                            <input asp-for="City" class="form-control" placeholder="San Francisco" required style="border-radius:var(--radius-sm);border:1px solid var(--border);" />
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="State" class="form-label" style="font-weight:600;font-size:13px;color:var(--heading);">State <span class="text-danger">*</span></label>
+                            <input asp-for="State" class="form-control" placeholder="CA" required style="border-radius:var(--radius-sm);border:1px solid var(--border);" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="OperatingHours" class="form-label" style="font-weight:600;font-size:13px;color:var(--heading);">Operating Hours</label>
+                            <input asp-for="OperatingHours" class="form-control" placeholder="e.g. 8:00 AM - 2:00 PM" style="border-radius:var(--radius-sm);border:1px solid var(--border);" />
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="OpenDays" class="form-label" style="font-weight:600;font-size:13px;color:var(--heading);">Open Days</label>
+                            <input asp-for="OpenDays" class="form-control" placeholder="e.g. Saturday, Tuesday, Thursday" style="border-radius:var(--radius-sm);border:1px solid var(--border);" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Latitude" class="form-label" style="font-weight:600;font-size:13px;color:var(--heading);">Latitude <span class="text-danger">*</span></label>
+                            <input asp-for="Latitude" type="number" step="0.000001" class="form-control" required style="border-radius:var(--radius-sm);border:1px solid var(--border);" />
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Longitude" class="form-label" style="font-weight:600;font-size:13px;color:var(--heading);">Longitude <span class="text-danger">*</span></label>
+                            <input asp-for="Longitude" type="number" step="0.000001" class="form-control" required style="border-radius:var(--radius-sm);border:1px solid var(--border);" />
+                        </div>
+
+                        <div class="col-md-12">
+                            <label asp-for="ImageUrl" class="form-label" style="font-weight:600;font-size:13px;color:var(--heading);">Cover Photo URL</label>
+                            <input asp-for="ImageUrl" type="url" placeholder="https://..." class="form-control" style="border-radius:var(--radius-sm);border:1px solid var(--border);" />
+                        </div>
+
+                        <div class="col-12 pt-2">
+                            <div class="d-flex flex-wrap gap-4 p-3" style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);">
+                                <div class="form-check form-switch">
+                                    <input asp-for="IsActive" class="form-check-input" type="checkbox" id="isActiveSwitch" checked />
+                                    <label class="form-check-label" for="isActiveSwitch" style="font-weight:600;font-size:13px;">Active Market</label>
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input asp-for="IsFeatured" class="form-check-input" type="checkbox" id="isFeaturedSwitch" />
+                                    <label class="form-check-label" for="isFeaturedSwitch" style="font-weight:600;font-size:13px;">Featured on Home Page</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 d-flex justify-content-end gap-2 pt-3">
+                            <a asp-area="Admin" asp-controller="Markets" asp-action="Index" class="btn btn-light px-4" style="border:1px solid var(--border);">Cancel</a>
+                            <button type="submit" class="btn btn-primary-green px-4 btn-pill">Save Market</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

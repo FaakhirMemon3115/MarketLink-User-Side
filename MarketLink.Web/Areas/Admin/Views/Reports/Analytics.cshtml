@@ -1,0 +1,132 @@
+@{
+    ViewData["Title"] = "Platform Growth & Revenue Analytics";
+    var daysLabels = ViewBag.DaysLabels as List<string> ?? new List<string>();
+    var ordersPerDay = ViewBag.OrdersPerDay as List<int> ?? new List<int>();
+    var revenuePerDay = ViewBag.RevenuePerDay as List<decimal> ?? new List<decimal>();
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+        <h4 style="margin:0;font-weight:700;color:var(--heading);">Marketplace Analytics & Trends</h4>
+        <p style="margin:4px 0 0;font-size:13px;color:var(--muted);">Visual analytics on order volumes, physical pickup revenue, and platform adoption.</p>
+    </div>
+    <a asp-area="Admin" asp-controller="Reports" asp-action="Index" class="btn btn-outline-secondary btn-sm btn-pill">
+        <i class="fas fa-arrow-left me-1"></i>Back to Reports
+    </a>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-6">
+        <div class="card h-100" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-sm);">
+            <div class="card-header" style="background:transparent;border-bottom:1px solid var(--border);padding:20px;">
+                <h6 style="margin:0;font-weight:700;color:var(--heading);">Daily Orders Trend (7 Days)</h6>
+            </div>
+            <div class="card-body p-4">
+                <canvas id="ordersChart" height="150"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card h-100" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-sm);">
+            <div class="card-header" style="background:transparent;border-bottom:1px solid var(--border);padding:20px;">
+                <h6 style="margin:0;font-weight:700;color:var(--heading);">Gross Pickup Revenue ($)</h6>
+            </div>
+            <div class="card-body p-4">
+                <canvas id="revenueChart" height="150"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-12">
+        <div class="card" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-sm);">
+            <div class="card-header" style="background:transparent;border-bottom:1px solid var(--border);padding:20px;">
+                <h6 style="margin:0;font-weight:700;color:var(--heading);">Platform Ecosystem Ratio</h6>
+            </div>
+            <div class="card-body p-4">
+                <div class="row text-center g-4">
+                    <div class="col-md-4">
+                        <div class="p-4" style="background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border);">
+                            <div style="font-size:32px;font-weight:800;color:var(--primary);">@ViewBag.TotalFarmers</div>
+                            <div style="font-size:13px;color:var(--muted);margin-top:4px;">Producer Farms</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-4" style="background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border);">
+                            <div style="font-size:32px;font-weight:800;color:var(--accent);">@ViewBag.TotalCustomers</div>
+                            <div style="font-size:13px;color:var(--muted);margin-top:4px;">Active Buyers</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-4" style="background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border);">
+                            <div style="font-size:32px;font-weight:800;color:var(--success);">@ViewBag.TotalOrders</div>
+                            <div style="font-size:13px;color:var(--muted);margin-top:4px;">Lifetime Pre-Orders</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const labels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(daysLabels));
+            const orders = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ordersPerDay));
+            const revenue = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(revenuePerDay));
+
+            const ctxOrders = document.getElementById('ordersChart');
+            if (ctxOrders) {
+                new Chart(ctxOrders, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Orders',
+                            data: orders,
+                            borderColor: '#5C6F2B',
+                            backgroundColor: 'rgba(92,111,43,0.1)',
+                            fill: true,
+                            tension: 0.3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: false } },
+                        scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+                    }
+                });
+            }
+
+            const ctxRevenue = document.getElementById('revenueChart');
+            if (ctxRevenue) {
+                new Chart(ctxRevenue, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Revenue ($)',
+                            data: revenue,
+                            backgroundColor: '#DE802B',
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(val) { return '$' + val; }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+}

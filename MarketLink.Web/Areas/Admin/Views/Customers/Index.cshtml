@@ -1,0 +1,99 @@
+@model IEnumerable<MarketLink.Core.Entities.Customer>
+@{
+    ViewData["Title"] = "Customer Management";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+        <h4 style="margin:0;font-weight:700;color:var(--heading);">Registered Shoppers & Customers</h4>
+        <p style="margin:4px 0 0;font-size:13px;color:var(--muted);">Manage buyer accounts, review activity, and moderate access.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <span class="badge bg-primary px-3 py-2" style="font-size:13px;border-radius:var(--radius-sm);">
+            Total: @Model.Count() Shoppers
+        </span>
+    </div>
+</div>
+
+<div class="card" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-sm);">
+    <div class="card-body p-0">
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5 text-muted">
+                <i class="fas fa-users fa-3x mb-3" style="color:var(--border);"></i>
+                <h6>No registered customers yet</h6>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table mb-0 align-middle">
+                    <thead style="background:var(--bg);">
+                        <tr>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Customer</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Contact</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Location</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Pre-Orders</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Registered</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Status</th>
+                            <th style="padding:16px 20px;border-bottom:none;text-align:right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var c in Model)
+                        {
+                            var isActive = c.User?.IsActive ?? true;
+
+                            <tr>
+                                <td style="padding:16px 20px;">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div style="width:40px;height:40px;border-radius:50%;background:var(--soft-highlight);color:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;">
+                                            @((c.User?.FullName ?? c.User?.UserName ?? "C").FirstOrDefault())
+                                        </div>
+                                        <div>
+                                            <div style="font-weight:700;color:var(--heading);">@(c.User?.FullName ?? c.User?.UserName ?? "Customer")</div>
+                                            <div style="font-size:12px;color:var(--muted);">ID: #@c.Id</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="padding:16px 20px;">
+                                    <div style="font-size:13px;color:var(--heading);">@c.User?.Email</div>
+                                    <div style="font-size:12px;color:var(--muted);">@(c.Phone ?? "No phone")</div>
+                                </td>
+                                <td style="padding:16px 20px;">
+                                    <div style="font-size:13px;color:var(--heading);">@(string.IsNullOrEmpty(c.City) ? "Local" : $"{c.City}, {c.State}")</div>
+                                </td>
+                                <td style="padding:16px 20px;">
+                                    <span class="badge bg-light text-dark border">
+                                        @c.Orders.Count orders
+                                    </span>
+                                </td>
+                                <td style="padding:16px 20px;font-size:13px;color:var(--muted);">
+                                    @c.RegisteredAt.ToString("MMM dd, yyyy")
+                                </td>
+                                <td style="padding:16px 20px;">
+                                    @if (isActive)
+                                    {
+                                        <span class="badge bg-success">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Deactivated</span>
+                                    }
+                                </td>
+                                <td style="padding:16px 20px;text-align:right;">
+                                    <form asp-area="Admin" asp-controller="Customers" asp-action="ToggleStatus" asp-route-id="@c.Id" method="post" class="d-inline" onsubmit="return confirm('Toggle account status?');">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-sm @(isActive ? "btn-outline-danger" : "btn-outline-success") btn-pill">
+                                            @(isActive ? "Deactivate" : "Activate")
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

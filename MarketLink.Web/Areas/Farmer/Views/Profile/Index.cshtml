@@ -1,0 +1,87 @@
+@model MarketLink.Core.Entities.Farmer
+@{
+    ViewData["Title"] = "Farm Profile & Stall Info";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-9">
+        <div class="card" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-sm);">
+            <div class="card-header d-flex justify-content-between align-items-center" style="background:transparent;border-bottom:1px solid var(--border);padding:20px;">
+                <div>
+                    <h5 style="margin:0;font-weight:700;color:var(--heading);">
+                        <i class="fas fa-tractor me-2" style="color:var(--primary);"></i>Farm Profile & Brand
+                    </h5>
+                    <p style="margin:4px 0 0;font-size:13px;color:var(--muted);">Public farm page details, stall locations, and contact info displayed to shoppers.</p>
+                </div>
+                <a asp-area="Farmer" asp-controller="Profile" asp-action="Markets" class="btn btn-outline-success btn-sm btn-pill">
+                    <i class="fas fa-store me-1"></i>Manage Markets
+                </a>
+            </div>
+            <div class="card-body p-4">
+                <form asp-area="Farmer" asp-controller="Profile" asp-action="Update" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label asp-for="FarmName" class="form-label" style="font-weight:600;font-size:13px;color:var(--heading);">Farm / Business Name <span class="text-danger">*</span></label>
+                            <input asp-for="FarmName" class="form-control" required style="border-radius:var(--radius-sm);border:1px solid var(--border);" />
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Phone" class="form-label" style="font-weight:600;font-size:13px;color:var(--heading);">Contact Phone</label>
+                            <input asp-for="Phone" class="form-control" style="border-radius:var(--radius-sm);border:1px solid var(--border);" />
+                        </div>
+
+                        <div class="col-12">
+                            <label asp-for="Description" class="form-label" style="font-weight:600;font-size:13px;color:var(--heading);">Farm Story / Bio</label>
+                            <textarea asp-for="Description" class="form-control" rows="4" placeholder="Tell customers about your heritage, organic soil practices, and harvest cycle..." style="border-radius:var(--radius-sm);border:1px solid var(--border);"></textarea>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label asp-for="City" class="form-label" style="font-weight:600;font-size:13px;color:var(--heading);">City</label>
+                            <input asp-for="City" class="form-control" style="border-radius:var(--radius-sm);border:1px solid var(--border);" />
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="State" class="form-label" style="font-weight:600;font-size:13px;color:var(--heading);">State / Province</label>
+                            <input asp-for="State" class="form-control" style="border-radius:var(--radius-sm);border:1px solid var(--border);" />
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="StallNumber" class="form-label" style="font-weight:600;font-size:13px;color:var(--heading);">Default Stall Number</label>
+                            <input asp-for="StallNumber" placeholder="e.g. Stall #12-A" class="form-control" style="border-radius:var(--radius-sm);border:1px solid var(--border);" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Website" class="form-label" style="font-weight:600;font-size:13px;color:var(--heading);">Website</label>
+                            <input asp-for="Website" type="url" placeholder="https://greenfarms.example.com" class="form-control" style="border-radius:var(--radius-sm);border:1px solid var(--border);" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label asp-for="Latitude" class="form-label" style="font-weight:600;font-size:13px;color:var(--heading);">Latitude (Map)</label>
+                            <input asp-for="Latitude" type="number" step="0.000001" class="form-control" style="border-radius:var(--radius-sm);border:1px solid var(--border);" />
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="Longitude" class="form-label" style="font-weight:600;font-size:13px;color:var(--heading);">Longitude (Map)</label>
+                            <input asp-for="Longitude" type="number" step="0.000001" class="form-control" style="border-radius:var(--radius-sm);border:1px solid var(--border);" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="ProfileImageUrl" class="form-label" style="font-weight:600;font-size:13px;color:var(--heading);">Farm Logo / Avatar URL</label>
+                            <input asp-for="ProfileImageUrl" type="url" placeholder="https://..." class="form-control" style="border-radius:var(--radius-sm);border:1px solid var(--border);" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="BannerImageUrl" class="form-label" style="font-weight:600;font-size:13px;color:var(--heading);">Cover / Banner Image URL</label>
+                            <input asp-for="BannerImageUrl" type="url" placeholder="https://..." class="form-control" style="border-radius:var(--radius-sm);border:1px solid var(--border);" />
+                        </div>
+
+                        <div class="col-12 d-flex justify-content-end gap-2 pt-3">
+                            <button type="submit" class="btn btn-primary-green px-4 btn-pill">
+                                <i class="fas fa-save me-2"></i>Save Farm Profile
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

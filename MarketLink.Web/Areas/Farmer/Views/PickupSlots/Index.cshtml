@@ -1,0 +1,166 @@
+@model IEnumerable<MarketLink.Core.Entities.PickupSlot>
+@{
+    ViewData["Title"] = "Pickup Slots";
+    var markets = ViewBag.Markets as IEnumerable<MarketLink.Core.Entities.Market> ?? Enumerable.Empty<MarketLink.Core.Entities.Market>();
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+        <h4 style="margin:0;font-weight:700;color:var(--heading);">Market Pickup Slots</h4>
+        <p style="margin:4px 0 0;font-size:13px;color:var(--muted);">Define days and time windows when customers can collect pre-orders at your stall.</p>
+    </div>
+    <button type="button" class="btn btn-primary-green btn-pill" data-bs-toggle="modal" data-bs-target="#addSlotModal">
+        <i class="fas fa-plus me-2"></i>Add Pickup Slot
+    </button>
+</div>
+
+<div class="card" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-sm);">
+    <div class="card-body p-0">
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5">
+                <i class="fas fa-clock fa-3x mb-3" style="color:var(--border);"></i>
+                <h6 style="color:var(--heading);">No pickup windows configured yet</h6>
+                <p style="font-size:13px;color:var(--muted);">Add your market days so customers can select a pickup time during checkout.</p>
+                <button type="button" class="btn btn-outline-success btn-sm btn-pill" data-bs-toggle="modal" data-bs-target="#addSlotModal">
+                    <i class="fas fa-plus me-1"></i>Create First Slot
+                </button>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table mb-0 align-middle">
+                    <thead style="background:var(--bg);">
+                        <tr>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Market</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Day</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Pickup Window</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Capacity</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Status</th>
+                            <th style="padding:16px 20px;border-bottom:none;text-align:right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var slot in Model)
+                        {
+                            <tr>
+                                <td style="padding:16px 20px;">
+                                    <div style="font-weight:700;color:var(--heading);">
+                                        <i class="fas fa-store text-muted me-1"></i>
+                                        @(slot.Market?.Name ?? "Market Location")
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(slot.Notes))
+                                    {
+                                        <div style="font-size:12px;color:var(--muted);">@slot.Notes</div>
+                                    }
+                                </td>
+                                <td style="padding:16px 20px;">
+                                    <span class="badge bg-light text-dark border px-2 py-1" style="font-weight:600;">
+                                        @slot.DayOfWeek
+                                    </span>
+                                </td>
+                                <td style="padding:16px 20px;">
+                                    <div style="font-weight:600;color:var(--primary);">
+                                        @slot.StartTime.ToString("hh\\:mm") – @slot.EndTime.ToString("hh\\:mm")
+                                    </div>
+                                </td>
+                                <td style="padding:16px 20px;">
+                                    <div style="font-size:13px;color:var(--heading);">
+                                        Max @slot.MaxOrders orders
+                                    </div>
+                                </td>
+                                <td style="padding:16px 20px;">
+                                    @if (slot.IsActive)
+                                    {
+                                        <span class="badge bg-success">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Disabled</span>
+                                    }
+                                </td>
+                                <td style="padding:16px 20px;text-align:right;">
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <form asp-area="Farmer" asp-controller="PickupSlots" asp-action="Toggle" asp-route-id="@slot.Id" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm @(slot.IsActive ? "btn-outline-warning" : "btn-outline-success") btn-pill" title="Toggle active status">
+                                                @(slot.IsActive ? "Disable" : "Enable")
+                                            </button>
+                                        </form>
+                                        <form asp-area="Farmer" asp-controller="PickupSlots" asp-action="Delete" asp-route-id="@slot.Id" method="post" class="d-inline" onsubmit="return confirm('Delete this pickup slot?');">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm btn-outline-danger btn-circle" title="Delete">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Add Slot Modal -->
+<div class="modal fade" id="addSlotModal" tabindex="-1" aria-labelledby="addSlotModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius:var(--radius);border:1px solid var(--border);">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addSlotModalLabel" style="font-weight:700;">Add Pickup Window</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-area="Farmer" asp-controller="PickupSlots" asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label" style="font-weight:600;font-size:13px;">Market Location <span class="text-danger">*</span></label>
+                        <select name="marketId" class="form-select" required style="border:1px solid var(--border);">
+                            @foreach (var m in markets)
+                            {
+                                <option value="@m.Id">@m.Name (@m.City)</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" style="font-weight:600;font-size:13px;">Day of Week <span class="text-danger">*</span></label>
+                        <select name="dayOfWeek" class="form-select" style="border:1px solid var(--border);">
+                            <option value="Saturday">Saturday</option>
+                            <option value="Sunday">Sunday</option>
+                            <option value="Wednesday">Wednesday</option>
+                            <option value="Thursday">Thursday</option>
+                            <option value="Friday">Friday</option>
+                            <option value="Monday">Monday</option>
+                            <option value="Tuesday">Tuesday</option>
+                        </select>
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label" style="font-weight:600;font-size:13px;">Start Time</label>
+                            <input type="time" name="startTime" value="09:00" class="form-control" required style="border:1px solid var(--border);" />
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label" style="font-weight:600;font-size:13px;">End Time</label>
+                            <input type="time" name="endTime" value="13:00" class="form-control" required style="border:1px solid var(--border);" />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" style="font-weight:600;font-size:13px;">Max Pre-Orders Capacity</label>
+                        <input type="number" name="maxOrders" value="25" min="1" max="150" class="form-control" style="border:1px solid var(--border);" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" style="font-weight:600;font-size:13px;">Stall / Instructions Note</label>
+                        <input type="text" name="notes" placeholder="e.g. Stall #14 near the fountain" class="form-control" style="border:1px solid var(--border);" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary-green">Save Slot</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

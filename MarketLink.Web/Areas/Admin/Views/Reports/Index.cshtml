@@ -1,0 +1,105 @@
+@{
+    ViewData["Title"] = "Reports & Data Exports";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+        <h4 style="margin:0;font-weight:700;color:var(--heading);">Marketplace Performance Reports</h4>
+        <p style="margin:4px 0 0;font-size:13px;color:var(--muted);">Export system audit reports, order logs, and farmer directories for accounting and management.</p>
+    </div>
+    <a asp-area="Admin" asp-controller="Reports" asp-action="Analytics" class="btn btn-outline-success btn-pill">
+        <i class="fas fa-chart-line me-1"></i>View Live Visual Analytics
+    </a>
+</div>
+
+<!-- High Level Metrics -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card p-4 h-100" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-sm);">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <i class="fas fa-hand-holding-usd text-success" style="font-size:24px;"></i>
+                <span class="badge bg-success-subtle text-success">Fulfilled</span>
+            </div>
+            <h3 style="font-weight:800;color:var(--heading);margin:0;">$@ViewBag.TotalRevenue.ToString("N2")</h3>
+            <div style="font-size:13px;color:var(--muted);margin-top:4px;">Gross Revenue (Pickup Cash)</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card p-4 h-100" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-sm);">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <i class="fas fa-shopping-cart text-primary" style="font-size:24px;"></i>
+            </div>
+            <h3 style="font-weight:800;color:var(--heading);margin:0;">@ViewBag.TotalOrders</h3>
+            <div style="font-size:13px;color:var(--muted);margin-top:4px;">Total Pre-Orders Placed</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card p-4 h-100" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-sm);">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <i class="fas fa-tractor text-accent" style="font-size:24px;"></i>
+            </div>
+            <h3 style="font-weight:800;color:var(--heading);margin:0;">@ViewBag.TotalFarmers</h3>
+            <div style="font-size:13px;color:var(--muted);margin-top:4px;">Registered Farmers</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card p-4 h-100" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-sm);">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <i class="fas fa-users text-info" style="font-size:24px;"></i>
+            </div>
+            <h3 style="font-weight:800;color:var(--heading);margin:0;">@ViewBag.TotalCustomers</h3>
+            <div style="font-size:13px;color:var(--muted);margin-top:4px;">Active Customers</div>
+        </div>
+    </div>
+</div>
+
+<!-- Export Cards -->
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card h-100" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-sm);">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div style="width:48px;height:48px;border-radius:12px;background:rgba(92,111,43,0.15);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:22px;">
+                        <i class="fas fa-file-csv"></i>
+                    </div>
+                    <div>
+                        <h5 style="margin:0;font-weight:700;color:var(--heading);">Pre-Orders Audit Report</h5>
+                        <p style="margin:0;font-size:12px;color:var(--muted);">All customer orders, pickup slots, amounts, and completion status.</p>
+                    </div>
+                </div>
+                <p style="font-size:13px;color:var(--body-text);line-height:1.6;">
+                    Exports detailed CSV records of every pre-order created across the system, including customer email, farm name, pickup time, line item totals, and payment status.
+                </p>
+                <div class="d-flex justify-content-end mt-4">
+                    <a asp-area="Admin" asp-controller="Reports" asp-action="ExportOrdersCsv" class="btn btn-primary-green btn-pill">
+                        <i class="fas fa-download me-2"></i>Download Orders CSV
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card h-100" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-sm);">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div style="width:48px;height:48px;border-radius:12px;background:rgba(222,128,43,0.15);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:22px;">
+                        <i class="fas fa-users-cog"></i>
+                    </div>
+                    <div>
+                        <h5 style="margin:0;font-weight:700;color:var(--heading);">Farmers Directory Export</h5>
+                        <p style="margin:0;font-size:12px;color:var(--muted);">Farm names, locations, contact info, and active product counts.</p>
+                    </div>
+                </div>
+                <p style="font-size:13px;color:var(--body-text);line-height:1.6;">
+                    Download an exhaustive directory of all registered farmers, verification status, contact details, number of items listed, and market stall affiliations.
+                </p>
+                <div class="d-flex justify-content-end mt-4">
+                    <a asp-area="Admin" asp-controller="Reports" asp-action="ExportFarmersCsv" class="btn btn-accent btn-pill">
+                        <i class="fas fa-download me-2"></i>Download Farmers CSV
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

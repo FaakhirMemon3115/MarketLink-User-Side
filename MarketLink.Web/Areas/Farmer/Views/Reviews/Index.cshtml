@@ -1,0 +1,100 @@
+@model IEnumerable<MarketLink.Core.Entities.Review>
+@{
+    ViewData["Title"] = "Customer Reviews";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+        <h4 style="margin:0;font-weight:700;color:var(--heading);">Customer Feedback & Ratings</h4>
+        <p style="margin:4px 0 0;font-size:13px;color:var(--muted);">Read reviews left by verified customers and reply with farm updates or thanks.</p>
+    </div>
+    <div class="d-flex align-items-center gap-3 p-3" style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);">
+        <div style="font-size:26px;font-weight:800;color:var(--accent);">
+            @ViewBag.AverageRating.ToString("F1") <i class="fas fa-star" style="font-size:18px;"></i>
+        </div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.3;">
+            Based on<br /><strong>@ViewBag.ReviewCount</strong> ratings
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    @if (!Model.Any())
+    {
+        <div class="col-12">
+            <div class="card p-5 text-center" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
+                <i class="fas fa-star-half-alt fa-3x mb-3" style="color:var(--border);"></i>
+                <h6 style="color:var(--heading);">No reviews yet</h6>
+                <p style="font-size:13px;color:var(--muted);">When customers collect their orders, they can review your produce and farm.</p>
+            </div>
+        </div>
+    }
+    else
+    {
+        @foreach (var review in Model)
+        {
+            <div class="col-12">
+                <div class="card p-4" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-sm);">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <div style="font-weight:700;color:var(--heading);">
+                                    @(review.Customer?.User?.FullName ?? review.Customer?.User?.UserName ?? "Verified Shopper")
+                                </div>
+                                <span class="badge bg-light text-dark border">
+                                    @(review.Product != null ? $"Produce: {review.Product.Name}" : "Farm Review")
+                                </span>
+                            </div>
+                            <div style="color:#DE802B;font-size:13px;">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <i class="fas fa-star @(i <= review.Rating ? "" : "text-muted opacity-25")"></i>
+                                }
+                                <span style="font-size:12px;color:var(--muted);margin-left:6px;">@review.CreatedAt.ToString("MMM dd, yyyy")</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(review.Title))
+                    {
+                        <h6 style="font-weight:700;color:var(--heading);margin-top:6px;">@review.Title</h6>
+                    }
+                    <p style="font-size:14px;color:var(--body-text);line-height:1.6;margin-bottom:12px;">
+                        @review.Comment
+                    </p>
+
+                    <!-- Farmer Reply Section -->
+                    @if (!string.IsNullOrEmpty(review.FarmerResponse))
+                    {
+                        <div class="p-3 mt-2" style="background:var(--bg);border-left:3px solid var(--primary);border-radius:var(--radius-sm);">
+                            <div style="font-size:12px;font-weight:700;color:var(--primary);margin-bottom:3px;">
+                                <i class="fas fa-reply me-1"></i>Your Response (@(review.FarmerRespondedAt?.ToString("MMM dd, yyyy") ?? "")):
+                            </div>
+                            <div style="font-size:13px;color:var(--body-text);">@review.FarmerResponse</div>
+                        </div>
+                    }
+
+                    <div class="d-flex justify-content-end mt-3">
+                        <button type="button" class="btn btn-sm btn-outline-secondary btn-pill" data-bs-toggle="collapse" data-bs-target="#replyBox-@review.Id">
+                            <i class="fas fa-reply me-1"></i>@(string.IsNullOrEmpty(review.FarmerResponse) ? "Reply to Customer" : "Edit Reply")
+                        </button>
+                    </div>
+
+                    <!-- Collapsible reply form -->
+                    <div class="collapse mt-3" id="replyBox-@review.Id">
+                        <form asp-area="Farmer" asp-controller="Reviews" asp-action="Reply" asp-route-id="@review.Id" method="post">
+                            @Html.AntiForgeryToken()
+                            <div class="mb-2">
+                                <textarea name="farmerResponse" class="form-control" rows="2" placeholder="Write a polite, appreciative reply..." required style="border:1px solid var(--border);border-radius:var(--radius-sm);">@review.FarmerResponse</textarea>
+                            </div>
+                            <div class="d-flex justify-content-end gap-2">
+                                <button type="button" class="btn btn-sm btn-light" data-bs-toggle="collapse" data-bs-target="#replyBox-@review.Id">Cancel</button>
+                                <button type="submit" class="btn btn-sm btn-primary-green">Post Response</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>

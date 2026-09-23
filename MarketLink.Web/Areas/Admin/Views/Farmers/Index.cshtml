@@ -1,43 +1,156 @@
 @model IEnumerable<MarketLink.Core.Entities.Farmer>
 @{
-    ViewData["Title"] = "Farmers";
+    ViewData["Title"] = "Farmers Management";
+    var currentStatus = ViewBag.CurrentStatus as string ?? "";
 }
 
-<div class="card" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);">
-    <div class="card-header d-flex justify-content-between align-items-center" style="background:transparent;border-bottom:1px solid var(--border);padding:20px;">
-        <h5 style="margin:0;font-weight:700;">Registered Farmers</h5>
-        <button class="btn btn-primary-green btn-sm btn-pill"><i class="fas fa-plus me-2"></i>Add New</button>
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+        <h4 style="margin:0;font-weight:700;color:var(--heading);">Farmer Verification & Accounts</h4>
+        <p style="margin:4px 0 0;font-size:13px;color:var(--muted);">Review new farmer registrations, approve market stalls, and manage farm statuses.</p>
     </div>
+    @if (ViewBag.PendingCount > 0)
+    {
+        <span class="badge bg-warning text-dark px-3 py-2" style="font-size:13px;border-radius:var(--radius-sm);">
+            <i class="fas fa-hourglass-half me-1"></i>@ViewBag.PendingCount Pending Approval
+        </span>
+    }
+</div>
+
+<!-- Status Filters -->
+<div class="d-flex flex-wrap gap-2 mb-4 p-2" style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);">
+    <a asp-area="Admin" asp-controller="Farmers" asp-action="Index" class="btn btn-sm @(string.IsNullOrEmpty(currentStatus) ? "btn-primary-green" : "btn-light") btn-pill">
+        All Farmers (@Model.Count())
+    </a>
+    <a asp-area="Admin" asp-controller="Farmers" asp-action="Index" asp-route-status="Approved" class="btn btn-sm @(currentStatus == "Approved" ? "btn-primary-green" : "btn-light") btn-pill">
+        <i class="fas fa-check-circle me-1"></i>Approved
+    </a>
+    <a asp-area="Admin" asp-controller="Farmers" asp-action="Index" asp-route-status="Pending" class="btn btn-sm @(currentStatus == "Pending" ? "btn-primary-green" : "btn-light") btn-pill">
+        <i class="fas fa-clock me-1"></i>Pending Review
+    </a>
+    <a asp-area="Admin" asp-controller="Farmers" asp-action="Index" asp-route-status="Suspended" class="btn btn-sm @(currentStatus == "Suspended" ? "btn-primary-green" : "btn-light") btn-pill">
+        <i class="fas fa-ban me-1"></i>Suspended
+    </a>
+</div>
+
+<div class="card" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-sm);">
     <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table mb-0 align-middle">
-                <thead style="background:var(--bg);">
-                    <tr>
-                        <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);">Farmer</th>
-                        <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);">Location</th>
-                        <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);">Status</th>
-                        <th style="padding:16px 20px;border-bottom:none;"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var f in Model)
-                    {
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5 text-muted">
+                <i class="fas fa-tractor fa-3x mb-3" style="color:var(--border);"></i>
+                <h6>No farmers found</h6>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table mb-0 align-middle">
+                    <thead style="background:var(--bg);">
                         <tr>
-                            <td style="padding:16px 20px;">
-                                <div style="font-weight:600;color:var(--heading);">@f.FarmName</div>
-                                <div style="font-size:12px;color:var(--muted);">ID: @f.Id</div>
-                            </td>
-                            <td style="padding:16px 20px;">@f.City</td>
-                            <td style="padding:16px 20px;">
-                                <span class="badge badge-success">Active</span>
-                            </td>
-                            <td style="padding:16px 20px;text-align:right;">
-                                <button class="btn btn-sm btn-light btn-circle shadow-sm"><i class="fas fa-edit"></i></button>
-                            </td>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Farm & Contact</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Location</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Catalog</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Markets</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Status</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Featured</th>
+                            <th style="padding:16px 20px;border-bottom:none;text-align:right;">Actions</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                        @foreach (var f in Model)
+                        {
+                            var badgeClass = f.Status switch
+                            {
+                                MarketLink.Core.Enums.FarmerStatus.Approved => "bg-success",
+                                MarketLink.Core.Enums.FarmerStatus.Pending => "bg-warning text-dark",
+                                MarketLink.Core.Enums.FarmerStatus.Suspended => "bg-danger",
+                                _ => "bg-secondary"
+                            };
+
+                            <tr>
+                                <td style="padding:16px 20px;">
+                                    <div class="d-flex align-items-center gap-3">
+                                        @if (!string.IsNullOrEmpty(f.ProfileImageUrl))
+                                        {
+                                            <img src="@f.ProfileImageUrl" alt="@f.FarmName" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:1px solid var(--border);" />
+                                        }
+                                        else
+                                        {
+                                            <div style="width:40px;height:40px;border-radius:50%;background:var(--soft-highlight);color:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;">
+                                                @(f.FarmName.FirstOrDefault())
+                                            </div>
+                                        }
+                                        <div>
+                                            <div style="font-weight:700;color:var(--heading);">@f.FarmName</div>
+                                            <div style="font-size:12px;color:var(--muted);">
+                                                @(f.User?.FullName ?? f.User?.Email ?? "No user link")
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="padding:16px 20px;">
+                                    <div style="font-size:13px;color:var(--heading);">@f.City, @f.State</div>
+                                    <div style="font-size:11px;color:var(--muted);">Stall: @(f.StallNumber ?? "N/A")</div>
+                                </td>
+                                <td style="padding:16px 20px;">
+                                    <span class="badge bg-light text-dark border">
+                                        @f.Products.Count products
+                                    </span>
+                                </td>
+                                <td style="padding:16px 20px;">
+                                    <span class="badge bg-light text-dark border">
+                                        @f.FarmerMarkets.Count markets
+                                    </span>
+                                </td>
+                                <td style="padding:16px 20px;">
+                                    <span class="badge @badgeClass" style="border-radius:var(--radius-sm);">
+                                        @f.Status
+                                    </span>
+                                </td>
+                                <td style="padding:16px 20px;">
+                                    <form asp-area="Admin" asp-controller="Farmers" asp-action="ToggleFeatured" asp-route-id="@f.Id" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-sm btn-link p-0 text-decoration-none" title="Toggle Home Page Featured">
+                                            @if (f.IsFeatured)
+                                            {
+                                                <i class="fas fa-star text-warning" style="font-size:16px;"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="far fa-star text-muted" style="font-size:16px;"></i>
+                                            }
+                                        </button>
+                                    </form>
+                                </td>
+                                <td style="padding:16px 20px;text-align:right;">
+                                    <div class="d-flex justify-content-end gap-2">
+                                        @if (f.Status != MarketLink.Core.Enums.FarmerStatus.Approved)
+                                        {
+                                            <form asp-area="Admin" asp-controller="Farmers" asp-action="Approve" asp-route-id="@f.Id" method="post" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-sm btn-success btn-pill">
+                                                    <i class="fas fa-check me-1"></i>Approve
+                                                </button>
+                                            </form>
+                                        }
+
+                                        @if (f.Status != MarketLink.Core.Enums.FarmerStatus.Suspended)
+                                        {
+                                            <form asp-area="Admin" asp-controller="Farmers" asp-action="Suspend" asp-route-id="@f.Id" method="post" class="d-inline" onsubmit="return confirm('Suspend farmer account?');">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-sm btn-outline-danger btn-pill">
+                                                    <i class="fas fa-ban me-1"></i>Suspend
+                                                </button>
+                                            </form>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
     </div>
 </div>

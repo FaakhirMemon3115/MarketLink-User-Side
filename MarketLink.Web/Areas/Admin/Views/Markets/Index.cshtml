@@ -1,0 +1,106 @@
+@model IEnumerable<MarketLink.Core.Entities.Market>
+@{
+    ViewData["Title"] = "Market Locations";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+        <h4 style="margin:0;font-weight:700;color:var(--heading);">Market Locations & Fairgrounds</h4>
+        <p style="margin:4px 0 0;font-size:13px;color:var(--muted);">Manage community farmers market venues, GPS coordinates, and schedules.</p>
+    </div>
+    <a asp-area="Admin" asp-controller="Markets" asp-action="Create" class="btn btn-primary-green btn-pill">
+        <i class="fas fa-plus me-2"></i>Add New Market
+    </a>
+</div>
+
+<div class="card" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-sm);">
+    <div class="card-body p-0">
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5 text-muted">
+                <i class="fas fa-store-slash fa-3x mb-3" style="color:var(--border);"></i>
+                <h6>No markets registered yet</h6>
+                <a asp-area="Admin" asp-controller="Markets" asp-action="Create" class="btn btn-primary-green btn-sm btn-pill mt-2">Create First Market</a>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table mb-0 align-middle">
+                    <thead style="background:var(--bg);">
+                        <tr>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Market Name</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Address / City</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Operating Hours</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Farmers</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Coordinates</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Status</th>
+                            <th style="padding:16px 20px;border-bottom:none;text-align:right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var m in Model)
+                        {
+                            <tr>
+                                <td style="padding:16px 20px;">
+                                    <div class="d-flex align-items-center gap-3">
+                                        @if (!string.IsNullOrEmpty(m.ImageUrl))
+                                        {
+                                            <img src="@m.ImageUrl" alt="@m.Name" style="width:42px;height:42px;border-radius:8px;object-fit:cover;border:1px solid var(--border);" />
+                                        }
+                                        <div>
+                                            <div style="font-weight:700;color:var(--heading);">@m.Name</div>
+                                            @if (m.IsFeatured)
+                                            {
+                                                <span class="badge bg-warning text-dark" style="font-size:10px;">Featured</span>
+                                            }
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="padding:16px 20px;">
+                                    <div style="font-size:13px;color:var(--heading);">@m.Address</div>
+                                    <div style="font-size:12px;color:var(--muted);">@m.City, @m.State</div>
+                                </td>
+                                <td style="padding:16px 20px;">
+                                    <div style="font-size:13px;color:var(--heading);">@(m.OperatingHours ?? "Check schedule")</div>
+                                    <div style="font-size:11px;color:var(--muted);">Days: @(m.OpenDays ?? "Weekends")</div>
+                                </td>
+                                <td style="padding:16px 20px;">
+                                    <span class="badge bg-light text-dark border">
+                                        @m.FarmerMarkets.Count stalls
+                                    </span>
+                                </td>
+                                <td style="padding:16px 20px;font-size:12px;color:var(--muted);font-family:monospace;">
+                                    @m.Latitude.ToString("F4"), @m.Longitude.ToString("F4")
+                                </td>
+                                <td style="padding:16px 20px;">
+                                    @if (m.IsActive)
+                                    {
+                                        <span class="badge bg-success">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Inactive</span>
+                                    }
+                                </td>
+                                <td style="padding:16px 20px;text-align:right;">
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <a asp-area="Admin" asp-controller="Markets" asp-action="Edit" asp-route-id="@m.Id" class="btn btn-sm btn-outline-secondary btn-circle" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form asp-area="Admin" asp-controller="Markets" asp-action="Delete" asp-route-id="@m.Id" method="post" class="d-inline" onsubmit="return confirm('Delete this market?');">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm btn-outline-danger btn-circle" title="Delete">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

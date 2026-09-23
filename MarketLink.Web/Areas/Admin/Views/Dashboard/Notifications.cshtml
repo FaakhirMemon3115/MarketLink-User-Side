@@ -1,0 +1,115 @@
+@model IEnumerable<MarketLink.Core.Entities.Notification>
+@{
+    ViewData["Title"] = "Notification Broadcast Center";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+        <h4 style="margin:0;font-weight:700;color:var(--heading);">Notification Center & Broadcasts</h4>
+        <p style="margin:4px 0 0;font-size:13px;color:var(--muted);">Send announcements, weather advisories, or market reminders to platform users.</p>
+    </div>
+    <button type="button" class="btn btn-primary-green btn-pill" data-bs-toggle="modal" data-bs-target="#broadcastModal">
+        <i class="fas fa-bullhorn me-2"></i>Send Broadcast Announcement
+    </button>
+</div>
+
+<div class="card" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-sm);">
+    <div class="card-header" style="background:transparent;border-bottom:1px solid var(--border);padding:16px 20px;">
+        <h6 style="margin:0;font-weight:700;color:var(--heading);">Recent Notifications Log</h6>
+    </div>
+    <div class="card-body p-0">
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5 text-muted">
+                <i class="fas fa-bell-slash fa-3x mb-3" style="color:var(--border);"></i>
+                <h6>No notifications sent yet</h6>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table mb-0 align-middle">
+                    <thead style="background:var(--bg);">
+                        <tr>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Recipient</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Type</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Title</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Message</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Status</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var n in Model)
+                        {
+                            <tr>
+                                <td style="padding:16px 20px;">
+                                    <div style="font-weight:600;color:var(--heading);">@(n.User?.FullName ?? n.User?.Email ?? "User")</div>
+                                </td>
+                                <td style="padding:16px 20px;">
+                                    <span class="badge bg-light text-dark border">@n.Type</span>
+                                </td>
+                                <td style="padding:16px 20px;font-weight:600;color:var(--heading);">
+                                    @n.Title
+                                </td>
+                                <td style="padding:16px 20px;max-width:300px;font-size:13px;color:var(--body-text);">
+                                    @n.Message
+                                </td>
+                                <td style="padding:16px 20px;">
+                                    @if (n.IsRead)
+                                    {
+                                        <span class="badge bg-success">Read</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark">Unread</span>
+                                    }
+                                </td>
+                                <td style="padding:16px 20px;font-size:12px;color:var(--muted);">
+                                    @n.CreatedAt.ToString("MMM dd, yyyy HH:mm")
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Broadcast Modal -->
+<div class="modal fade" id="broadcastModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius:var(--radius);border:1px solid var(--border);">
+            <div class="modal-header">
+                <h5 class="modal-title" style="font-weight:700;">Broadcast Announcement</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-area="Admin" asp-controller="Dashboard" asp-action="Broadcast" method="post">
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label" style="font-weight:600;font-size:13px;">Target Audience</label>
+                        <select name="targetRole" class="form-select" style="border:1px solid var(--border);">
+                            <option value="All">All Active Users (Customers & Farmers)</option>
+                            <option value="Customer">Customers Only</option>
+                            <option value="Farmer">Farmers Only</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" style="font-weight:600;font-size:13px;">Announcement Title <span class="text-danger">*</span></label>
+                        <input type="text" name="title" placeholder="e.g. Saturday Market Hours Extended!" required class="form-control" style="border:1px solid var(--border);" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" style="font-weight:600;font-size:13px;">Message Content <span class="text-danger">*</span></label>
+                        <textarea name="message" rows="4" placeholder="Write announcement details..." required class="form-control" style="border:1px solid var(--border);"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary-green">Send Broadcast</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

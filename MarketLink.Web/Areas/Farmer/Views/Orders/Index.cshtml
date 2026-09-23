@@ -1,0 +1,130 @@
+@model IEnumerable<MarketLink.Core.Entities.Order>
+@{
+    ViewData["Title"] = "Customer Orders";
+    var currentStatus = ViewBag.CurrentStatus as string ?? "";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+        <h4 style="margin:0;font-weight:700;color:var(--heading);">Incoming Orders & Pickups</h4>
+        <p style="margin:4px 0 0;font-size:13px;color:var(--muted);">Manage farm pre-orders, prepare pickup boxes, and record fulfillment.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <span class="badge bg-warning text-dark d-flex align-items-center px-3 py-2" style="font-size:13px;border-radius:var(--radius-sm);">
+            <i class="fas fa-clock me-2"></i>@ViewBag.PendingCount Pending Confirmation
+        </span>
+    </div>
+</div>
+
+<!-- Status Filters -->
+<div class="d-flex flex-wrap gap-2 mb-4 p-2" style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);">
+    <a asp-area="Farmer" asp-controller="Orders" asp-action="Index" class="btn btn-sm @(string.IsNullOrEmpty(currentStatus) ? "btn-primary-green" : "btn-light") btn-pill">
+        All Orders (@Model.Count())
+    </a>
+    <a asp-area="Farmer" asp-controller="Orders" asp-action="Index" asp-route-status="Pending" class="btn btn-sm @(currentStatus == "Pending" ? "btn-primary-green" : "btn-light") btn-pill">
+        <i class="fas fa-hourglass-half me-1"></i>Pending
+    </a>
+    <a asp-area="Farmer" asp-controller="Orders" asp-action="Index" asp-route-status="Accepted" class="btn btn-sm @(currentStatus == "Accepted" ? "btn-primary-green" : "btn-light") btn-pill">
+        <i class="fas fa-thumbs-up me-1"></i>Accepted
+    </a>
+    <a asp-area="Farmer" asp-controller="Orders" asp-action="Index" asp-route-status="ReadyForPickup" class="btn btn-sm @(currentStatus == "ReadyForPickup" ? "btn-primary-green" : "btn-light") btn-pill">
+        <i class="fas fa-box-open me-1"></i>Ready for Pickup
+    </a>
+    <a asp-area="Farmer" asp-controller="Orders" asp-action="Index" asp-route-status="Completed" class="btn btn-sm @(currentStatus == "Completed" ? "btn-primary-green" : "btn-light") btn-pill">
+        <i class="fas fa-check-double me-1"></i>Completed
+    </a>
+    <a asp-area="Farmer" asp-controller="Orders" asp-action="Index" asp-route-status="Cancelled" class="btn btn-sm @(currentStatus == "Cancelled" ? "btn-primary-green" : "btn-light") btn-pill">
+        <i class="fas fa-times me-1"></i>Cancelled
+    </a>
+</div>
+
+<div class="card" style="border:1px solid var(--border);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-sm);">
+    <div class="card-body p-0">
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5">
+                <i class="fas fa-shopping-basket fa-3x mb-3" style="color:var(--border);"></i>
+                <h6 style="color:var(--heading);">No orders match this status</h6>
+                <p style="font-size:13px;color:var(--muted);">Incoming customer orders will appear here in real time.</p>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table mb-0 align-middle">
+                    <thead style="background:var(--bg);">
+                        <tr>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Order #</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Customer</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Pickup Time / Market</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Items</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Amount</th>
+                            <th style="padding:16px 20px;border-bottom:none;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;">Status</th>
+                            <th style="padding:16px 20px;border-bottom:none;text-align:right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in Model)
+                        {
+                            var badgeClass = order.Status switch
+                            {
+                                MarketLink.Core.Enums.OrderStatus.Pending => "bg-warning text-dark",
+                                MarketLink.Core.Enums.OrderStatus.Accepted => "bg-info text-dark",
+                                MarketLink.Core.Enums.OrderStatus.ReadyForPickup => "bg-primary text-white",
+                                MarketLink.Core.Enums.OrderStatus.Completed => "bg-success text-white",
+                                MarketLink.Core.Enums.OrderStatus.Cancelled => "bg-danger text-white",
+                                _ => "bg-secondary text-white"
+                            };
+
+                            <tr>
+                                <td style="padding:16px 20px;">
+                                    <a asp-area="Farmer" asp-controller="Orders" asp-action="Details" asp-route-id="@order.Id" style="font-weight:700;color:var(--primary);text-decoration:none;">
+                                        #@order.OrderNumber
+                                    </a>
+                                    <div style="font-size:11px;color:var(--muted);">@order.OrderedAt.ToString("MMM dd, yyyy HH:mm")</div>
+                                </td>
+                                <td style="padding:16px 20px;">
+                                    <div style="font-weight:600;color:var(--heading);">
+                                        @(order.Customer?.User?.FullName ?? order.Customer?.User?.UserName ?? "Valued Customer")
+                                    </div>
+                                    <div style="font-size:12px;color:var(--muted);">
+                                        <i class="fas fa-phone me-1"></i>@(order.Customer?.Phone ?? "No phone")
+                                    </div>
+                                </td>
+                                <td style="padding:16px 20px;">
+                                    <div style="font-weight:600;font-size:13px;color:var(--heading);">
+                                        <i class="fas fa-store me-1" style="color:var(--accent);"></i>
+                                        @(order.PickupSlot?.Market?.Name ?? "Market Stall")
+                                    </div>
+                                    <div style="font-size:12px;color:var(--muted);">
+                                        <i class="fas fa-clock me-1"></i>
+                                        @(order.PickupTime?.ToString("ddd, MMM dd - h:mm tt") ?? $"{order.PickupSlot?.DayOfWeek} {order.PickupSlot?.StartTime}")
+                                    </div>
+                                </td>
+                                <td style="padding:16px 20px;">
+                                    <span class="badge bg-light text-dark border">
+                                        @order.Items.Count items (@order.Items.Sum(i => i.QuantityKg) kg)
+                                    </span>
+                                </td>
+                                <td style="padding:16px 20px;">
+                                    <div style="font-weight:700;color:var(--heading);">$@order.TotalAmount.ToString("F2")</div>
+                                    <div style="font-size:10px;color:var(--accent);font-weight:600;text-transform:uppercase;">Physical Payment</div>
+                                </td>
+                                <td style="padding:16px 20px;">
+                                    <span class="badge @badgeClass" style="border-radius:var(--radius-sm);font-weight:600;">
+                                        @order.Status
+                                    </span>
+                                </td>
+                                <td style="padding:16px 20px;text-align:right;">
+                                    <a asp-area="Farmer" asp-controller="Orders" asp-action="Details" asp-route-id="@order.Id" class="btn btn-sm btn-outline-secondary btn-pill">
+                                        Manage <i class="fas fa-chevron-right ms-1"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>
