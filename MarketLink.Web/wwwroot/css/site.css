@@ -52,6 +52,22 @@
   --highlight: #064E3B;
 }
 
+[data-theme="dark"] a.text-muted,
+[data-theme="dark"] .text-muted {
+  color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .bg-soft {
+  background-color: #064E3B !important;
+}
+
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-select {
+  background-color: #1E293B !important;
+  color: #F1F5F9 !important;
+  border-color: #334155 !important;
+}
+
 /* ── Custom Theme Components & Badges ──────────────────────── */
 .badge-success {
   background-color: var(--primary) !important;

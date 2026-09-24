@@ -111,21 +111,41 @@ const Sidebar = {
 /* ── Cart AJAX ──────────────────────────────────────────────── */
 const Cart = {
     async addItem(productId, quantityKg) {
+        const role = document.body.dataset.role || 'Guest';
+        if (role === 'Admin' || role === 'Farmer') {
+            Toast.show('You are not eligible for this function.', 'warning');
+            return;
+        }
+        if (role === 'Guest') {
+            window.location.href = '/Auth/Login';
+            return;
+        }
+
         try {
             const response = await fetch('/Customer/Cart/AddItem', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'RequestVerificationToken': getAntiForgeryToken() },
                 body: JSON.stringify({ productId, quantityKg })
             });
+
+            if (response.status === 403 || response.redirected && response.url.includes('AccessDenied')) {
+                Toast.show('You are not eligible for this function.', 'warning');
+                return;
+            }
+
             const data = await response.json();
             if (data.success) {
                 Toast.show(`Added ${quantityKg}kg to cart!`, 'success');
                 this.updateBadge(data.cartCount);
             } else {
-                Toast.show(data.message || 'Failed to add to cart', 'error');
+                Toast.show(data.message || 'You are not eligible for this function.', 'warning');
             }
         } catch (e) {
-            Toast.show('Network error. Please try again.', 'error');
+            if (role === 'Admin' || role === 'Farmer') {
+                Toast.show('You are not eligible for this function.', 'warning');
+            } else {
+                Toast.show('An error occurred. Please try again.', 'error');
+            }
         }
     },
     updateBadge(count) {
@@ -139,19 +159,41 @@ const Cart = {
 /* ── Favorites AJAX ─────────────────────────────────────────── */
 const Favorites = {
     async toggle(type, id, btn) {
+        const role = document.body.dataset.role || 'Guest';
+        if (role === 'Admin' || role === 'Farmer') {
+            Toast.show('You are not eligible for this function.', 'warning');
+            return;
+        }
+        if (role === 'Guest') {
+            window.location.href = '/Auth/Login';
+            return;
+        }
+
         try {
             const response = await fetch('/Customer/Favorites/Toggle', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'RequestVerificationToken': getAntiForgeryToken() },
                 body: JSON.stringify({ type, id })
             });
+
+            if (response.status === 403 || response.redirected && response.url.includes('AccessDenied')) {
+                Toast.show('You are not eligible for this function.', 'warning');
+                return;
+            }
+
             const data = await response.json();
             if (data.success) {
                 btn.classList.toggle('active', data.isFavorite);
                 Toast.show(data.isFavorite ? 'Added to favorites!' : 'Removed from favorites', data.isFavorite ? 'success' : 'info');
+            } else {
+                Toast.show(data.message || 'You are not eligible for this function.', 'warning');
             }
         } catch (e) {
-            Toast.show('Please login to save favorites', 'warning');
+            if (role === 'Admin' || role === 'Farmer') {
+                Toast.show('You are not eligible for this function.', 'warning');
+            } else {
+                Toast.show('Please login to save favorites', 'warning');
+            }
         }
     }
 };

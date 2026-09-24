@@ -317,13 +317,22 @@
 @section Scripts {
 <script>
     async function toggleProductFavorite(btn, productId) {
+        const role = document.body.dataset.role || 'Guest';
+        if (role === 'Admin' || role === 'Farmer') {
+            ML.Toast.show('You are not eligible for this function.', 'warning');
+            return;
+        }
+        if (role === 'Guest') {
+            window.location.href = '/Auth/Login';
+            return;
+        }
+
         try {
             const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value || '';
             const formData = new FormData();
             formData.append('type', 'product');
             formData.append('id', productId);
 
-            // Using standard fetch with antiforgery token
             const res = await fetch('/Customer/Favorites/Toggle', {
                 method: 'POST',
                 headers: {
@@ -332,8 +341,8 @@
                 body: formData
             });
 
-            if (res.status === 401 || res.redirected) {
-                window.location.href = '/Auth/Login';
+            if (res.status === 403 || res.redirected && res.url.includes('AccessDenied')) {
+                ML.Toast.show('You are not eligible for this function.', 'warning');
                 return;
             }
 
@@ -350,10 +359,14 @@
                     ML.Toast.show('Removed from favorites', 'info');
                 }
             } else {
-                ML.Toast.show(data.message || 'Please log in to save favorites.', 'warning');
+                ML.Toast.show(data.message || 'You are not eligible for this function.', 'warning');
             }
         } catch (err) {
-            ML.Toast.show('Please log in to save favorites.', 'warning');
+            if (role === 'Admin' || role === 'Farmer') {
+                ML.Toast.show('You are not eligible for this function.', 'warning');
+            } else {
+                ML.Toast.show('Please log in to save favorites.', 'warning');
+            }
         }
     }
 </script>

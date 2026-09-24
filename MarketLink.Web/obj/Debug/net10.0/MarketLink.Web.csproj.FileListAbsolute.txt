@@ -294,3 +294,5 @@ C:\Users\USER\Desktop\ \MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\
 C:\Users\USER\Desktop\ \MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\MarketLink.Web.genruntimeconfig.cache
 C:\Users\USER\Desktop\ \MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\ref\MarketLink.Web.dll
 C:\Users\USER\Desktop\ \MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\compressed\b1bjtn3ed9-{0}-lr1h5k4y4n-lr1h5k4y4n.gz
+C:\Users\USER\Desktop\ \MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\compressed\b1bjtn3ed9-{0}-us1empjl7k-us1empjl7k.gz
+C:\Users\USER\Desktop\ \MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\compressed\vqsvky1ean-{0}-4i0wf9ff5o-4i0wf9ff5o.gz
