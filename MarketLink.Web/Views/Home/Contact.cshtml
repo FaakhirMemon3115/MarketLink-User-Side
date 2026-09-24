@@ -1,0 +1,161 @@
+@{
+    ViewData["Title"] = "Contact Us";
+}
+
+<!-- Contact Hero -->
+<div style="background:linear-gradient(135deg, var(--heading) 0%, var(--primary-dark) 100%);color:#fff;padding:70px 0 50px;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:-60px;right:-60px;width:240px;height:240px;background:rgba(255,255,255,0.05);border-radius:50%;"></div>
+    <div class="container text-center position-relative" style="z-index:2;">
+        <span class="badge px-3 py-2 rounded-pill mb-3" style="background:var(--secondary);color:var(--heading);font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;">
+            💬 Get In Touch
+        </span>
+        <h1 class="display-4 fw-bold mb-3" style="color:#fff;font-family:var(--font-heading);">
+            We'd Love to Hear From You
+        </h1>
+        <p class="lead mx-auto mb-0" style="max-width:650px;color:rgba(255,255,255,0.85);font-size:17px;">
+            Have a question about fresh produce, order pickups, or becoming a seller on MarketLink? Our friendly team is here to support you.
+        </p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row g-4 mb-5">
+        <!-- Contact Cards -->
+        <div class="col-md-4">
+            <div class="card h-100 border-0 p-4 text-center" style="background:var(--card);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);">
+                <div style="width:54px;height:54px;border-radius:50%;background:rgba(5,150,105,0.12);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 16px;">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <h5 class="fw-bold mb-2" style="color:var(--heading);">Customer & Farm Support</h5>
+                <p class="text-muted small mb-3">Questions about orders, pickups, or account setup?</p>
+                <a href="tel:+15551234567" class="fw-bold text-decoration-none" style="color:var(--primary);font-size:16px;">+1 (555) 123-4567</a>
+                <div class="text-muted small mt-1">Mon - Sat: 8:00 AM - 6:00 PM</div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 border-0 p-4 text-center" style="background:var(--card);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);">
+                <div style="width:54px;height:54px;border-radius:50%;background:rgba(245,158,11,0.12);color:var(--accent-dark);display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 16px;">
+                    <i class="fas fa-envelope-open-text"></i>
+                </div>
+                <h5 class="fw-bold mb-2" style="color:var(--heading);">Email Us Directly</h5>
+                <p class="text-muted small mb-3">Send us an email and we'll reply within 24 hours.</p>
+                <a href="mailto:info@marketlink.com" class="fw-bold text-decoration-none" style="color:var(--accent-dark);font-size:16px;">info@marketlink.com</a>
+                <div class="text-muted small mt-1">24/7 Digital Helpdesk</div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 border-0 p-4 text-center" style="background:var(--card);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);">
+                <div style="width:54px;height:54px;border-radius:50%;background:rgba(5,150,105,0.12);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 16px;">
+                    <i class="fas fa-tractor"></i>
+                </div>
+                <h5 class="fw-bold mb-2" style="color:var(--heading);">Farmer Onboarding</h5>
+                <p class="text-muted small mb-3">Want to start selling produce at local markets?</p>
+                <a asp-controller="Auth" asp-action="Register" asp-route-role="Farmer" class="btn btn-outline-green btn-sm btn-pill px-4">Register as Farmer</a>
+                <div class="text-muted small mt-2">Zero setup fee for local growers</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Form & Map Section -->
+    <div class="row g-5 align-items-stretch">
+        <div class="col-lg-7">
+            <div class="card border-0 p-4 p-md-5" style="background:var(--card);border-radius:var(--radius-lg);box-shadow:var(--shadow);border:1px solid var(--border);">
+                <h3 class="fw-bold mb-1" style="color:var(--heading);">Send Us a Message</h3>
+                <p class="text-muted small mb-4">Fill out the form below and our team will get back to you promptly.</p>
+
+                <form id="contactForm" onsubmit="handleContactSubmit(event)">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small" style="color:var(--heading);">Your Full Name</label>
+                            <input type="text" class="form-control" placeholder="John Doe" required style="border-radius:var(--radius-sm);border:1px solid var(--border);padding:10px 14px;" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small" style="color:var(--heading);">Email Address</label>
+                            <input type="email" class="form-control" placeholder="john@example.com" required style="border-radius:var(--radius-sm);border:1px solid var(--border);padding:10px 14px;" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small" style="color:var(--heading);">Phone Number (Optional)</label>
+                            <input type="tel" class="form-control" placeholder="+1 (555) 000-0000" style="border-radius:var(--radius-sm);border:1px solid var(--border);padding:10px 14px;" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small" style="color:var(--heading);">Topic</label>
+                            <select class="form-select" style="border-radius:var(--radius-sm);border:1px solid var(--border);padding:10px 14px;">
+                                <option>General Inquiry</option>
+                                <option>Order Assistance</option>
+                                <option>Farmer Registration</option>
+                                <option>Market Partnership</option>
+                                <option>Feedback & Suggestions</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold small" style="color:var(--heading);">Message</label>
+                            <textarea class="form-control" rows="5" placeholder="How can we help you today?" required style="border-radius:var(--radius-sm);border:1px solid var(--border);padding:10px 14px;"></textarea>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary-green btn-lg btn-pill px-5 shadow">
+                                <i class="fas fa-paper-plane me-2"></i>Send Message
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card border-0 p-4 p-md-5 h-100 d-flex flex-column justify-content-between" style="background:linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);color:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);">
+                <div>
+                    <span class="badge px-3 py-1 rounded-pill mb-3" style="background:rgba(255,255,255,0.2);color:#fff;font-size:12px;">📍 Main Office & Hub</span>
+                    <h3 class="fw-bold mb-3" style="color:#fff;">MarketLink Headquarters</h3>
+                    <p style="color:rgba(255,255,255,0.85);font-size:15px;line-height:1.7;">
+                        Connecting communities with local organic agriculture. Visit our regional office or contact our market coordinators.
+                    </p>
+
+                    <div class="d-flex flex-column gap-3 mt-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <i class="fas fa-map-marker-alt text-warning fs-5"></i>
+                            <div>
+                                <div class="fw-bold">Address</div>
+                                <div class="small opacity-75">123 Agriculture Way, Suite 400, Springfield, IL 62701</div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-3">
+                            <i class="fas fa-clock text-warning fs-5"></i>
+                            <div>
+                                <div class="fw-bold">Office Hours</div>
+                                <div class="small opacity-75">Monday – Friday: 8:30 AM – 5:30 PM</div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-3">
+                            <i class="fas fa-seedling text-warning fs-5"></i>
+                            <div>
+                                <div class="fw-bold">Registered Farmers</div>
+                                <div class="small opacity-75">150+ Verified Regional Farms</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-top border-light border-opacity-25 mt-4">
+                    <h6 class="fw-bold mb-2">Follow Our Journey</h6>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="btn btn-outline-light btn-circle" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="btn btn-outline-light btn-circle" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="btn btn-outline-light btn-circle" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    function handleContactSubmit(e) {
+        e.preventDefault();
+        ML.Toast.show('Thank you! Your message has been sent successfully.', 'success');
+        document.getElementById('contactForm').reset();
+    }
+</script>
+}

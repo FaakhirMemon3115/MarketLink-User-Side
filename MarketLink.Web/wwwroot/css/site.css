@@ -7,49 +7,49 @@
 
 /* ── CSS Custom Properties ─────────────────────────────────── */
 :root {
-  --primary:       #2D5A27; /* Rich Farm Emerald */
-  --primary-dark:  #1F401A;
-  --primary-light: #447A3B;
-  --accent:        #D4A373; /* Harvest Gold / Wheat */
-  --accent-dark:   #B87D4B;
-  --accent-light:  #E8C5A0;
-  --bg:            #F4F7F2; /* Fresh Sage Clean Background */
+  --primary:       #059669; /* Vibrant Farm Emerald Green */
+  --primary-dark:  #064E3B; /* Deep Forest Green */
+  --primary-light: #10B981; /* Fresh Leaf Mint */
+  --accent:        #F59E0B; /* Vibrant Harvest Gold */
+  --accent-dark:   #D97706; /* Warm Amber */
+  --accent-light:  #FDE68A;
+  --bg:            #F8FAFC; /* Pristine Soft Background */
   --card:          #FFFFFF;
-  --secondary:     #CCD5AE; /* Soft Leaf Sage */
-  --highlight:     #E9EDC9; /* Morning Dew Highlight */
-  --border:        #D2DEC9; /* Soft Earth Border */
-  --success:       #52B788; /* Fresh Sprout Green */
-  --heading:       #1B3817; /* Deep Woodland Heading */
-  --body-text:     #2D372E; /* Crisp High-Contrast Reading */
-  --muted:         #6C7A6B; /* Soft Herbaceous Gray */
-  --danger:        #D64045;
-  --warning:       #E76F51;
-  --info:          #457B9D;
+  --secondary:     #84CC16; /* Sprout Lime */
+  --highlight:     #ECFDF5; /* Fresh Emerald Highlight */
+  --border:        #E2E8F0; /* Soft Crisp Border */
+  --success:       #10B981; /* Fresh Green */
+  --heading:       #064E3B; /* Deep Forest Heading */
+  --body-text:     #1E293B; /* High-Contrast Dark Slate Reading */
+  --muted:         #64748B; /* Soft Professional Slate Gray */
+  --danger:        #EF4444;
+  --warning:       #F59E0B;
+  --info:          #0284C7;
 
-  --radius-sm:     8px;
-  --radius:        14px;
-  --radius-lg:     22px;
-  --radius-xl:     32px;
+  --radius-sm:     10px;
+  --radius:        16px;
+  --radius-lg:     24px;
+  --radius-xl:     36px;
 
-  --shadow-sm:     0 2px 10px rgba(31,64,26,.06);
-  --shadow:        0 6px 24px rgba(31,64,26,.09);
-  --shadow-lg:     0 12px 42px rgba(31,64,26,.14);
-  --shadow-accent: 0 6px 24px rgba(212,163,115,.25);
+  --shadow-sm:     0 2px 12px rgba(6,78,59,.06);
+  --shadow:        0 8px 30px rgba(6,78,59,.10);
+  --shadow-lg:     0 14px 48px rgba(6,78,59,.16);
+  --shadow-accent: 0 6px 24px rgba(245,158,11,.25);
 
   --transition:    all .25s cubic-bezier(.4,0,.2,1);
   --font-body:     'Plus Jakarta Sans', sans-serif;
-  --font-heading:  'Playfair Display', serif;
+  --font-heading:  'Plus Jakarta Sans', sans-serif;
 }
 
 /* ── Dark Mode ──────────────────────────────────────────────── */
 [data-theme="dark"] {
-  --bg:        #121A11;
-  --card:      #1A2518;
-  --heading:   #E2EFE0;
-  --body-text: #C3D4C0;
-  --muted:     #849781;
-  --border:    #2B3C27;
-  --highlight: #233320;
+  --bg:        #0F172A;
+  --card:      #1E293B;
+  --heading:   #F1F5F9;
+  --body-text: #CBD5E1;
+  --muted:     #94A3B8;
+  --border:    #334155;
+  --highlight: #064E3B;
 }
 
 /* ── Custom Theme Components & Badges ──────────────────────── */

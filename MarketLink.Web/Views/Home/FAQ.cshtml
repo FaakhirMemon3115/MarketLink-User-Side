@@ -1,0 +1,193 @@
+@{
+    ViewData["Title"] = "Frequently Asked Questions";
+}
+
+<!-- FAQ Hero -->
+<div style="background:linear-gradient(135deg, var(--card) 0%, var(--bg) 100%);border-bottom:1px solid var(--border);padding:60px 0 40px;">
+    <div class="container text-center">
+        <span class="badge badge-success px-3 py-2 rounded-pill mb-3" style="font-size:12px;letter-spacing:1px;text-transform:uppercase;">
+            💡 Knowledge Base
+        </span>
+        <h1 class="fw-bold mb-3" style="color:var(--heading);font-size:2.8rem;">Frequently Asked Questions</h1>
+        <p style="color:var(--muted);max-width:650px;margin:0 auto;font-size:16px;">
+            Find answers to common questions about buying fresh produce, farmer pickups, payments, and setting up your digital farm stand.
+        </p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            
+            <!-- Category Tabs -->
+            <ul class="nav nav-pills justify-content-center gap-2 mb-5" id="faqTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active btn-pill px-4" id="customers-tab" data-bs-toggle="tab" data-bs-target="#faq-customers" type="button" role="tab">
+                        <i class="fas fa-shopping-basket me-2"></i>For Customers
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link btn-pill px-4" id="farmers-tab" data-bs-toggle="tab" data-bs-target="#faq-farmers" type="button" role="tab">
+                        <i class="fas fa-tractor me-2"></i>For Farmers
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link btn-pill px-4" id="markets-tab" data-bs-toggle="tab" data-bs-target="#faq-markets" type="button" role="tab">
+                        <i class="fas fa-store me-2"></i>Markets & Pickups
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="faqTabContent">
+                <!-- Customer FAQ -->
+                <div class="tab-pane fade show active" id="faq-customers" role="tabpanel">
+                    <div class="accordion accordion-custom" id="customerAccordion">
+                        
+                        <div class="accordion-item mb-3 border-0 shadow-sm" style="border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)!important;">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button fw-bold fs-6" type="button" data-bs-toggle="collapse" data-bs-target="#c1" aria-expanded="true">
+                                    <i class="fas fa-leaf text-success me-3"></i>How does ordering directly from farmers work?
+                                </button>
+                            </h2>
+                            <div id="c1" class="accordion-collapse collapse show" data-bs-parent="#customerAccordion">
+                                <div class="accordion-body text-muted style-text">
+                                    MarketLink connects you with local registered farmers. Browse daily harvested produce, add items to your cart, and choose your preferred market pickup slot or home delivery. Farmers harvest items shortly before your scheduled pickup so you receive maximum freshness.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item mb-3 border-0 shadow-sm" style="border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)!important;">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold fs-6" type="button" data-bs-toggle="collapse" data-bs-target="#c2">
+                                    <i class="fas fa-check-circle text-primary me-3"></i>Are all produce on MarketLink 100% Organic?
+                                </button>
+                            </h2>
+                            <div id="c2" class="accordion-collapse collapse" data-bs-parent="#customerAccordion">
+                                <div class="accordion-body text-muted style-text">
+                                    Every product profile clearly indicates whether it is <strong>Certified Organic</strong> or naturally grown using eco-friendly practices. You can filter products by clicking the "Organic Only" checkbox on our shop page.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item mb-3 border-0 shadow-sm" style="border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)!important;">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold fs-6" type="button" data-bs-toggle="collapse" data-bs-target="#c3">
+                                    <i class="fas fa-undo text-danger me-3"></i>What is your Freshness Guarantee & Refund Policy?
+                                </button>
+                            </h2>
+                            <div id="c3" class="accordion-collapse collapse" data-bs-parent="#customerAccordion">
+                                <div class="accordion-body text-muted style-text">
+                                    If any item received is damaged or does not meet quality standards, report it through your Customer Dashboard within 24 hours for a full refund or direct item replacement by the farmer.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item mb-3 border-0 shadow-sm" style="border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)!important;">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold fs-6" type="button" data-bs-toggle="collapse" data-bs-target="#c4">
+                                    <i class="fas fa-wallet text-warning me-3"></i>What payment options are supported?
+                                </button>
+                            </h2>
+                            <div id="c4" class="accordion-collapse collapse" data-bs-parent="#customerAccordion">
+                                <div class="accordion-body text-muted style-text">
+                                    We support major Credit/Debit Cards, Digital Wallets, and Cash on Pickup at selected participating local market stalls.
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Farmer FAQ -->
+                <div class="tab-pane fade" id="faq-farmers" role="tabpanel">
+                    <div class="accordion accordion-custom" id="farmerAccordion">
+                        
+                        <div class="accordion-item mb-3 border-0 shadow-sm" style="border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)!important;">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button fw-bold fs-6" type="button" data-bs-toggle="collapse" data-bs-target="#f1">
+                                    <i class="fas fa-tractor text-success me-3"></i>How do I register as a seller on MarketLink?
+                                </button>
+                            </h2>
+                            <div id="f1" class="accordion-collapse collapse show" data-bs-parent="#farmerAccordion">
+                                <div class="accordion-body text-muted style-text">
+                                    Registration is completely free! Click on <strong>Get Started</strong>, select "Seller / Farmer Account", fill in your farm details and stall location, and submit. Once verified by our admin team, your digital farm stand will go live!
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item mb-3 border-0 shadow-sm" style="border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)!important;">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold fs-6" type="button" data-bs-toggle="collapse" data-bs-target="#f2">
+                                    <i class="fas fa-dollar-sign text-primary me-3"></i>What are the platform fees for farmers?
+                                </button>
+                            </h2>
+                            <div id="f2" class="accordion-collapse collapse" data-bs-parent="#farmerAccordion">
+                                <div class="accordion-body text-muted style-text">
+                                    Farmers retain up to 90-95% of every transaction. MarketLink charges a minimal service fee to maintain infrastructure, hosting, and customer support.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item mb-3 border-0 shadow-sm" style="border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)!important;">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold fs-6" type="button" data-bs-toggle="collapse" data-bs-target="#f3">
+                                    <i class="fas fa-calendar-alt text-warning me-3"></i>Can I set custom pickup slots and stock limits?
+                                </button>
+                            </h2>
+                            <div id="f3" class="accordion-collapse collapse" data-bs-parent="#farmerAccordion">
+                                <div class="accordion-body text-muted style-text">
+                                    Yes! In your Farmer Dashboard, navigate to <strong>Pickup Slots</strong> and <strong>Inventory</strong>. You can configure available operating days, set order limits per slot, and update produce stock in real-time.
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Markets FAQ -->
+                <div class="tab-pane fade" id="faq-markets" role="tabpanel">
+                    <div class="accordion accordion-custom" id="marketAccordion">
+                        
+                        <div class="accordion-item mb-3 border-0 shadow-sm" style="border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)!important;">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button fw-bold fs-6" type="button" data-bs-toggle="collapse" data-bs-target="#m1">
+                                    <i class="fas fa-store text-success me-3"></i>How are local Farmers Markets integrated?
+                                </button>
+                            </h2>
+                            <div id="m1" class="accordion-collapse collapse show" data-bs-parent="#marketAccordion">
+                                <div class="accordion-body text-muted style-text">
+                                    MarketLink partners with established physical farmers markets. Each market profile highlights vendor stalls, operating schedules, interactive map locations, and current seasonal produce available.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item mb-3 border-0 shadow-sm" style="border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)!important;">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold fs-6" type="button" data-bs-toggle="collapse" data-bs-target="#m2">
+                                    <i class="fas fa-map-marker-alt text-danger me-3"></i>Where do I pick up my orders?
+                                </button>
+                            </h2>
+                            <div id="m2" class="accordion-collapse collapse" data-bs-parent="#marketAccordion">
+                                <div class="accordion-body text-muted style-text">
+                                    When placing an order, you select your preferred market location and stall number. At your chosen time slot, present your order confirmation code at the farmer's stall.
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Still have questions CTA -->
+            <div class="card border-0 p-5 mt-5 text-center" style="background:var(--card);border-radius:var(--radius-lg);box-shadow:var(--shadow);border:1px solid var(--border);">
+                <h4 class="fw-bold mb-2" style="color:var(--heading);">Still have unanswered questions?</h4>
+                <p class="text-muted small mb-4">Our support team is always ready to assist customers, farmers, and market organizers.</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a asp-action="Contact" class="btn btn-primary-green btn-pill px-4 shadow">Contact Support</a>
+                    <a asp-controller="Products" asp-action="Index" class="btn btn-outline-green btn-pill px-4">Browse Marketplace</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

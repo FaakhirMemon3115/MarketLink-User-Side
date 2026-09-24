@@ -1,0 +1,191 @@
+@model MarketLink.Core.Entities.Market
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<!-- Market Header Banner -->
+<div style="background:linear-gradient(135deg, var(--heading) 0%, var(--primary-dark) 100%);color:#fff;padding:60px 0 45px;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:-50px;right:-50px;width:220px;height:220px;background:rgba(255,255,255,0.05);border-radius:50%;"></div>
+    <div class="container position-relative" style="z-index:2;">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-white opacity-75">Home</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Markets" asp-action="Index" class="text-white opacity-75">Markets</a></li>
+                <li class="breadcrumb-item active text-white" aria-current="page">@Model.Name</li>
+            </ol>
+        </nav>
+
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <span class="badge px-3 py-1 rounded-pill mb-2" style="background:var(--secondary);color:var(--heading);font-weight:700;font-size:12px;text-transform:uppercase;">
+                    📍 Local Farmers Market
+                </span>
+                <h1 class="fw-bold mb-2" style="color:#fff;font-family:var(--font-heading);font-size:2.8rem;">@Model.Name</h1>
+                <p class="lead mb-3" style="color:rgba(255,255,255,0.88);font-size:16px;max-width:700px;">
+                    @Model.Description
+                </p>
+                <div class="d-flex flex-wrap gap-4 text-white opacity-90 small">
+                    <div><i class="fas fa-map-marker-alt text-danger me-2"></i>@Model.Address, @Model.City, @Model.State</div>
+                    <div><i class="fas fa-clock text-warning me-2"></i>@Model.OperatingHours</div>
+                    <div><i class="fas fa-calendar-alt text-info me-2"></i>Open Days: @Model.OpenDays</div>
+                </div>
+            </div>
+            <div class="col-lg-4 mt-4 mt-lg-0 text-lg-end">
+                <a asp-controller="Products" asp-action="Index" class="btn btn-accent btn-pill btn-lg px-4 shadow">
+                    <i class="fas fa-shopping-basket me-2"></i>Shop Produce Here
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row g-4">
+        <!-- Market Info Sidebar -->
+        <div class="col-lg-4">
+            <div class="card border-0 p-4 mb-4" style="background:var(--card);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);">
+                <h5 class="fw-bold mb-3" style="color:var(--heading);"><i class="fas fa-info-circle text-primary-green me-2"></i>Market Details</h5>
+                
+                <div class="d-flex flex-column gap-3">
+                    <div class="d-flex align-items-start gap-3">
+                        <div style="width:38px;height:38px;border-radius:10px;background:rgba(5,150,105,0.1);color:var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                            <i class="fas fa-location-arrow"></i>
+                        </div>
+                        <div>
+                            <div class="fw-bold small" style="color:var(--heading);">Full Address</div>
+                            <div class="text-muted small">@Model.Address<br />@Model.City, @Model.State</div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-start gap-3">
+                        <div style="width:38px;height:38px;border-radius:10px;background:rgba(245,158,11,0.1);color:var(--accent-dark);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div>
+                            <div class="fw-bold small" style="color:var(--heading);">Hours & Days</div>
+                            <div class="text-muted small">@Model.OperatingHours</div>
+                            <div class="text-muted small">Days: @Model.OpenDays</div>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.Phone))
+                    {
+                        <div class="d-flex align-items-start gap-3">
+                            <div style="width:38px;height:38px;border-radius:10px;background:rgba(59,130,246,0.1);color:var(--info);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold small" style="color:var(--heading);">Phone Contact</div>
+                                <a href="tel:@Model.Phone" class="text-muted small text-decoration-none">@Model.Phone</a>
+                            </div>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(Model.Email))
+                    {
+                        <div class="d-flex align-items-start gap-3">
+                            <div style="width:38px;height:38px;border-radius:10px;background:rgba(16,185,129,0.1);color:var(--success);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold small" style="color:var(--heading);">Email Organizer</div>
+                                <a href="mailto:@Model.Email" class="text-muted small text-decoration-none">@Model.Email</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <hr class="my-4" style="border-color:var(--border);" />
+
+                <a asp-controller="Farmers" asp-action="Index" class="btn btn-outline-green btn-sm w-100 btn-pill">
+                    <i class="fas fa-tractor me-2"></i>Meet All Farmers
+                </a>
+            </div>
+
+            <!-- Map Placeholder Card -->
+            <div class="card border-0 p-4" style="background:var(--card);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);">
+                <h6 class="fw-bold mb-3" style="color:var(--heading);"><i class="fas fa-map me-2 text-danger"></i>Interactive Location</h6>
+                <div id="market-detail-map" style="height:200px;border-radius:12px;background:#e9ecef;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px;border:1px solid var(--border);">
+                    <div class="text-center p-3">
+                        <i class="fas fa-map-marked-alt text-primary fs-2 mb-2"></i>
+                        <div>@Model.Name Map</div>
+                        <div class="small opacity-75">Lat: @Model.Latitude, Long: @Model.Longitude</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area: Participating Farmers & Fresh Produce -->
+        <div class="col-lg-8">
+            <div class="card border-0 p-4 mb-4" style="background:var(--card);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <span class="badge badge-success mb-1" style="font-size:11px;">Verified Stalls</span>
+                        <h4 class="fw-bold mb-0" style="color:var(--heading);">Participating Farmers & Stalls</h4>
+                    </div>
+                    <a asp-controller="Farmers" asp-action="Index" class="btn btn-outline-green btn-sm btn-pill">View All</a>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="p-3 rounded-3 d-flex align-items-center gap-3" style="background:var(--bg);border:1px solid var(--border);">
+                            <div style="width:48px;height:48px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px;">
+                                H
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="fw-bold mb-0" style="color:var(--heading);">Harrison Organic Farms</h6>
+                                <div class="small text-muted"><i class="fas fa-store me-1 text-primary"></i>Stall A1 • Heirloom Produce</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 rounded-3 d-flex align-items-center gap-3" style="background:var(--bg);border:1px solid var(--border);">
+                            <div style="width:48px;height:48px;border-radius:50%;background:var(--accent-dark);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px;">
+                                S
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="fw-bold mb-0" style="color:var(--heading);">Sunnyside Dairy Farm</h6>
+                                <div class="small text-muted"><i class="fas fa-store me-1 text-primary"></i>Stall B3 • Artisanal Dairy</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 rounded-3 d-flex align-items-center gap-3" style="background:var(--bg);border:1px solid var(--border);">
+                            <div style="width:48px;height:48px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px;">
+                                M
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="fw-bold mb-0" style="color:var(--heading);">Miguel's Heritage Farm</h6>
+                                <div class="small text-muted"><i class="fas fa-store me-1 text-primary"></i>Stall C7 • Fresh Vegetables</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 rounded-3 d-flex align-items-center gap-3" style="background:var(--bg);border:1px solid var(--border);">
+                            <div style="width:48px;height:48px;border-radius:50%;background:var(--accent-dark);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px;">
+                                E
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="fw-bold mb-0" style="color:var(--heading);">Emma's Herb Garden</h6>
+                                <div class="small text-muted"><i class="fas fa-store me-1 text-primary"></i>Stall D2 • Fresh Herbs</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Market CTA Card -->
+            <div class="card border-0 p-4 text-center" style="background:linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);color:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow);">
+                <h4 class="fw-bold mb-2" style="color:#fff;">Order Ahead & Pick Up Fresh</h4>
+                <p class="small opacity-90 max-width-500 mx-auto mb-4">
+                    Skip the lines at @Model.Name. Place your order online directly from local growers and collect your fresh basket at your chosen time slot.
+                </p>
+                <div>
+                    <a asp-controller="Products" asp-action="Index" class="btn btn-accent btn-pill px-4 shadow">
+                        Browse Produce Marketplace <i class="fas fa-arrow-right ms-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

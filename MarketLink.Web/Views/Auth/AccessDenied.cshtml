@@ -1,0 +1,29 @@
+@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<div class="container py-5 text-center my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
+            <div class="card border-0 p-5" style="background:var(--card);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);border:1px solid var(--border);">
+                <div style="width:80px;height:80px;border-radius:50%;background:rgba(214,64,69,0.1);color:var(--danger);display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 24px;">
+                    <i class="fas fa-lock"></i>
+                </div>
+                
+                <h2 class="fw-bold mb-3" style="color:var(--heading);">Access Restricted</h2>
+                <p class="text-muted mb-4" style="font-size:16px;line-height:1.6;">
+                    You do not have permission to access this page. Please sign in with an authorized account or return to the main marketplace.
+                </p>
+
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-primary-green btn-pill px-4 shadow">
+                        <i class="fas fa-home me-2"></i>Back to Home
+                    </a>
+                    <a asp-controller="Auth" asp-action="Login" class="btn btn-outline-green btn-pill px-4">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

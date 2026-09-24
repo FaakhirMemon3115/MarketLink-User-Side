@@ -1,0 +1,75 @@
+@{
+    ViewData["Title"] = "Terms & Conditions";
+}
+
+<!-- Terms Hero -->
+<div style="background:linear-gradient(135deg, var(--card) 0%, var(--bg) 100%);border-bottom:1px solid var(--border);padding:50px 0 35px;">
+    <div class="container text-center">
+        <span class="badge badge-success px-3 py-2 rounded-pill mb-3" style="font-size:12px;letter-spacing:1px;text-transform:uppercase;">
+            📜 Legal & Governance
+        </span>
+        <h1 class="fw-bold mb-3" style="color:var(--heading);font-size:2.6rem;">Terms & Conditions</h1>
+        <p style="color:var(--muted);max-width:650px;margin:0 auto;font-size:15px;">
+            Effective Date: @DateTime.Now.ToString("MMMM dd, yyyy") • MarketLink eGreen Basket Platform Rules
+        </p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="card border-0 p-4 p-md-5" style="background:var(--card);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);border:1px solid var(--border);line-height:1.8;color:var(--body-text);">
+                
+                <h4 class="fw-bold mb-3" style="color:var(--heading);"><i class="fas fa-seedling text-success me-2"></i>1. Platform Overview</h4>
+                <p class="text-muted">
+                    MarketLink – eGreen Basket operates as a digital agricultural marketplace connecting local independent farmers ("Sellers") directly with consumers ("Buyers"). MarketLink facilitates product discovery, inventory management, reservation of fresh produce, and pickup scheduling.
+                </p>
+
+                <hr class="my-4" style="border-color:var(--border);" />
+
+                <h4 class="fw-bold mb-3" style="color:var(--heading);"><i class="fas fa-user-check text-primary me-2"></i>2. User Accounts & Responsibilities</h4>
+                <p class="text-muted mb-2">
+                    By registering an account on MarketLink, you agree to:
+                </p>
+                <ul class="text-muted mb-3">
+                    <li>Provide accurate, current, and verifiable contact information.</li>
+                    <li>Maintain the security and confidentiality of your credentials.</li>
+                    <li>For Farmers: Ensure all listed produce meets local agricultural safety standards and accurate harvest descriptions.</li>
+                    <li>For Buyers: Honor scheduled pickup slots or notify the farmer in advance if changes are required.</li>
+                </ul>
+
+                <hr class="my-4" style="border-color:var(--border);" />
+
+                <h4 class="fw-bold mb-3" style="color:var(--heading);"><i class="fas fa-leaf text-success me-2"></i>3. Freshness & Quality Guarantee Policy</h4>
+                <p class="text-muted">
+                    We take pride in 100% farm-fresh produce. If any item received is damaged, spoilt, or inconsistent with your order summary, you are eligible for an immediate replacement or full refund by submitting a claim within 24 hours of pickup.
+                </p>
+
+                <hr class="my-4" style="border-color:var(--border);" />
+
+                <h4 class="fw-bold mb-3" style="color:var(--heading);"><i class="fas fa-hand-holding-usd text-warning me-2"></i>4. Pricing, Payments & Cancellations</h4>
+                <p class="text-muted">
+                    Prices are set directly by individual farmers per unit/kg. Taxes and applicable service fees are presented clearly at checkout. Orders can be canceled free of charge up to 4 hours before the scheduled harvest/pickup window.
+                </p>
+
+                <hr class="my-4" style="border-color:var(--border);" />
+
+                <h4 class="fw-bold mb-3" style="color:var(--heading);"><i class="fas fa-shield-alt text-danger me-2"></i>5. Limitation of Liability</h4>
+                <p class="text-muted">
+                    MarketLink facilitates connections between buyers and sellers. While we conduct verification on participating farms, seasonal weather events or harvest variations may affect produce availability. In such cases, buyers will be notified immediately.
+                </p>
+
+                <div class="p-4 rounded-3 mt-4" style="background:var(--bg);border:1px solid var(--border);">
+                    <div class="d-flex align-items-center gap-3">
+                        <i class="fas fa-envelope-open text-primary fs-3"></i>
+                        <div>
+                            <h6 class="fw-bold mb-1" style="color:var(--heading);">Questions regarding our legal terms?</h6>
+                            <div class="small text-muted">Contact our legal compliance team at <a href="mailto:legal@marketlink.com" class="fw-bold text-decoration-none">legal@marketlink.com</a></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
