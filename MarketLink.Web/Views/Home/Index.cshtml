@@ -4,13 +4,17 @@
 }
 
 <!-- Hero Section -->
-<section class="hero-section" style="padding:100px 0;background:linear-gradient(135deg, var(--bg) 0%, #D8E983 100%);">
-    <div class="container">
+<section class="hero-section" style="padding:100px 0;background:linear-gradient(135deg, var(--bg) 0%, var(--secondary) 100%);position:relative;overflow:hidden;">
+    <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg, var(--primary), var(--accent), var(--success));"></div>
+    <div class="container position-relative">
         <div class="row align-items-center">
             <div class="col-lg-6 animate-on-scroll">
-                <span class="badge badge-success mb-3" style="font-size:14px;padding:8px 16px;">🌱 100% Farm Fresh</span>
+                <div class="d-inline-flex align-items-center gap-2 mb-3 px-3 py-1 rounded-pill" style="background:rgba(45,90,39,0.12);border:1px solid rgba(45,90,39,0.25);">
+                    <i class="fas fa-seedling text-success"></i>
+                    <span style="font-size:13px;font-weight:700;color:var(--primary);letter-spacing:0.5px;text-transform:uppercase;">100% Farm-To-Table Fresh</span>
+                </div>
                 <h1 style="font-size:3.5rem;font-weight:800;color:var(--heading);line-height:1.2;margin-bottom:24px;">
-                    Farm Fresh Food,<br />Delivered <span style="color:var(--primary)">Local</span>.
+                    Farm Fresh Food,<br />Delivered <span style="color:var(--primary);text-decoration:underline;text-decoration-color:var(--accent);">Local</span>.
                 </h1>
                 <p style="font-size:1.1rem;color:var(--body-text);margin-bottom:32px;max-width:500px;">
                     Connect directly with local farmers in your area. Get fresh, seasonal produce while supporting your local community.
@@ -69,24 +73,62 @@
 <!-- Featured Categories -->
 <section style="padding:80px 0;background:var(--bg);">
     <div class="container">
-        <div class="d-flex justify-content-between align-items-end mb-5">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-end mb-4 gap-3">
             <div>
-                <span style="color:var(--accent);font-weight:600;text-transform:uppercase;letter-spacing:1px;font-size:13px;">Browse by</span>
-                <h2 style="font-weight:700;color:var(--heading);margin:0;">Categories</h2>
+                <span class="badge badge-success mb-2" style="font-size:12px;padding:6px 14px;"><i class="fas fa-tractor me-1"></i>Farm Fresh Harvest</span>
+                <h2 style="font-weight:800;color:var(--heading);margin:0;">Pick Your Produce by Category</h2>
+                <p class="text-muted small mb-0 mt-1">Explore locally grown vegetables, organic fruits, artisan dairy, and freshly cut herbs.</p>
             </div>
-            <a asp-controller="Products" asp-action="Index" class="btn btn-outline-green btn-sm btn-pill">View All</a>
+            <a asp-controller="Products" asp-action="Index" class="btn btn-outline-green btn-sm btn-pill">
+                Explore All Produce <i class="fas fa-arrow-right ms-1"></i>
+            </a>
         </div>
         
         <div class="row g-4">
+            @{
+                string GetCategoryIcon(string name, string? existingIcon)
+                {
+                    if (!string.IsNullOrEmpty(existingIcon)) return existingIcon;
+                    var n = (name ?? "").ToLower();
+                    if (n.Contains("veg")) return "fas fa-carrot";
+                    if (n.Contains("fruit")) return "fas fa-apple-alt";
+                    if (n.Contains("dairy") || n.Contains("milk") || n.Contains("cheese")) return "fas fa-cheese";
+                    if (n.Contains("herb") || n.Contains("mint") || n.Contains("basil")) return "fas fa-leaf";
+                    if (n.Contains("grain") || n.Contains("wheat") || n.Contains("rice")) return "fas fa-wheat-awn";
+                    if (n.Contains("potato")) return "fas fa-seedling";
+                    if (n.Contains("tomato")) return "fas fa-apple-alt";
+                    return "fas fa-seedling";
+                }
+
+                string GetCategoryEmoji(string name)
+                {
+                    var n = (name ?? "").ToLower();
+                    if (n.Contains("veg")) return "🥦";
+                    if (n.Contains("fruit")) return "🍎";
+                    if (n.Contains("dairy")) return "🥛";
+                    if (n.Contains("herb")) return "🌿";
+                    if (n.Contains("grain")) return "🌾";
+                    if (n.Contains("potato")) return "🥔";
+                    if (n.Contains("tomato")) return "🍅";
+                    if (n.Contains("mango")) return "🥭";
+                    if (n.Contains("onion")) return "🧅";
+                    return "🌱";
+                }
+            }
+
             @foreach (var cat in ViewBag.Categories)
             {
+                var icon = GetCategoryIcon(cat.Name, cat.IconClass);
+                var emoji = GetCategoryEmoji(cat.Name);
                 <div class="col-lg-2 col-md-4 col-6 animate-on-scroll">
                     <a asp-controller="Products" asp-action="Index" asp-route-categorySlug="@cat.Slug" style="text-decoration:none;">
-                        <div class="card product-card text-center h-100" style="padding:24px 16px;border-radius:24px;">
-                            <div style="width:60px;height:60px;background:var(--soft-highlight);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
-                                <i class="fas @cat.IconClass" style="font-size:24px;color:var(--primary);"></i>
+                        <div class="card product-card text-center h-100 p-3" style="border-radius:20px;border:1px solid var(--border);transition:var(--transition);background:var(--card);box-shadow:var(--shadow-sm);">
+                            <div style="width:64px;height:64px;background:rgba(46,90,39,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;position:relative;">
+                                <i class="@icon" style="font-size:24px;color:var(--primary);"></i>
+                                <span style="position:absolute;bottom:-4px;right:-4px;font-size:16px;">@emoji</span>
                             </div>
-                            <h6 style="color:var(--heading);font-weight:600;margin:0;">@cat.Name</h6>
+                            <h6 style="color:var(--heading);font-weight:700;margin:0 0 4px;font-size:15px;">@cat.Name</h6>
+                            <span class="text-muted" style="font-size:11px;font-weight:600;"><i class="fas fa-check-circle text-success me-1"></i>Direct Farm</span>
                         </div>
                     </a>
                 </div>

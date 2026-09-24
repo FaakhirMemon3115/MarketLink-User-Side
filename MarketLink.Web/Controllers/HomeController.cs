@@ -17,10 +17,15 @@ public class HomeController : Controller
     public async Task<IActionResult> Index()
     {
         var products = await _productService.GetFeaturedAsync();
-        var categories = await _unitOfWork.Repository<MarketLink.Core.Entities.Category>().GetAllAsync();
+        var allCategories = await _unitOfWork.Repository<MarketLink.Core.Entities.Category>().GetAllAsync();
         var markets = await _unitOfWork.Repository<MarketLink.Core.Entities.Market>().GetAllAsync();
 
-        ViewBag.Categories = categories;
+        // Main primary categories (or all if none marked)
+        var mainCategories = allCategories.Where(c => c.ParentId == null).OrderBy(c => c.SortOrder).ToList();
+        if (!mainCategories.Any()) mainCategories = allCategories.Take(6).ToList();
+
+        ViewBag.Categories = mainCategories;
+        ViewBag.AllCategories = allCategories;
         ViewBag.Markets = markets;
         
         return View(products.Take(8).ToList());

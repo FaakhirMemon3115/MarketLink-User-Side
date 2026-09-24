@@ -170,6 +170,7 @@ function initQtySelector() {
 }
 
 /* ── AI Search Assistant ────────────────────────────────────── */
+/* ── Advanced eGreen Assistant (English & Roman Urdu) ──────── */
 const AIAssistant = {
     panel: null,
     input: null,
@@ -184,44 +185,151 @@ const AIAssistant = {
         toggle?.addEventListener('click', () => {
             this.panel?.classList.toggle('open');
             if (this.panel?.classList.contains('open') && this.messages?.children.length === 0) {
-                this.addMessage('bot', '👋 Hi! I\'m your eGreen Basket assistant. Ask me about products, seasons, or what\'s fresh today!');
+                this.addBotMessage('🌾 **Assalam-o-Alaikum!** Main aapka eGreen Assistant hoon.<br>Aap mujhse fresh produce, organic cheezain, prices ya apna order track karwa saktay hain!');
+                this.renderQuickChips();
             }
         });
 
         this.input?.addEventListener('keypress', e => { if (e.key === 'Enter') this.sendMessage(); });
         sendBtn?.addEventListener('click', () => this.sendMessage());
     },
-    addMessage(type, text) {
+    renderQuickChips() {
+        const chips = document.createElement('div');
+        chips.className = 'ai-quick-chips';
+        chips.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;padding:4px 0 10px;';
+        chips.innerHTML = `
+            <button type="button" class="btn btn-sm btn-light py-1 px-2" style="font-size:11px;border-radius:20px;border:1px solid var(--border);" onclick="AIAssistant.askQuestion('Organic vegetables')">🌿 Organic</button>
+            <button type="button" class="btn btn-sm btn-light py-1 px-2" style="font-size:11px;border-radius:20px;border:1px solid var(--border);" onclick="AIAssistant.askQuestion('Sasta produce')">💰 Sasta Produce</button>
+            <button type="button" class="btn btn-sm btn-light py-1 px-2" style="font-size:11px;border-radius:20px;border:1px solid var(--border);" onclick="AIAssistant.askQuestion('Fresh Tamatar')">🍅 Tamatar</button>
+            <button type="button" class="btn btn-sm btn-light py-1 px-2" style="font-size:11px;border-radius:20px;border:1px solid var(--border);" onclick="AIAssistant.askQuestion('Order kahan hai')">📦 Track Order</button>
+        `;
+        this.messages?.appendChild(chips);
+    },
+    askQuestion(text) {
+        if (this.input) this.input.value = text;
+        this.sendMessage();
+    },
+    addUserMessage(text) {
         const msg = document.createElement('div');
-        msg.className = `ai-msg ${type}`;
+        msg.className = 'ai-msg user';
         msg.textContent = text;
         this.messages?.appendChild(msg);
+        this.scrollToBottom();
+    },
+    addBotMessage(html) {
+        const msg = document.createElement('div');
+        msg.className = 'ai-msg bot';
+        msg.innerHTML = html;
+        this.messages?.appendChild(msg);
+        this.scrollToBottom();
+    },
+    scrollToBottom() {
         if (this.messages) this.messages.scrollTop = this.messages.scrollHeight;
     },
     async sendMessage() {
         const text = this.input?.value.trim();
         if (!text) return;
-        this.addMessage('user', text);
+        this.addUserMessage(text);
         if (this.input) this.input.value = '';
 
-        // Smart search response
         const lower = text.toLowerCase();
+
+        // 1. Order Tracking by Order Number or Keywords
+        const orderMatch = text.match(/ML-\d+-\d+/i) || text.match(/#?(\d{1,6})/);
+        if (lower.includes('track') || lower.includes('order') || lower.includes('kahan') || lower.includes('status')) {
+            if (orderMatch) {
+                const queryId = orderMatch[0].replace('#', '');
+                this.addBotMessage(`🔍 Checking status for Order <b>${queryId}</b>...`);
+                try {
+                    // Try fetch by ID or check order
+                    const numericId = parseInt(queryId);
+                    if (!isNaN(numericId)) {
+                        const res = await fetch(`/api/orders/${numericId}`);
+                        if (res.ok) {
+                            const data = await res.json();
+                            if (data.success && data.order) {
+                                const o = data.order;
+                                this.addBotMessage(`
+                                    <div style="background:var(--card);padding:10px;border-radius:8px;border:1px solid var(--border);">
+                                        <div style="font-weight:700;color:var(--heading);">Order #${o.orderNumber || o.id}</div>
+                                        <div style="font-size:12px;color:var(--primary);font-weight:600;">Status: ${o.status}</div>
+                                        <div style="font-size:12px;color:var(--muted);">Total: $${o.totalAmount} · Farm: ${o.farmer?.farmName || 'Local Farm'}</div>
+                                        <div style="margin-top:6px;"><a href="/Customer/Orders/Details/${o.id}" class="btn btn-outline-green btn-sm py-0 px-2" style="font-size:11px;">View Full Order</a></div>
+                                    </div>
+                                `);
+                                return;
+                            }
+                        }
+                    }
+                } catch { /* proceed to general reply */ }
+            }
+
+            this.addBotMessage(`📦 Aap apna Order History yahan se check kar saktay hain: <a href="/Customer/Orders/History" class="fw-bold text-success">Order History Page</a>. Agar aapke paas Order ID hai to likhein jaise <i>"Track 1"</i>.`);
+            return;
+        }
+
+        // 2. Product Search & Filter Mapping
+        let searchParam = '';
+        let isOrganic = null;
+        let sortBy = '';
+
         if (lower.includes('organic')) {
-            this.addMessage('bot', '🌿 Looking for organic products! Let me search our organic section for you...');
-            setTimeout(() => window.location.href = '/Products?isOrganic=true', 1500);
-        } else if (lower.includes('tomato') || lower.includes('carrot') || lower.includes('potato')) {
-            const word = lower.includes('tomato') ? 'tomato' : lower.includes('carrot') ? 'carrot' : 'potato';
-            this.addMessage('bot', `🔍 Searching for ${word} products from local farmers...`);
-            setTimeout(() => window.location.href = `/Products?q=${word}`, 1500);
-        } else if (lower.includes('cheap') || lower.includes('affordable') || lower.includes('best price')) {
-            this.addMessage('bot', '💰 Showing you the most affordable options sorted by price...');
-            setTimeout(() => window.location.href = '/Products?sortBy=price_asc', 1500);
-        } else if (lower.includes('seasonal') || lower.includes('season')) {
-            this.addMessage('bot', '🍂 Here are our fresh seasonal products right now!');
-            setTimeout(() => window.location.href = '/Products?seasonal=true', 1500);
-        } else {
-            this.addMessage('bot', `🔍 Searching for "${text}" across all our farmers and products...`);
-            setTimeout(() => window.location.href = `/Products?q=${encodeURIComponent(text)}`, 1500);
+            isOrganic = true;
+        }
+        if (lower.includes('sasta') || lower.includes('cheap') || lower.includes('affordable') || lower.includes('kam price')) {
+            sortBy = 'price_asc';
+        }
+
+        // Urdu & English synonyms
+        if (lower.includes('tamatar') || lower.includes('tomato')) searchParam = 'Tomato';
+        else if (lower.includes('aaloo') || lower.includes('aalu') || lower.includes('potato')) searchParam = 'Potato';
+        else if (lower.includes('pyaz') || lower.includes('piaz') || lower.includes('onion')) searchParam = 'Onion';
+        else if (lower.includes('aam') || lower.includes('mango')) searchParam = 'Mango';
+        else if (lower.includes('saib') || lower.includes('apple')) searchParam = 'Apple';
+        else if (lower.includes('kela') || lower.includes('banana')) searchParam = 'Banana';
+        else if (lower.includes('doodh') || lower.includes('milk')) searchParam = 'Milk';
+        else if (lower.includes('gajar') || lower.includes('carrot')) searchParam = 'Carrot';
+        else if (lower.includes('sabzi') || lower.includes('vegetable')) searchParam = 'Vegetables';
+        else if (lower.includes('phal') || lower.includes('fruit')) searchParam = 'Fruits';
+        else if (!isOrganic && !sortBy) searchParam = text;
+
+        this.addBotMessage(`🌱 Looking up fresh produce for <i>"${text}"</i>...`);
+
+        try {
+            let url = `/api/products?pageSize=3`;
+            if (searchParam) url += `&q=${encodeURIComponent(searchParam)}`;
+            if (isOrganic) url += `&isOrganic=true`;
+            if (sortBy) url += `&sortBy=${sortBy}`;
+
+            const res = await fetch(url);
+            const data = await res.json();
+
+            if (data.success && data.products && data.products.length > 0) {
+                let cardsHtml = `<div style="display:flex;flex-direction:column;gap:8px;margin-top:6px;">`;
+                data.products.forEach(p => {
+                    cardsHtml += `
+                        <div style="display:flex;align-items:center;gap:10px;background:var(--card);padding:8px;border-radius:8px;border:1px solid var(--border);">
+                            <img src="${p.imageUrl || '/images/placeholder.png'}" style="width:42px;height:42px;border-radius:6px;object-fit:cover;" alt="${p.name}" />
+                            <div style="flex:1;min-width:0;">
+                                <div style="font-weight:700;font-size:13px;color:var(--heading);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.name}</div>
+                                <div style="font-size:11px;color:var(--muted);">$${p.pricePerKg}/kg · ${p.farmer?.farmName || 'Local Farm'}</div>
+                            </div>
+                            <button type="button" class="btn btn-primary-green btn-sm py-1 px-2" style="font-size:11px;" onclick="ML.Cart.addItem(${p.Id || p.id}, 1)">
+                                + Add
+                            </button>
+                        </div>
+                    `;
+                });
+                cardsHtml += `</div>
+                    <div style="margin-top:8px;text-align:right;">
+                        <a href="/Products?q=${encodeURIComponent(searchParam || '')}${isOrganic ? '&isOrganic=true' : ''}" style="font-size:12px;color:var(--primary);font-weight:600;">View All Results &rarr;</a>
+                    </div>`;
+                this.addBotMessage(cardsHtml);
+            } else {
+                this.addBotMessage(`Aapki talash ke mutabiq koi product nahi mila. Aap hamara <a href="/Products" class="fw-bold text-success">Products Catalog</a> dekh saktay hain.`);
+            }
+        } catch (e) {
+            this.addBotMessage(`Products search karne ke liye <a href="/Products?q=${encodeURIComponent(text)}" class="fw-bold text-success">yahan click karein</a>.`);
         }
     }
 };
