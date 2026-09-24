@@ -593,3 +593,7 @@ C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\comp
 C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\compressed\vqsvky1ean-{0}-zf4ks39r5s-zf4ks39r5s.gz
 C:\Users\USER\Desktop\MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\compressed\b1bjtn3ed9-{0}-s0d5mfmvdj-s0d5mfmvdj.gz
 >>>>>>> aa979bc6291d490aaec5aa6e03c1fcf1e9c9f742
+C:\Users\USER\Desktop\ \MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\MarketLink.Web.csproj.AssemblyReference.cache
+C:\Users\USER\Desktop\ \MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\MarketLink.Web.dll
+C:\Users\USER\Desktop\ \MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\refint\MarketLink.Web.dll
+C:\Users\USER\Desktop\ \MarketLink-User-Side\MarketLink.Web\obj\Debug\net10.0\MarketLink.Web.pdb

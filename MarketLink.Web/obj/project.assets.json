@@ -3657,11 +3657,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\USER\\Desktop\\MarketLink-User-Side\\MarketLink.Web\\MarketLink.Web.csproj",
+      "projectUniqueName": "C:\\Users\\USER\\Desktop\\ \\MarketLink-User-Side\\MarketLink.Web\\MarketLink.Web.csproj",
       "projectName": "MarketLink.Web",
-      "projectPath": "C:\\Users\\USER\\Desktop\\MarketLink-User-Side\\MarketLink.Web\\MarketLink.Web.csproj",
+      "projectPath": "C:\\Users\\USER\\Desktop\\ \\MarketLink-User-Side\\MarketLink.Web\\MarketLink.Web.csproj",
       "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\USER\\Desktop\\MarketLink-User-Side\\MarketLink.Web\\obj\\",
+      "outputPath": "C:\\Users\\USER\\Desktop\\ \\MarketLink-User-Side\\MarketLink.Web\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -3677,11 +3677,11 @@
           "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
-            "C:\\Users\\USER\\Desktop\\MarketLink-User-Side\\MarketLink.Core\\MarketLink.Core.csproj": {
-              "projectPath": "C:\\Users\\USER\\Desktop\\MarketLink-User-Side\\MarketLink.Core\\MarketLink.Core.csproj"
+            "C:\\Users\\USER\\Desktop\\ \\MarketLink-User-Side\\MarketLink.Core\\MarketLink.Core.csproj": {
+              "projectPath": "C:\\Users\\USER\\Desktop\\ \\MarketLink-User-Side\\MarketLink.Core\\MarketLink.Core.csproj"
             },
-            "C:\\Users\\USER\\Desktop\\MarketLink-User-Side\\MarketLink.Infrastructure\\MarketLink.Infrastructure.csproj": {
-              "projectPath": "C:\\Users\\USER\\Desktop\\MarketLink-User-Side\\MarketLink.Infrastructure\\MarketLink.Infrastructure.csproj"
+            "C:\\Users\\USER\\Desktop\\ \\MarketLink-User-Side\\MarketLink.Infrastructure\\MarketLink.Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\USER\\Desktop\\ \\MarketLink-User-Side\\MarketLink.Infrastructure\\MarketLink.Infrastructure.csproj"
             }
           }
         }
