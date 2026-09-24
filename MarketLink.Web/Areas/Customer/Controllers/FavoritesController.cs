@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace MarketLink.Web.Areas.Customer.Controllers;
 
 [Area("Customer")]
-[Authorize(Roles = "Customer")]
+[Authorize]
 public class FavoritesController : Controller
 {
     private readonly IUnitOfWork _unitOfWork;
@@ -33,6 +33,10 @@ public class FavoritesController : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
+        if (!User.IsInRole("Customer"))
+        {
+            return RedirectToAction("AccessDenied", "Auth", new { area = "" });
+        }
         ViewData["Title"] = "My Favorites";
         int customerId = await GetCustomerIdAsync();
 
@@ -52,6 +56,11 @@ public class FavoritesController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Toggle(string type, int id)
     {
+        if (User.IsInRole("Admin") || User.IsInRole("Farmer"))
+        {
+            return Json(new { success = false, message = "You are not eligible for this function." });
+        }
+
         if (string.IsNullOrEmpty(type) || id <= 0)
         {
             return Json(new { success = false, message = "Invalid parameters." });

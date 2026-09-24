@@ -24,7 +24,7 @@
 
     @await RenderSectionAsync("Styles", required: false)
 </head>
-<body data-authenticated="@User.Identity?.IsAuthenticated.ToString().ToLower()">
+<body data-authenticated="@User.Identity?.IsAuthenticated.ToString().ToLower()" data-role="@(User.IsInRole("Admin") ? "Admin" : User.IsInRole("Farmer") ? "Farmer" : User.IsInRole("Customer") ? "Customer" : "Guest")">
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-green sticky-top">

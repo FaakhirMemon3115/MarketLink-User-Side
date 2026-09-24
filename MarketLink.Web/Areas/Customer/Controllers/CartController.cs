@@ -6,7 +6,7 @@ using System.Security.Claims;
 namespace MarketLink.Web.Areas.Customer.Controllers;
 
 [Area("Customer")]
-[Authorize(Roles = "Customer")]
+[Authorize]
 public class CartController : Controller
 {
     private readonly ICartService _cartService;
@@ -32,6 +32,10 @@ public class CartController : Controller
 
     public async Task<IActionResult> Index()
     {
+        if (!User.IsInRole("Customer"))
+        {
+            return RedirectToAction("AccessDenied", "Auth", new { area = "" });
+        }
         ViewData["Title"] = "Shopping Cart";
         var customerId = await GetCustomerIdAsync();
         var items = await _cartService.GetCartAsync(customerId);
@@ -42,6 +46,11 @@ public class CartController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> AddItem([FromBody] AddToCartRequest req)
     {
+        if (User.IsInRole("Admin") || User.IsInRole("Farmer"))
+        {
+            return Json(new { success = false, message = "You are not eligible for this function." });
+        }
+
         if (req == null || req.ProductId <= 0 || req.QuantityKg <= 0)
             return Json(new { success = false, message = "Invalid request." });
 
